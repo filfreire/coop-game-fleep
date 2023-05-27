@@ -1,6 +1,6 @@
 # coop-game-fleep
 
-![build workflow status](https://github.com/filfreire/coop-game-fleep/actions/workflows/build.yml/badge.svg)
+[![build workflow status](https://github.com/filfreire/coop-game-fleep/actions/workflows/build.yml/badge.svg)](https://github.com/filfreire/coop-game-fleep/actions/workflows/build.yml)
 
 This is my personal repo with exercises, experiments and classwork of the <https://www.udemy.com/course/unrealengine-cpp> class.
 It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s original work on: <https://github.com/tomlooman/CoopHordeShooter>
