@@ -13,5 +13,9 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v3
 
+    - name: Try to print paths
+      run: |
+        echo $env:UNREAL_PATH $env:GITHUB_ACTION_PATH ${{ env.GITHUB_ACTION_PATH }} (Get-Location).Path
+
     - name: Try to run UAT
-      run: .\scripts\Build.bat $env:UNREAL_PATH $env:GITHUB_ACTION_PATH
+      run: .\scripts\Build.bat $env:UNREAL_PATH ${{ env.GITHUB_ACTION_PATH }}
