@@ -14,4 +14,4 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Try to run UAT
-      run: .\scripts\Build.bat $env:UNREAL_PATH $GITHUB_ACTION_PATH
+      run: .\scripts\Build.bat $env:UNREAL_PATH $env:GITHUB_ACTION_PATH
