@@ -24,6 +24,16 @@ For Linux/MacOS:
 
 /todo - work in progress
 
+```powershell
+todo
+```
+
+## How to run tests
+
+```powershell
+todo
+```
+
 ## How to package and run
 
 First, run on a Powershell terminal:

@@ -1,14 +1,17 @@
-name: Build
+name: Build and Test
 
 on: [push, pull_request]
 
 env:
   UNREAL_PATH: E:\unreal\UE_5.2
   PROJECT_NAME: CoopGameFleep.uproject
+  TEST_SUITE_TO_RUN: CoopGameFleepTests.
+  TEST_REPORT_FOLDER: TestResults
+  TEST_LOGNAME: RunTests.log
 
 jobs:
   build:
-    name: Build
+    name: Build and Test
     runs-on: self-hosted
 
     steps:
@@ -17,3 +20,6 @@ jobs:
 
     - name: Build
       run: .\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
+
+    - name: Test
+      run: .\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME
