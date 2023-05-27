@@ -9,5 +9,5 @@ set testReportFolder=%~5
 set testLogName=%~6
 
 
-"%ueLocation%\Engine\Binaries\Win64\UE4Editor-cmd.exe" "%projectLocation%\%projectName%" -nosplash -Unattended -nopause -nosound -NullRHI -nocontentbrowser -ExecCmds="Automation RunTests %testSuiteToRun%;quit" -TestExit="Automation Test Queue Empty" -ReportOutputPath="%projectLocation%\%testReportFolder%" -Log=%testLogName%
+"%ueLocation%\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "%projectLocation%\%projectName%" -nosplash -Unattended -nopause -nosound -NullRHI -nocontentbrowser -ExecCmds="Automation RunTests %testSuiteToRun%;quit" -TestExit="Automation Test Queue Empty" -ReportOutputPath="%projectLocation%\%testReportFolder%" -Log=%testLogName%
 
