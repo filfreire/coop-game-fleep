@@ -1,0 +1,19 @@
+name: CoopGameFleep CI - Build
+
+on: [push, pull_request]
+
+env:
+  UNREAL_PATH: E:\unreal\UE_5.2
+  PROJECT_NAME: CoopGameFleep.uproject
+
+jobs:
+  build:
+    name: Build
+    runs-on: self-hosted
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+
+    - name: Build
+      run: .\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
