@@ -30,4 +30,4 @@ jobs:
       with:
         if-no-files-found: ignore
         name: test-results
-        path: ${{env.TEST_REPORT_FOLDER}}\${{env.TEST_LOGNAME}}
+        path: ${{env.TEST_REPORT_FOLDER}}
