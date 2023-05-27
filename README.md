@@ -27,10 +27,10 @@ For Linux/MacOS:
 First, run on a Powershell terminal:
 
 ```powershell
-& '.\EpicGames\Epic Games\UE_5.2\Engine\Build\BatchFiles\RunUAT.bat' BuildCookRun -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -target=CoopGameFleep -platform=Win64 -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="D:/builds" -clientconfig=Development -nocompile -nocompileuat
+& 'D:\EpicGames\Epic Games\UE_5.2\Engine\Build\BatchFiles\RunUAT.bat' BuildCookRun -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -target=CoopGameFleep -platform=Win64 -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="D:/builds" -clientconfig=Development -nocompile -nocompileuat
 ```
 
-> note: replace `EpicGames\Epic Games\UE_5.2` and `unreal/coop-game-fleep` with the respective paths where you installed Unreal Engine 5.2 and cloned the repository:
+> note: replace `D:\EpicGames\Epic Games\UE_5.2` and `unreal/coop-game-fleep` with the respective paths where you installed Unreal Engine 5.2 and cloned the repository:
 
 If packaging works successfully, you should see a log like:
 
