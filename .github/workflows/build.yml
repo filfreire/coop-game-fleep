@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build+Test+Package
 
 on: [push, pull_request]
 
@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    name: Build and Test
+    name: Build+Test+Package
     runs-on: self-hosted
 
     steps:
