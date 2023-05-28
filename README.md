@@ -7,42 +7,63 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
 
 > Note repository is in a WIP state.
 
+- [coop-game-fleep](#coop-game-fleep)
+  - [Prerequisites](#prerequisites)
+  - [How to build](#how-to-build)
+  - [How to run tests](#how-to-run-tests)
+  - [How to package and run](#how-to-package-and-run)
+
 ## Prerequisites
 
 For Windows 10/11:
 
 - Install [Unreal Engine 5.2](https://www.unrealengine.com/en-US/download) (and all needed sub-dependencies)
 - Install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
+- Install all dependencies mentioned on [official documentation](https://docs.unrealengine.com/5.2/en-US/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine/)
 
 (Tested on a Windows 10 Pro, version 22H2)
 
-For Linux/MacOS:
-
-/todo - work in progress
+> For Linux/MacOS: `Not used yet, work in progress`
 
 ## How to build
 
-/todo - work in progress
+First, clone the repository, make sure you have everything listed on **Prerequisites** setup and then `cd` into the cloned folder.
+
+Use `.\scripts\Build.bat` batch file to compile/build the project:
 
 ```powershell
-todo
+# UNREAL_PATH - Unreal engine install path, e.g. C:\Epic Games\UE_5.2
+# PROJECT_NAME - project name, e.g. CoopGameFleep.uproject
+
+.\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
 ```
 
 ## How to run tests
 
+To run tests, use the `.\scripts\RunTests.bat` batch file:
+
 ```powershell
-todo
+# UNREAL_PATH - Unreal engine install path, e.g. C:\Epic Games\UE_5.2
+# PROJECT_NAME - project name, e.g. CoopGameFleep.uproject
+# TEST_SUITE_TO_RUN - e.g. CoopGameFleepTests.
+# TEST_REPORT_FOLDER - e.g. TestResults
+# TEST_LOGNAME - e.g. RunTests.log
+
+.\scripts\RunTests.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME
 ```
 
 ## How to package and run
 
-First, run on a Powershell terminal:
+To package a game build for Win64 platform, r   un `.\scripts\Package.bat` on a Powershell terminal:
 
 ```powershell
-& 'D:\EpicGames\Epic Games\UE_5.2\Engine\Build\BatchFiles\RunUAT.bat' BuildCookRun -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project="D:/unreal/coop-game-fleep/CoopGameFleep.uproject" -target=CoopGameFleep -platform=Win64 -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="D:/builds" -clientconfig=Development -nocompile -nocompileuat
-```
+# UNREAL_PATH - Unreal engine install path, e.g. C:\Epic Games\UE_5.2
+# PROJECT_NAME - project name, e.g. CoopGameFleep.uproject
+# TARGET_NAME - name of target, e.g. CoopGameFleep
+# PACKAGE_FOLDER - Folder name where to place the packaged game binaries, e.g. PackageResults
 
-> note: replace `D:\EpicGames\Epic Games\UE_5.2` and `unreal/coop-game-fleep` with the respective paths where you installed Unreal Engine 5.2 and cloned the repository:
+.\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TARGET_NAME $env:PACKAGE_FOLDER
+```
 
 If packaging works successfully, you should see a log like:
 
@@ -54,6 +75,6 @@ UATHelper: Packaging (Windows): AutomationTool executed for 0h 10m 37s
 UATHelper: Packaging (Windows): AutomationTool exiting with ExitCode=0 (Success)
 ```
 
-And you should see a packaged build in `D:/builds` (or the `-archivedirectory` you've picked).
+And you should see a packaged build in `PACKAGE_FOLDER` (or the `-archivedirectory` you've picked in case you edit the `.\scripts\Package.bat` batch file).
 
-> Note: First packaging is taking between 10 to 20 minutes on an AMD Ryzen 7 5800 processor. It might take longer or less time depending on your specs.
+> Note: First packaging is can take between 10 to 20 minutes. This is what it took on an AMD Ryzen 7 5800 processor and an Intel Core i7 6700k. It might take longer or less time depending on your specs.
