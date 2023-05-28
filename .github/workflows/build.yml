@@ -8,6 +8,7 @@ env:
   TEST_SUITE_TO_RUN: CoopGameFleepTests.
   TEST_REPORT_FOLDER: TestResults
   TEST_LOGNAME: RunTests.log
+  TARGET_NAME: CoopGameFleep
   PACKAGE_FOLDER: PackageResults
 
 jobs:
@@ -45,7 +46,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Package
-      run: .\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME CoopGameFleep $env:PACKAGE_FOLDER
+      run: .\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TARGET_NAME $env:PACKAGE_FOLDER
 
     - name: Archive package
       uses: actions/upload-artifact@v3
