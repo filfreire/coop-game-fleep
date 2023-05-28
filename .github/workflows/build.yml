@@ -8,6 +8,7 @@ env:
   TEST_SUITE_TO_RUN: CoopGameFleepTests.
   TEST_REPORT_FOLDER: TestResults
   TEST_LOGNAME: RunTests.log
+  PACKAGE_FOLDER: PackageResults
 
 jobs:
   build:
@@ -33,3 +34,24 @@ jobs:
         path: |
           ${{env.TEST_REPORT_FOLDER}}
           Saved\Logs\${{env.TEST_LOGNAME}}
+
+  package:
+    name: Package
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v3
+
+    - name: Package
+      run: .\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME CoopGameFleep $env:PACKAGE_FOLDER
+
+    - name: Archive package
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        if-no-files-found: ignore
+        name: win64-build
+        path: |
+          ${{env.PACKAGE_FOLDER}}
