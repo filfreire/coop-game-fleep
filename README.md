@@ -5,6 +5,8 @@
 This is my personal repo with exercises, experiments and classwork of the <https://www.udemy.com/course/unrealengine-cpp> class.
 It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s original work on: <https://github.com/tomlooman/CoopHordeShooter>
 
+![coopgamefleep](docs/imgs/coopgamefleep.jpg)
+
 > Note repository is in a WIP state.
 
 - [coop-game-fleep](#coop-game-fleep)
