@@ -20,6 +20,8 @@ env:
   PACKAGE_FOLDER: PackageResults
   PACKAGE_SHIPPING_FOLDER: PackageShippingResults
   UNREAL_EDITOR_CMD: UnrealEditor-Cmd.exe
+  ACTIONS_RUNNER_HOOK_JOB_STARTED=/cleanup_script.sh
+
 
 jobs:
   build:
@@ -27,6 +29,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Cleanup
+      run: rm -Recurse ${{github.workspace}}\*
+
     - name: Clone repository
       uses: actions/checkout@v3
 
