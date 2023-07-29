@@ -49,6 +49,9 @@ jobs:
           ${{env.TEST_REPORT_FOLDER}}
           Saved\Logs\${{env.TEST_LOGNAME}}
 
+    - name: Cook
+      run: .\scripts\Cook.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
+
     - name: Package
       run: .\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TARGET_NAME $env:PACKAGE_FOLDER
 
