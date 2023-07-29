@@ -1,6 +1,14 @@
 name: Build+Test+Package
 
-on: [push, pull_request]
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - master
 
 env:
   UNREAL_PATH: E:\unreal\UE_5.2
@@ -10,6 +18,8 @@ env:
   TEST_LOGNAME: RunTests.log
   TARGET_NAME: CoopGameFleep
   PACKAGE_FOLDER: PackageResults
+  PACKAGE_SHIPPING_FOLDER: PackageShippingResults
+  UNREAL_EDITOR_CMD: UnrealEditor-Cmd.exe
 
 jobs:
   build:
@@ -24,7 +34,7 @@ jobs:
       run: .\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
 
     - name: Test
-      run: .\scripts\RunTests.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME
+      run: .\scripts\RunTests.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME $env:UNREAL_EDITOR_CMD
 
     - name: Archive test results
       uses: actions/upload-artifact@v3
