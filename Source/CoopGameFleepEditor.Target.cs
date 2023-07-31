@@ -10,5 +10,6 @@ public class CoopGameFleepEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 		ExtraModuleNames.AddRange( new string[] { "CoopGameFleep" } );
+		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 	}
 }
