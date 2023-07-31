@@ -32,9 +32,9 @@ set testReportFolder=%~5
 set testLogName=%~6
 set UnrealEditorCmd=%~7
 set LightQuality=%~8
-:: set MapToRebuild=%~9
+set MapToRebuild=%~9
 
 
-"%ueLocation%\Engine\Binaries\Win64\%UnrealEditorCmd%" "%projectLocation%\%projectName%" -run=resavepackages -buildlighting -allowcommandletrendering -quality=%LightQuality%
+:: "%ueLocation%\Engine\Binaries\Win64\%UnrealEditorCmd%" "%projectLocation%\%projectName%" -run=resavepackages -buildlighting -allowcommandletrendering -quality=%LightQuality%
 
-:: "%ueLocation%\Engine\Binaries\Win64\%UnrealEditorCmd%" "%projectLocation%\%projectName%" -run=resavepackages -buildlighting -allowcommandletrendering -quality=%LightQuality% -map=%MapToRebuild%
+"%ueLocation%\Engine\Binaries\Win64\%UnrealEditorCmd%" "%projectLocation%\%projectName%" -run=resavepackages -buildlighting -allowcommandletrendering -quality=%LightQuality% -map=%MapToRebuild%
