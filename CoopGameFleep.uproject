@@ -199,5 +199,8 @@
 			"Name": "IOSDeviceProfileSelector",
 			"Enabled": false
 		}
+	],
+	"TargetPlatforms": [
+		"Windows"
 	]
 }
