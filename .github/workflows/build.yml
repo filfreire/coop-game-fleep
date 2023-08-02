@@ -51,7 +51,7 @@ jobs:
           Saved\Logs\${{env.TEST_LOGNAME}}
 
     - name: Rebuild Lighting
-      run: .\scripts\RebuildLighting.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME $env:UNREAL_EDITOR_CMD Preview P_TestMap
+      run: .\scripts\RebuildLighting.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:UNREAL_EDITOR_CMD Preview P_TestMap
 
     - name: Package
       run: .\scripts\Package.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TARGET_NAME $env:PACKAGE_FOLDER
