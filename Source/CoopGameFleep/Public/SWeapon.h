@@ -20,14 +20,10 @@ public:
 	ASWeapon();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USkeletalMeshComponent* MeshComp;
 
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	virtual void Fire();
+	void PlayFireEffects(FVector TracerEnd);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<UDamageType> DamageType;
@@ -48,7 +44,7 @@ protected:
 	UParticleSystem* TracerEffect;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	// BlueprintProtected not found for UE 5
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	virtual void Fire();
 };
