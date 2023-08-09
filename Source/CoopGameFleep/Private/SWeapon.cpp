@@ -7,6 +7,10 @@
 #include "Particles/ParticleSystem.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Chaos/ChaosEngineInterface.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
+#include <CoopGameFleep/CoopGameFleep.h>
+
 
 static int32 DebugWeaponDrawing = 0;
 FAutoConsoleVariableRef CVarDebugWeapon(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"), ECVF_Cheat);
@@ -43,6 +47,7 @@ void ASWeapon::Fire()
 		QueryParams.AddIgnoredActor(WeaponOwner);
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.bTraceComplex = true;
+		QueryParams.bReturnPhysicalMaterial = true;
 
 		// Particle "Target" parameter
 		FVector TracerEndpoint = TraceEnd;
@@ -55,9 +60,26 @@ void ASWeapon::Fire()
 
 			UGameplayStatics::ApplyPointDamage(HitActor, 20.0f, ShotDirection, Hit, WeaponOwner->GetInstigatorController(), this, DamageType);
 
-			if (ImpactEffect)
+			
+			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
+
+			UParticleSystem* SelectedEffect = nullptr;
+
+			switch (SurfaceType)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), true);
+			case SURFACE_FLESH_DEFAULT:
+			case SURFACE_FLESH_VULNERABLE:
+				SelectedEffect = FleshImpactEffect;
+				break;
+			case SurfaceType_Default:
+			default:
+				SelectedEffect = DefaultImpactEffect;
+				break;
+			}
+
+			if (SelectedEffect)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), true);
 			}
 
 			TracerEndpoint = Hit.ImpactPoint;
