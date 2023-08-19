@@ -9,6 +9,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Chaos/ChaosEngineInterface.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
+#include "TimerManager.h"
 #include <CoopGameFleep/CoopGameFleep.h>
 
 
@@ -26,6 +27,14 @@ ASWeapon::ASWeapon()
 
 	BaseDamage = 20.0f;
 
+	FireRate = 600;
+
+}
+
+void ASWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+	TimeBetweenShots = 60 / FireRate;
 }
 
 void ASWeapon::Fire()
@@ -98,7 +107,20 @@ void ASWeapon::Fire()
 		}
 
 		PlayFireEffects(TracerEndpoint);
+
+		LastFireTime = GetWorld()->TimeSeconds;
 	}
+}
+
+void ASWeapon::StartFire()
+{
+	float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShoots, this, &ASWeapon::Fire, TimeBetweenShots, true, FirstDelay);
+}
+
+void ASWeapon::StopFire()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShoots);
 }
 
 void ASWeapon::PlayFireEffects(FVector TracerEnd)
