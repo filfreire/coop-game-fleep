@@ -11,6 +11,7 @@
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "TimerManager.h"
 #include <CoopGameFleep/CoopGameFleep.h>
+#include <SCharacter.h>
 
 
 static int32 DebugWeaponDrawing = 0;
@@ -43,7 +44,9 @@ void ASWeapon::Fire()
 
 	AActor* WeaponOwner = GetOwner();
 
-	if (WeaponOwner)
+	ASCharacter* WeaponOwnerCharacter = Cast<ASCharacter>(WeaponOwner);
+
+	if (WeaponOwner && WeaponOwnerCharacter->CurrentPlayerRifleAmmoCount() > 0)
 	{
 		FVector EyeLocation;
 		FRotator EyeRotation;
@@ -109,6 +112,7 @@ void ASWeapon::Fire()
 		PlayFireEffects(TracerEndpoint);
 
 		LastFireTime = GetWorld()->TimeSeconds;
+		WeaponOwnerCharacter->UpdatePlayerRifleAmmoCount(-1);
 	}
 }
 

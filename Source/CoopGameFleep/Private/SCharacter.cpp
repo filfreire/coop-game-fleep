@@ -46,6 +46,9 @@ void ASCharacter::BeginPlay()
 		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachSocketName);
 	}
 
+
+	RifleAmmo = 30;
+
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -137,5 +140,32 @@ FVector ASCharacter::GetPawnViewLocation() const
 		return CameraComp->GetComponentLocation();
 	}
 	return Super::GetPawnViewLocation();
+}
+
+bool ASCharacter::UpdatePlayerRifleAmmoCount(int ammount)
+{
+	// TODO: simplify logic, this is just a dumb first pass
+
+	if (ammount == 0) {
+		return false;
+	}
+
+	if (ammount > 0) {
+		RifleAmmo += ammount;
+		return true;
+	}
+
+	if (ammount < 0 && RifleAmmo > 0 && RifleAmmo + ammount >= 0) {
+		RifleAmmo += ammount;
+		return true;
+	}
+
+	return false;
+	
+}
+
+int ASCharacter::CurrentPlayerRifleAmmoCount()
+{
+	return RifleAmmo;
 }
 

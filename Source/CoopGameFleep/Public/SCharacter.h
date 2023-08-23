@@ -65,6 +65,9 @@ protected:
 
 	void StopFire();
 
+	UPROPERTY(EditDefaultsOnly, Category = "Player")
+	int RifleAmmo;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -74,4 +77,8 @@ public:
 
 	virtual FVector GetPawnViewLocation() const override;
 
+	bool UpdatePlayerRifleAmmoCount(int ammount);
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	int CurrentPlayerRifleAmmoCount();
 };
