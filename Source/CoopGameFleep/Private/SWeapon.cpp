@@ -113,6 +113,8 @@ void ASWeapon::Fire()
 
 		LastFireTime = GetWorld()->TimeSeconds;
 		WeaponOwnerCharacter->UpdatePlayerRifleAmmoCount(-1);
+
+		UE_LOG(LogTemp, Log, TEXT("Ammo changed: %s"), *FString::FromInt(WeaponOwnerCharacter->CurrentPlayerRifleAmmoCount()));
 	}
 }
 

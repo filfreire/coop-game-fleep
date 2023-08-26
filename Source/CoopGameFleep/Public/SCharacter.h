@@ -10,6 +10,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class ASWeapon;
+class USHealthComponent;
 
 UCLASS()
 class COOPGAMEFLEEP_API ASCharacter : public ACharacter
@@ -38,6 +39,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* SpringArmComp;
 
+	USHealthComponent* HealthComp;
+
 	bool bWantsToZoom;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
@@ -50,14 +53,14 @@ protected:
 	float ZoomInterpSpeed;
 
 	void BeginZoom();
-	
+
 	void EndZoom();
 
 	ASWeapon* CurrentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	TSubclassOf<ASWeapon> StarterWeaponClass;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Player")
 	FName WeaponAttachSocketName;
 
@@ -67,6 +70,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Player")
 	int RifleAmmo;
+
+	UFUNCTION()
+	void OnHealthChanged(USHealthComponent* HealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	/* Pawn Died previously */
+	UPROPERTY(BlueprintReadOnly, Category = "Player")
+	bool bDied;
 
 public:
 	// Called every frame

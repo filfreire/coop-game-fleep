@@ -6,11 +6,14 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "SWeapon.h"
+#include "Components/CapsuleComponent.h"
+#include <CoopGameFleep/CoopGameFleep.h>
+#include "Components/SHealthComponent.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
@@ -19,6 +22,10 @@ ASCharacter::ASCharacter()
 
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 	GetMovementComponent()->GetNavAgentPropertiesRef().bCanJump = true;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(COLLISION_WEAPON, ECR_Ignore);
+
+	HealthComp = CreateDefaultSubobject<USHealthComponent>(TEXT("HealthComp"));
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
@@ -48,6 +55,9 @@ void ASCharacter::BeginPlay()
 
 
 	RifleAmmo = 30;
+
+
+	HealthComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
 
 }
 
@@ -83,7 +93,7 @@ void ASCharacter::EndZoom()
 
 void ASCharacter::StartFire()
 {
-	if (CurrentWeapon) {
+	if (CurrentWeapon && !bDied) {
 		CurrentWeapon->StartFire();
 	}
 }
@@ -95,6 +105,21 @@ void ASCharacter::StopFire()
 	}
 }
 
+
+void ASCharacter::OnHealthChanged(USHealthComponent* HealthComp1, float Health, float HealthDelta, const class UDamageType* DamageType, 
+	class AController* InstigatedBy, AActor* DamageCauser)
+{
+	if (Health <= 0.0f && !bDied)
+	{
+		bDied = true;
+
+		GetMovementComponent()->StopMovementImmediately();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		DetachFromControllerPendingDestroy();
+		SetLifeSpan(10.0f);
+	}
+}
 
 // Called every frame
 void ASCharacter::Tick(float DeltaTime)
@@ -161,7 +186,7 @@ bool ASCharacter::UpdatePlayerRifleAmmoCount(int ammount)
 	}
 
 	return false;
-	
+
 }
 
 int ASCharacter::CurrentPlayerRifleAmmoCount()
