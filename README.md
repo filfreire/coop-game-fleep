@@ -14,6 +14,7 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
   - [How to build](#how-to-build)
   - [How to run tests](#how-to-run-tests)
   - [How to package and run](#how-to-package-and-run)
+  - [Problems using the project locally](#problems-using-the-project-locally)
 
 ## Prerequisites
 
@@ -21,11 +22,22 @@ For Windows 10/11:
 
 - Install [Unreal Engine 5.2](https://www.unrealengine.com/en-US/download) (and all needed sub-dependencies)
 - Install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
-- Install all dependencies mentioned on [official documentation](https://docs.unrealengine.com/5.2/en-US/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine/)
+- Install all dependencies mentioned on [official documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine?application_version=5.4)
+  - .NET desktop development 
+  - Desktop development with C++
+  - Universal Windows Platform development
+  - Game Development with C++
+  - (also mentioned)
+    - C++ profiling tools
+    - C++ AddressSanitizer
+    - Windows 10 SDK (10.0.18362 or Newer)
+    - Unreal Engine installer
+
 
 (Tested on a Windows 10 Pro, version 22H2)
 
 > For Linux/MacOS: `Not used yet, work in progress`
+
 
 ## How to build
 
@@ -80,3 +92,15 @@ UATHelper: Packaging (Windows): AutomationTool exiting with ExitCode=0 (Success)
 And you should see a packaged build in `PACKAGE_FOLDER` (or the `-archivedirectory` you've picked in case you edit the `.\scripts\Package.bat` batch file).
 
 > Note: First packaging is can take between 10 to 20 minutes. This is what it took on an AMD Ryzen 7 5800 processor and an Intel Core i7 6700k. It might take longer or less time depending on your specs.
+
+## Problems using the project locally
+
+I see a handful of errors when I try to run project from VSCode like:
+
+```plaintext
+Unable to find package (...)
+Unable to find package (...)
+Unable to find package (...)
+```
+
+Try to use solution documented in <https://stackoverflow.com/a/70584286>
