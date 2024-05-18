@@ -156,7 +156,7 @@ void ASWeapon::PlayFireEffects(FVector TracerEnd)
 
 		if (PlayerController)
 		{
-			PlayerController->ClientPlayCameraShake(FireCamShake);
+			PlayerController->ClientStartCameraShake(FireCamShake);
 		}
 	}
 

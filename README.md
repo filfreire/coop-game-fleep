@@ -15,6 +15,8 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
   - [How to run tests](#how-to-run-tests)
   - [How to package and run](#how-to-package-and-run)
   - [Problems using the project locally](#problems-using-the-project-locally)
+    - [Unable to find package errors](#unable-to-find-package-errors)
+    - [Error opening project about bStrictConformanceMode](#error-opening-project-about-bstrictconformancemode)
 
 ## Prerequisites
 
@@ -95,6 +97,8 @@ And you should see a packaged build in `PACKAGE_FOLDER` (or the `-archivedirecto
 
 ## Problems using the project locally
 
+### Unable to find package errors
+
 I see a handful of errors when I try to run project from VSCode like:
 
 ```plaintext
@@ -104,3 +108,20 @@ Unable to find package (...)
 ```
 
 Try to use solution documented in <https://stackoverflow.com/a/70584286>
+
+### Error opening project about bStrictConformanceMode
+
+When converting from Engine version 5.2 to 5.4, I see errors like:
+
+```
+modifies the values of properties: [ bStrictConformanceMode ]
+```
+
+There's some documentation about it <https://forums.unrealengine.com/t/build-failed-in-unreal-5-4/1789560/9>, editing `CoopGameFleepEditor.Target.cs` and `CoopGameFleep.Target.cs` files with
+
+```
+DefaultBuildSettings = BuildSettingsVersion.V5;
+bOverrideBuildEnvironment = true;
+```
+
+appears to have solved the issue.
