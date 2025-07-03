@@ -11,7 +11,7 @@ on:
       - master
 
 env:
-  UNREAL_PATH: D:\unreal\UE_5.6
+  UNREAL_PATH: C:\unreal\UE_5.6
   PROJECT_NAME: CoopGameFleep.uproject
   TEST_SUITE_TO_RUN: CoopGameFleepTests.
   TEST_REPORT_FOLDER: TestResults
