@@ -32,7 +32,7 @@ jobs:
       run: rm -Recurse ${{github.workspace}}\*
 
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build
       run: .\scripts\Build.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME
@@ -41,7 +41,7 @@ jobs:
       run: .\scripts\RunTests.bat $env:UNREAL_PATH (Get-Location).Path $env:PROJECT_NAME $env:TEST_SUITE_TO_RUN $env:TEST_REPORT_FOLDER $env:TEST_LOGNAME $env:UNREAL_EDITOR_CMD
 
     - name: Archive test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         if-no-files-found: ignore
@@ -60,7 +60,7 @@ jobs:
       run: .\scripts\CompressPackage.bat (Get-Location).Path $env:PACKAGE_FOLDER
 
     - name: Archive package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         if-no-files-found: ignore
