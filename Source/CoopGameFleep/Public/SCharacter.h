@@ -79,6 +79,13 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
+	// Learning Agents variables
+	UPROPERTY(BlueprintReadOnly, Category = "Learning")
+	int32 AgentID;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Learning")
+	bool bFoundManager;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -95,5 +102,28 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void ResetCharacterPosition();
+
+	// Learning Agents public interface
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	void AIMoveForward(float Value) { MoveForward(Value); }
+
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	void AIMoveRight(float Value) { MoveRight(Value); }
+
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	void AIBeginCrouch() { BeginCrouch(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	void AIEndCrouch() { EndCrouch(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	bool IsDead() const { return bDied; }
+
+	UFUNCTION(BlueprintCallable, Category = "Learning Agents")
+	USHealthComponent* GetHealthComponent() const { return HealthComp; }
+
+private:
+	// Register with Learning Agents Manager
+	void RegisterWithLearningAgentsManager();
 
 };

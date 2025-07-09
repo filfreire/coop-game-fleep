@@ -17,6 +17,7 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
   - [Problems using the project locally](#problems-using-the-project-locally)
     - [Unable to find package errors](#unable-to-find-package-errors)
     - [Error opening project about bStrictConformanceMode](#error-opening-project-about-bstrictconformancemode)
+  - [Helper scripts](#helper-scripts)
 
 ## Prerequisites
 
@@ -125,3 +126,14 @@ bOverrideBuildEnvironment = true;
 ```
 
 appears to have solved the issue.
+
+## Helper scripts
+
+```powershell
+
+# build
+& "D:\unreal\UE_5.6\Engine\Build\BatchFiles\Build.bat" CoopGameFleepEditor Win64 Development -Project="e:\unrealprojects\coop-game-fleep\CoopGameFleep.uproject"
+
+# run unreal editor
+& "D:\unreal\UE_5.6\Engine\Binaries\Win64\UnrealEditor.exe" "e:\unrealprojects\coop-game-fleep\CoopGameFleep.uproject"
+```

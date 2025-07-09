@@ -9,6 +9,8 @@
 #include "Components/CapsuleComponent.h"
 #include <CoopGameFleep/CoopGameFleep.h>
 #include "Components/SHealthComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "LearningAgentsManager.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -31,6 +33,10 @@ ASCharacter::ASCharacter()
 	CameraComp->SetupAttachment(SpringArmComp);
 
 	WeaponAttachSocketName = "WeaponSocket";
+	
+	// Initialize Learning Agents variables
+	AgentID = -1;
+	bFoundManager = false;
 }
 
 // Called when the game starts or when spawned
@@ -56,8 +62,10 @@ void ASCharacter::BeginPlay()
 
 	RifleAmmo = 30;
 
-
 	HealthComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
+
+	// Register with Learning Agents Manager
+	RegisterWithLearningAgentsManager();
 
 }
 
@@ -216,6 +224,30 @@ void ASCharacter::ResetCharacterPosition()
 	if (GetController())
 	{
 		GetController()->SetControlRotation(ResetRotation);
+	}
+}
+
+void ASCharacter::RegisterWithLearningAgentsManager()
+{
+	// Register with any existing Learning Agents Managers
+	TArray<AActor*> Managers;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), "LearningAgentsManager", Managers);
+	for (const AActor* CurActor : Managers)
+	{
+		ULearningAgentsManager* Manager = Cast<ULearningAgentsManager>(
+			CurActor->GetComponentByClass(ULearningAgentsManager::StaticClass()));
+		if (Manager != nullptr)
+		{
+			AgentID = Manager->AddAgent(this);
+			bFoundManager = true;
+			UE_LOG(LogTemp, Log, TEXT("Character registered with Learning Agents Manager. Agent ID: %d"), AgentID);
+			break; // Found a manager, no need to continue searching
+		}
+	}
+
+	if (!bFoundManager)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character: Failed to find Learning Agents Manager (did you remember to add to scene and tag it?)"));
 	}
 }
 
