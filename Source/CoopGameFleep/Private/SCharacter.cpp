@@ -156,6 +156,8 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ASCharacter::StartFire);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ASCharacter::StopFire);
 
+	PlayerInputComponent->BindAction("ResetPosition", IE_Pressed, this, &ASCharacter::ResetCharacterPosition);
+
 }
 
 FVector ASCharacter::GetPawnViewLocation() const
@@ -192,5 +194,28 @@ bool ASCharacter::UpdatePlayerRifleAmmoCount(int ammount)
 int ASCharacter::CurrentPlayerRifleAmmoCount()
 {
 	return RifleAmmo;
+}
+
+void ASCharacter::ResetCharacterPosition()
+{
+	// Reset character position to world origin
+	FVector ResetLocation = FVector(0.0f, 0.0f, 100.0f); // Slightly above ground to avoid falling through
+	FRotator ResetRotation = FRotator::ZeroRotator;
+	
+	// Reset the character's transform
+	SetActorLocation(ResetLocation);
+	SetActorRotation(ResetRotation);
+	
+	// Reset velocity to prevent momentum carrying over
+	if (GetMovementComponent())
+	{
+		GetMovementComponent()->StopMovementImmediately();
+	}
+	
+	// Reset controller rotation as well
+	if (GetController())
+	{
+		GetController()->SetControlRotation(ResetRotation);
+	}
 }
 

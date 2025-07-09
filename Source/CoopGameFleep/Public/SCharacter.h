@@ -92,4 +92,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	int CurrentPlayerRifleAmmoCount();
+
+	UFUNCTION(BlueprintCallable, Category = "Player")
+	void ResetCharacterPosition();
+
 };
