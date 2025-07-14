@@ -63,12 +63,20 @@ void ASCharacter::BeginPlay()
 
 void ASCharacter::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector() * Value);
+	// Only process player input if enabled (allows AI to take over during learning)
+	if (bPlayerInputEnabled)
+	{
+		AddMovementInput(GetActorForwardVector() * Value);
+	}
 }
 
 void ASCharacter::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector() * Value);
+	// Only process player input if enabled (allows AI to take over during learning)
+	if (bPlayerInputEnabled)
+	{
+		AddMovementInput(GetActorRightVector() * Value);
+	}
 }
 
 void ASCharacter::BeginCrouch()
@@ -217,5 +225,45 @@ void ASCharacter::ResetCharacterPosition()
 	{
 		GetController()->SetControlRotation(ResetRotation);
 	}
+}
+
+void ASCharacter::ResetForLearning(FVector NewLocation, FRotator NewRotation)
+{
+	// Reset death state if needed
+	bDied = false;
+	
+	// Disable player input during learning (AI will control movement)
+	bPlayerInputEnabled = false;
+	
+	// Reset collision if it was disabled
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	
+	// Reset the character's transform
+	SetActorLocation(NewLocation);
+	SetActorRotation(NewRotation);
+	
+	// Reset velocity to prevent momentum carrying over
+	if (GetMovementComponent())
+	{
+		GetMovementComponent()->StopMovementImmediately();
+	}
+	
+	// Reset controller rotation
+	if (GetController())
+	{
+		GetController()->SetControlRotation(NewRotation);
+	}
+	
+	// Reset health to full
+	if (HealthComp)
+	{
+		HealthComp->ResetHealth();
+	}
+}
+
+bool ASCharacter::IsAvailableForLearning() const
+{
+	// Character is available for learning if it's not dead and has valid components
+	return !bDied && GetMovementComponent() != nullptr;
 }
 

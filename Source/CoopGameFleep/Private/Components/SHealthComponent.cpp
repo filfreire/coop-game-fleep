@@ -41,4 +41,10 @@ void USHealthComponent::HandleTakeAnyDamange(AActor* DamagedActor, float Damage,
 	OnHealthChanged.Broadcast(this, Health, Damage, DamageType, InstigatedBy, DamageCauser);
 }
 
+void USHealthComponent::ResetHealth()
+{
+	Health = DefaultHealth;
+	UE_LOG(LogTemp, Log, TEXT("Health reset to: %s"), *FString::SanitizeFloat(Health));
+}
+
 

@@ -80,6 +80,13 @@ protected:
 	bool bDied;
 
 public:
+	// Learning Agents support - make bDied accessible
+	UFUNCTION(BlueprintCallable, Category = "Learning")
+	bool IsDead() const { return bDied; }
+
+protected:
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -95,5 +102,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Player")
 	void ResetCharacterPosition();
+
+	// Learning Agents support
+	UFUNCTION(BlueprintCallable, Category = "Learning")
+	void ResetForLearning(FVector NewLocation, FRotator NewRotation = FRotator::ZeroRotator);
+
+	UFUNCTION(BlueprintCallable, Category = "Learning")
+	bool IsAvailableForLearning() const;
+
+	// Flag to control whether player input is enabled (useful during learning)
+	UPROPERTY(BlueprintReadWrite, Category = "Learning")
+	bool bPlayerInputEnabled = true;
 
 };
