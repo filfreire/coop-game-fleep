@@ -49,6 +49,16 @@ void USCharacterTrainingEnvironment::GatherAgentReward_Implementation(float& Out
 				OutReward += MovementTowardsTargetReward;
 			}
 		}
+		
+		// Facing target reward - encourage agent to look at the target
+		FVector DirectionToTarget = (TargetLocation - CharacterLocation).GetSafeNormal();
+		FVector CharacterForward = Character->GetActorForwardVector();
+		float DotProduct = FVector::DotProduct(CharacterForward, DirectionToTarget);
+		
+		// DotProduct ranges from -1 (opposite direction) to 1 (same direction)
+		// Convert to 0-1 range and apply reward
+		float FacingAlignment = (DotProduct + 1.0f) * 0.5f;
+		OutReward += FacingAlignment * FacingTargetReward;
 	}
 
 	// Time step penalty to encourage efficiency

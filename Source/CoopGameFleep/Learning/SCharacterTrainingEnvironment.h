@@ -38,6 +38,9 @@ public:
 	float MovementTowardsTargetReward = 0.5f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rewards")
+	float FacingTargetReward = 0.2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rewards")
 	float TimeStepPenalty = -0.01f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rewards")

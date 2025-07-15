@@ -46,6 +46,10 @@ void USCharacterInteractor::SpecifyAgentObservation_Implementation(
 	CharacterObservations.Add("DistanceToTarget", 
 		ULearningAgentsObservations::SpecifyFloatObservation(InObservationSchema, MaxObservationDistance));
 
+	// Facing alignment to target (-1 to 1, where 1 means perfectly facing target)
+	CharacterObservations.Add("FacingAlignment", 
+		ULearningAgentsObservations::SpecifyFloatObservation(InObservationSchema, 1.0f));
+
 	// Set the complete observation schema
 	OutObservationSchemaElement = ULearningAgentsObservations::SpecifyStructObservation(InObservationSchema, CharacterObservations);
 }
@@ -103,6 +107,12 @@ void USCharacterInteractor::GatherAgentObservation_Implementation(
 	float DistanceToTarget = FVector::Dist(Character->GetActorLocation(), TargetActor->GetActorLocation());
 	CharacterObservationObject.Add("DistanceToTarget", 
 		ULearningAgentsObservations::MakeFloatObservation(InObservationObject, DistanceToTarget));
+
+	// Facing angle to target (how well aligned the character is with the target)
+	FVector CharacterForward = Character->GetActorForwardVector();
+	float FacingAlignment = FVector::DotProduct(CharacterForward, DirectionToTarget);
+	CharacterObservationObject.Add("FacingAlignment", 
+		ULearningAgentsObservations::MakeFloatObservation(InObservationObject, FacingAlignment));
 
 	// Set the complete observation object
 	OutObservationObjectElement = ULearningAgentsObservations::MakeStructObservation(InObservationObject, CharacterObservationObject);
@@ -180,8 +190,8 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 	if (Character)
 	{
 		// Log action execution for debugging multi-agent issues
-		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Actions - Forward:%.2f, Right:%.2f, Turn:%.2f"), 
-			AgentId, *Character->GetName(), MoveForwardValue, MoveRightValue, TurnValue);
+		// UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Actions - Forward:%.2f, Right:%.2f, Turn:%.2f"), 
+		//	AgentId, *Character->GetName(), MoveForwardValue, MoveRightValue, TurnValue);
 		
 		// Apply forward/backward movement
 		Character->AddMovementInput(Character->GetActorForwardVector(), MoveForwardValue);
@@ -189,10 +199,12 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 		// Apply left/right movement  
 		Character->AddMovementInput(Character->GetActorRightVector(), MoveRightValue);
 		
-		// Apply rotation (yaw)
+		// Apply rotation (yaw) with increased sensitivity for better target facing
 		if (FMath::Abs(TurnValue) > 0.01f) // Only rotate if meaningful input
 		{
-			Character->AddControllerYawInput(TurnValue);
+			// Scale up the turn input for more responsive rotation
+			float TurnScale = 2.0f; // Increase rotation sensitivity
+			Character->AddControllerYawInput(TurnValue * TurnScale);
 		}
 	}
 } 
