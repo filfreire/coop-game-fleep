@@ -9,7 +9,7 @@ public class CoopGameFleep : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore",
-			"Learning", "LearningAgents", "LearningTraining", "LearningAgentsTraining"
+			"Learning", "LearningAgents", "LearningTraining", "LearningAgentsTraining", "AIModule"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "PhysicsCore" });

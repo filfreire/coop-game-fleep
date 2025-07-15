@@ -9,6 +9,10 @@
 #include "LearningAgentsCommunicator.h"
 #include "Kismet/GameplayStatics.h"
 #include "SCharacter.h"
+#include "Engine/Engine.h"
+#include "AIController.h"
+#include "LearningAgentsController.h"
+#include "LearningAgentsEntitiesManagerComponent.h"
 
 ASCharacterManager::ASCharacterManager()
 {
@@ -28,12 +32,83 @@ void ASCharacterManager::BeginPlay()
 
 void ASCharacterManager::InitializeAgents()
 {
-	// Get all SCharacter agents
+	// Get all SCharacter agents (including Blueprint-derived ones)
 	TArray<AActor*> Agents;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASCharacter::StaticClass(), Agents);
+	
+	// Also try to find any Character-derived actors that might be blueprints
+	TArray<AActor*> AllCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacter::StaticClass(), AllCharacters);
+	
+	// Filter characters to only include SCharacter and its derivatives
+	for (AActor* Actor : AllCharacters)
+	{
+		if (ASCharacter* SChar = Cast<ASCharacter>(Actor))
+		{
+			if (!Agents.Contains(Actor)) // Avoid duplicates
+			{
+				Agents.Add(Actor);
+			}
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Found %d total characters in world"), AllCharacters.Num());
+	UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Found %d SCharacter agents"), Agents.Num());
+	
+	// Log details about what we found
+	for (int32 i = 0; i < AllCharacters.Num(); i++)
+	{
+		AActor* Actor = AllCharacters[i];
+		ASCharacter* SChar = Cast<ASCharacter>(Actor);
+		UE_LOG(LogTemp, Warning, TEXT("Character %d: %s (Class: %s) - SCharacter Cast: %s"), 
+			i, 
+			*Actor->GetName(), 
+			*Actor->GetClass()->GetName(),
+			SChar ? TEXT("SUCCESS") : TEXT("FAILED"));
+	}
 
 	for (AActor* Agent : Agents)
 	{
+		// Ensure the agent has a controller for movement input
+		if (APawn* Pawn = Cast<APawn>(Agent))
+		{
+			AController* ExistingController = Pawn->GetController();
+			if (!ExistingController)
+			{
+				// Create an AI controller for learning agents
+				UWorld* World = GetWorld();
+				if (World)
+				{
+					AAIController* NewController = World->SpawnActor<AAIController>();
+					if (NewController)
+					{
+						NewController->Possess(Pawn);
+						UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Created AIController for agent %s"), *Agent->GetName());
+					}
+					else
+					{
+						UE_LOG(LogTemp, Error, TEXT("SCharacterManager: Failed to create AIController for agent %s"), *Agent->GetName());
+					}
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Agent %s already has controller %s"), 
+					*Agent->GetName(), *ExistingController->GetClass()->GetName());
+			}
+		}
+		
+		// Add agent to the Learning Agents Manager
+		int32 AgentId = LearningAgentsManager->AddAgent(Agent);
+		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Added agent %s to manager with ID %d"), *Agent->GetName(), AgentId);
+		
+		// Initialize agent for learning (disable player input, prepare for AI control)
+		if (ASCharacter* SChar = Cast<ASCharacter>(Agent))
+		{
+			SChar->ResetForLearning(SChar->GetActorLocation(), SChar->GetActorRotation());
+			UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Initialized %s for learning"), *Agent->GetName());
+		}
+		
 		// Make sure manager ticks first
 		Agent->AddTickPrerequisiteActor(this);
 
@@ -46,6 +121,14 @@ void ASCharacterManager::InitializeAgents()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Initialized %d character agents"), Agents.Num());
+	
+	if (Agents.Num() == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SCharacterManager: No SCharacter agents found! Make sure to:"));
+		UE_LOG(LogTemp, Error, TEXT("1. Place SCharacter (or Blueprint derived from SCharacter) actors in your level"));
+		UE_LOG(LogTemp, Error, TEXT("2. Don't just set SCharacter as PlayerPawn - you need actual actors in the world"));
+		UE_LOG(LogTemp, Error, TEXT("3. Check that your Blueprint inherits from SCharacter, not just Character"));
+	}
 }
 
 void ASCharacterManager::InitializeManager()
@@ -76,9 +159,9 @@ void ASCharacterManager::InitializeManager()
 	// Make Policy Instance
 	ULearningAgentsInteractor* InteractorPtr = Interactor;
 	Policy = ULearningAgentsPolicy::MakePolicy(
-		ManagerPtr, InteractorPtr, USCharacterInteractor::StaticClass(), TEXT("SCharacter Policy"), 
+		ManagerPtr, InteractorPtr, ULearningAgentsPolicy::StaticClass(), TEXT("SCharacter Policy"), 
 		EncoderNeuralNetwork, PolicyNeuralNetwork, DecoderNeuralNetwork, 
-		ReInitialize, ReInitialize, ReInitialize, PolicySettings);
+		ReInitialize, ReInitialize, ReInitialize, PolicySettings, RandomSeed);
 	if (Policy == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make policy object."));
@@ -88,8 +171,8 @@ void ASCharacterManager::InitializeManager()
 	// Make Critic Instance
 	ULearningAgentsPolicy* PolicyPtr = Policy;
 	Critic = ULearningAgentsCritic::MakeCritic(
-		ManagerPtr, InteractorPtr, PolicyPtr, USCharacterInteractor::StaticClass(), TEXT("SCharacter Critic"), 
-		CriticNeuralNetwork, ReInitialize, CriticSettings);
+		ManagerPtr, InteractorPtr, PolicyPtr, ULearningAgentsCritic::StaticClass(), TEXT("SCharacter Critic"), 
+		CriticNeuralNetwork, ReInitialize, CriticSettings, RandomSeed);
 	if (Critic == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make critic object."));

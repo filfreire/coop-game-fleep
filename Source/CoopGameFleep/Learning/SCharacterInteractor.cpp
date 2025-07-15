@@ -23,7 +23,7 @@ void USCharacterInteractor::SpecifyAgentObservation_Implementation(
 	// Character position relative to world
 	CharacterObservations.Add("CharacterLocation", 
 		ULearningAgentsObservations::SpecifyLocationObservation(
-			InObservationSchema, MaxObservationDistance, "CharacterLocationObservation"));
+			InObservationSchema, MaxObservationDistance, "LocationObservation"));
 
 	// Character velocity
 	CharacterObservations.Add("CharacterVelocity", 
@@ -31,16 +31,16 @@ void USCharacterInteractor::SpecifyAgentObservation_Implementation(
 
 	// Character forward direction
 	CharacterObservations.Add("CharacterDirection", 
-		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "CharacterDirectionObservation"));
+		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "DirectionObservation"));
 
 	// Target position relative to world
 	CharacterObservations.Add("TargetLocation", 
 		ULearningAgentsObservations::SpecifyLocationObservation(
-			InObservationSchema, MaxObservationDistance, "TargetLocationObservation"));
+			InObservationSchema, MaxObservationDistance, "LocationObservation"));
 
 	// Direction from character to target
 	CharacterObservations.Add("DirectionToTarget", 
-		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "DirectionToTargetObservation"));
+		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "DirectionObservation"));
 
 	// Distance to target (normalized)
 	CharacterObservations.Add("DistanceToTarget", 
@@ -56,9 +56,17 @@ void USCharacterInteractor::GatherAgentObservation_Implementation(
 {
 	// Get the character agent
 	const ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
+	
 	if (!Character || !TargetActor)
 	{
-		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character or target for agent %d"), AgentId);
+		if (!Character)
+		{
+			UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character for agent %d"), AgentId);
+		}
+		if (!TargetActor)
+		{
+			UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: TargetActor is NULL - make sure SCharacterManager.TargetActor is set!"));
+		}
 		return;
 	}
 
@@ -109,15 +117,15 @@ void USCharacterInteractor::SpecifyAgentAction_Implementation(
 
 	// Movement input (forward/backward)
 	CharacterActions.Add("MoveForward", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "MoveForwardAction"));
+		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Movement input (left/right)
 	CharacterActions.Add("MoveRight", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "MoveRightAction"));
+		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Rotation input (yaw)
 	CharacterActions.Add("Turn", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "TurnAction"));
+		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Set the complete action schema
 	OutActionSchemaElement = ULearningAgentsActions::SpecifyStructAction(InActionSchema, CharacterActions);
@@ -130,9 +138,10 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 {
 	// Get the character agent
 	ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
+	
 	if (!Character)
 	{
-		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character for agent %d"), AgentId);
+		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character for agent %d in PerformAgentAction"), AgentId);
 		return;
 	}
 
@@ -167,20 +176,23 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get Turn action for agent %d"), AgentId);
 	}
 
-	// Apply movement inputs to the character
-	if (FMath::Abs(MoveForwardValue) > 0.01f)
+	// Apply movement actions to the character
+	if (Character)
 	{
+		// Log action execution for debugging multi-agent issues
+		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Actions - Forward:%.2f, Right:%.2f, Turn:%.2f"), 
+			AgentId, *Character->GetName(), MoveForwardValue, MoveRightValue, TurnValue);
+		
+		// Apply forward/backward movement
 		Character->AddMovementInput(Character->GetActorForwardVector(), MoveForwardValue);
-	}
-
-	if (FMath::Abs(MoveRightValue) > 0.01f)
-	{
+		
+		// Apply left/right movement  
 		Character->AddMovementInput(Character->GetActorRightVector(), MoveRightValue);
-	}
-
-	// Apply rotation input
-	if (FMath::Abs(TurnValue) > 0.01f)
-	{
-		Character->AddControllerYawInput(TurnValue);
+		
+		// Apply rotation (yaw)
+		if (FMath::Abs(TurnValue) > 0.01f) // Only rotate if meaningful input
+		{
+			Character->AddControllerYawInput(TurnValue);
+		}
 	}
 } 

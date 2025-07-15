@@ -16,4 +16,7 @@ class COOPGAMEFLEEP_API USCharacterManagerComponent : public ULearningAgentsMana
 
 public:
 	USCharacterManagerComponent();
+
+protected:
+	virtual void PostInitProperties() override;
 }; 

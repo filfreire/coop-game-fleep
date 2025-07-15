@@ -5,4 +5,10 @@
 USCharacterManagerComponent::USCharacterManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
+}
+
+void USCharacterManagerComponent::PostInitProperties()
+{
+	MaxAgentNum = 32; // Set maximum number of agents this manager can handle
+	Super::PostInitProperties();
 } 

@@ -76,6 +76,8 @@ void USCharacterTrainingEnvironment::GatherAgentCompletion_Implementation(ELearn
 	ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
 	if (!Character || !TargetActor)
 	{
+		UE_LOG(LogTemp, Error, TEXT("Agent %d: Completion check failed - Character: %s, Target: %s"), 
+			AgentId, Character ? TEXT("Valid") : TEXT("NULL"), TargetActor ? TEXT("Valid") : TEXT("NULL"));
 		OutCompletion = ELearningAgentsCompletion::Termination;
 		return;
 	}
@@ -83,13 +85,17 @@ void USCharacterTrainingEnvironment::GatherAgentCompletion_Implementation(ELearn
 	// Check if agent reached the target
 	if (TargetActor->IsLocationWithinReach(Character->GetActorLocation()))
 	{
+		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Episode complete - reached target"), AgentId, *Character->GetName());
 		OutCompletion = ELearningAgentsCompletion::Termination;
 		return;
 	}
 
 	// Check if episode has exceeded maximum length
-	if (EpisodeSteps.Contains(AgentId) && EpisodeSteps[AgentId] >= MaxEpisodeLength)
+	int32 CurrentSteps = EpisodeSteps.FindRef(AgentId);
+	if (CurrentSteps >= (int32)MaxEpisodeLength)
 	{
+		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Episode complete - max steps reached (%d)"), 
+			AgentId, *Character->GetName(), CurrentSteps);
 		OutCompletion = ELearningAgentsCompletion::Termination;
 		return;
 	}
@@ -102,6 +108,7 @@ void USCharacterTrainingEnvironment::GatherAgentCompletion_Implementation(ELearn
 	if (CharacterLocation.X < BoundsMin.X || CharacterLocation.X > BoundsMax.X ||
 		CharacterLocation.Y < BoundsMin.Y || CharacterLocation.Y > BoundsMax.Y)
 	{
+		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Episode complete - out of bounds"), AgentId, *Character->GetName());
 		OutCompletion = ELearningAgentsCompletion::Termination;
 		return;
 	}
@@ -109,6 +116,7 @@ void USCharacterTrainingEnvironment::GatherAgentCompletion_Implementation(ELearn
 	// Check if character died
 	if (Character->IsDead())
 	{
+		UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Episode complete - character died"), AgentId, *Character->GetName());
 		OutCompletion = ELearningAgentsCompletion::Termination;
 		return;
 	}
@@ -120,6 +128,10 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 	ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
 	if (!Character || !TargetActor)
 	{
+		UE_LOG(LogTemp, Error, TEXT("SCharacterTrainingEnvironment: Reset failed for Agent %d - Character: %s, Target: %s"), 
+			AgentId, 
+			Character ? TEXT("Valid") : TEXT("NULL"), 
+			TargetActor ? TEXT("Valid") : TEXT("NULL"));
 		return;
 	}
 
@@ -127,32 +139,36 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 	EpisodeSteps.Add(AgentId, 0);
 	PreviousDistances.Remove(AgentId);
 
-	// Reset character to random position
+	// Reset character to random position with proper Z offset to avoid floor clipping
 	FVector CharacterResetLocation;
-	do {
-		CharacterResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
-		CharacterResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
-		CharacterResetLocation.Z = ResetCenter.Z + ResetBounds.Z; // Keep above ground
-	} while (false); // We'll place character first, then target
+	CharacterResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
+	CharacterResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
+	CharacterResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Ensure minimum 100 units above ground
 
 	// Use the character's learning reset method
 	Character->ResetForLearning(CharacterResetLocation, FRotator::ZeroRotator);
 
 	// Reset target to random position (ensuring minimum distance from character)
-	FVector TargetResetLocation;
-	int32 Attempts = 0;
-	do {
-		TargetResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
-		TargetResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
-		TargetResetLocation.Z = ResetCenter.Z + ResetBounds.Z; // Keep above ground
-		Attempts++;
-	} while (FVector::Dist(CharacterResetLocation, TargetResetLocation) < MinDistanceBetweenCharacterAndTarget && Attempts < 100);
+	// For multi-agent, we only move the target when the first agent resets to avoid conflicts
+	if (AgentId == 0 || !TargetActor)
+	{
+		FVector TargetResetLocation;
+		int32 Attempts = 0;
+		do {
+			TargetResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
+			TargetResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
+			TargetResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Keep above ground
+			Attempts++;
+		} while (FVector::Dist(CharacterResetLocation, TargetResetLocation) < MinDistanceBetweenCharacterAndTarget && Attempts < 100);
 
-	TargetActor->SetActorLocation(TargetResetLocation);
+		TargetActor->SetActorLocation(TargetResetLocation);
+		
+		UE_LOG(LogTemp, Log, TEXT("Reset Target for Agent %d - Target: %s"), AgentId, *TargetResetLocation.ToString());
+	}
 
-	UE_LOG(LogTemp, Log, TEXT("Reset Agent %d - Character: %s, Target: %s, Distance: %f"), 
+	UE_LOG(LogTemp, Log, TEXT("Reset Agent %d (%s) - Character: %s, Distance to Target: %f"), 
 		AgentId, 
-		*CharacterResetLocation.ToString(), 
-		*TargetResetLocation.ToString(),
-		FVector::Dist(CharacterResetLocation, TargetResetLocation));
-} 
+		*Character->GetName(),
+		*CharacterResetLocation.ToString(),
+		FVector::Dist(CharacterResetLocation, TargetActor->GetActorLocation()));
+}
