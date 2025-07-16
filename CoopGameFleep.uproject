@@ -198,6 +198,10 @@
 		{
 			"Name": "IOSDeviceProfileSelector",
 			"Enabled": false
+		},
+		{
+			"Name": "LearningAgents",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [

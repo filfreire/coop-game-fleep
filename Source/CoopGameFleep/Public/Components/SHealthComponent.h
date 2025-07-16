@@ -34,4 +34,14 @@ protected:
 public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnHealthChangedSignature OnHealthChanged;
+
+	// Learning Agents support - reset health to default
+	UFUNCTION(BlueprintCallable, Category = "Learning")
+	void ResetHealth();
+
+	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
+	float GetCurrentHealth() const { return Health; }
+
+	UFUNCTION(BlueprintCallable, Category = "HealthComponent") 
+	float GetDefaultHealth() const { return DefaultHealth; }
 };
