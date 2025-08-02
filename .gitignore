@@ -80,3 +80,5 @@ TestResults/*
 PackageResults/*
 PackageResults.zip
 Platforms/HoloLens/Config/HoloLensEngine.ini
+
+Packaged/*

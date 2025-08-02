@@ -198,6 +198,14 @@
 		{
 			"Name": "IOSDeviceProfileSelector",
 			"Enabled": false
+		},
+		{
+			"Name": "LearningAgents",
+			"Enabled": true
+		},
+		{
+			"Name": "Tensorboard",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
