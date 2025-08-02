@@ -17,6 +17,10 @@
 ASCharacterManager::ASCharacterManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	
+	// set training settings for headless training
+	TrainingSettings.bUseTensorboard = true;
+	TrainingSettings.bSaveSnapshots = true;
 
 	LearningAgentsManager = CreateDefaultSubobject<USCharacterManagerComponent>(TEXT("Learning Agents Manager"));
 }
@@ -135,8 +139,6 @@ void ASCharacterManager::InitializeManager()
 {
 	// Should neural networks be re-initialized
 	const bool ReInitialize = (RunMode == ESCharacterManagerMode::ReInitialize);
-
-	TrainingSettings.bUseTensorboard = true;
 
 	// Make Interactor Instance
 	ULearningAgentsManager* ManagerPtr = LearningAgentsManager;
