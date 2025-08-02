@@ -136,6 +136,8 @@ void ASCharacterManager::InitializeManager()
 	// Should neural networks be re-initialized
 	const bool ReInitialize = (RunMode == ESCharacterManagerMode::ReInitialize);
 
+	TrainingSettings.bUseTensorboard = true;
+
 	// Make Interactor Instance
 	ULearningAgentsManager* ManagerPtr = LearningAgentsManager;
 	Interactor = Cast<USCharacterInteractor>(ULearningAgentsInteractor::MakeInteractor(
