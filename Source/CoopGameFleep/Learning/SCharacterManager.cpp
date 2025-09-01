@@ -22,6 +22,33 @@ ASCharacterManager::ASCharacterManager()
 	TrainingSettings.bUseTensorboard = true;
 	TrainingSettings.bSaveSnapshots = true;
 
+	// Configure trainer process settings for headless training
+	// These paths are relative to the packaged executable location
+	// Auto-detect engine path based on hostname (same logic as packaging script)
+	FString HostName = FPlatformProcess::ComputerName();
+	FString EnginePath;
+	if (HostName == TEXT("filfreire01"))
+	{
+		EnginePath = TEXT("../../../../../C:/unreal/UE_5.6/Engine");
+	}
+	else if (HostName == TEXT("filfreire02"))
+	{
+		EnginePath = TEXT("../../../../../D:/unreal/UE_5.6/Engine");
+	}
+	else
+	{
+		// Default fallback
+		EnginePath = TEXT("../../../../../C:/unreal/UE_5.6/Engine");
+	}
+	
+	TrainerProcessSettings.NonEditorEngineRelativePath = EnginePath;
+	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../Intermediate");
+	
+	// Log the configured paths for debugging
+	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Configured trainer paths for hostname '%s':"), *HostName);
+	UE_LOG(LogTemp, Log, TEXT("  Engine Path: %s"), *TrainerProcessSettings.NonEditorEngineRelativePath);
+	UE_LOG(LogTemp, Log, TEXT("  Intermediate Path: %s"), *TrainerProcessSettings.NonEditorIntermediateRelativePath);
+
 	LearningAgentsManager = CreateDefaultSubobject<USCharacterManagerComponent>(TEXT("Learning Agents Manager"));
 }
 

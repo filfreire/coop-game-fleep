@@ -40,3 +40,4 @@ if (Test-Path $pythonPath) {
 # Pause to see the output if TensorBoard exits
 Write-Host "Press any key to continue..." -ForegroundColor Cyan
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
