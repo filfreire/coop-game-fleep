@@ -18,6 +18,10 @@ ASCharacterManager::ASCharacterManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
+	// Ensure we're in training mode for headless training
+	RunMode = ESCharacterManagerMode::Training;
+	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Constructor set RunMode to Training: %d"), (int32)RunMode);
+	
 	// set training settings for headless training
 	TrainingSettings.bUseTensorboard = true;
 	TrainingSettings.bSaveSnapshots = true;
@@ -27,22 +31,24 @@ ASCharacterManager::ASCharacterManager()
 	// Auto-detect engine path based on hostname (same logic as packaging script)
 	FString HostName = FPlatformProcess::ComputerName();
 	FString EnginePath;
+	// For headless training, we need to use the actual Engine installation
+	// Use absolute paths since relative paths with drive letters are problematic
 	if (HostName == TEXT("filfreire01"))
 	{
-		EnginePath = TEXT("../../../../../C:/unreal/UE_5.6/Engine");
+		EnginePath = TEXT("C:/unreal/UE_5.6/Engine");
 	}
 	else if (HostName == TEXT("filfreire02"))
 	{
-		EnginePath = TEXT("../../../../../D:/unreal/UE_5.6/Engine");
+		EnginePath = TEXT("D:/unreal/UE_5.6/Engine");
 	}
 	else
 	{
 		// Default fallback
-		EnginePath = TEXT("../../../../../C:/unreal/UE_5.6/Engine");
+		EnginePath = TEXT("C:/unreal/UE_5.6/Engine");
 	}
 	
 	TrainerProcessSettings.NonEditorEngineRelativePath = EnginePath;
-	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../Intermediate");
+	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../../../../Intermediate");
 	
 	// Log the configured paths for debugging
 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Configured trainer paths for hostname '%s':"), *HostName);
@@ -164,6 +170,15 @@ void ASCharacterManager::InitializeAgents()
 
 void ASCharacterManager::InitializeManager()
 {
+	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: InitializeManager called with RunMode: %d"), (int32)RunMode);
+	
+	// Force Training mode for headless training (override any blueprint settings)
+	if (RunMode != ESCharacterManagerMode::Training)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: RunMode was %d, forcing to Training mode"), (int32)RunMode);
+		RunMode = ESCharacterManagerMode::Training;
+	}
+	
 	// Should neural networks be re-initialized
 	const bool ReInitialize = (RunMode == ESCharacterManagerMode::ReInitialize);
 

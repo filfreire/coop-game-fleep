@@ -119,5 +119,3 @@ if ($ConfigComplete) {
 Write-Host "`nFor detailed information, see:" -ForegroundColor Cyan
 Write-Host "  - docs/headless-training-setup.md" -ForegroundColor White
 Write-Host "  - docs/learning-agents-setup.md" -ForegroundColor White
-
-Read-Host "Press Enter to continue"

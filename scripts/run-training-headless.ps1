@@ -5,7 +5,7 @@
 param(
     [string]$ProjectPath = (Get-Location).Path,
     [string]$TrainingBuildDir = "TrainingBuild",
-    [string]$MapName = "P_LearningAgentsTrial",  # Default learning map
+    [string]$MapName = "P_LearningAgentsTrial1",  # Default learning map
     [string]$LogFile = "scharacter_training.log",
     [string]$ExeName = "CoopGameFleep.exe",
     [int]$MaxTrainingTime = 0  # 0 = unlimited, otherwise minutes
@@ -113,5 +113,4 @@ Write-Host "  - Neural network snapshots in project Intermediate directory" -For
 
 Write-Host "`nTo view TensorBoard, run: .\scripts\run-tensorboard.ps1" -ForegroundColor Green
 
-Write-Host "`nPress any key to continue..." -ForegroundColor Cyan
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+# Training session completed

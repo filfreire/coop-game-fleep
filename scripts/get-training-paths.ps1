@@ -126,4 +126,3 @@ Write-Host "`n======================================" -ForegroundColor Cyan
 Write-Host "READY FOR HEADLESS TRAINING!" -ForegroundColor Green
 Write-Host "======================================" -ForegroundColor Cyan
 
-Read-Host "Press Enter to continue"
