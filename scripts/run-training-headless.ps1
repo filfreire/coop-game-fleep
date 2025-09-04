@@ -43,6 +43,7 @@ Write-Host "LAUNCHING HEADLESS TRAINING" -ForegroundColor Yellow
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host "Command Line Arguments:" -ForegroundColor Yellow
 Write-Host "  Map: $MapName" -ForegroundColor White
+Write-Host "  Headless Training: Enabled (forces Training mode)" -ForegroundColor White
 Write-Host "  Null RHI: Enabled (no rendering)" -ForegroundColor White
 Write-Host "  No Sound: Enabled" -ForegroundColor White
 Write-Host "  Logging: Enabled to $LogFile" -ForegroundColor White
@@ -50,6 +51,7 @@ Write-Host "  Logging: Enabled to $LogFile" -ForegroundColor White
 # Build command line arguments for headless training
 $GameArgs = @(
     $MapName                    # Load the training map
+    "-headless-training"        # Custom flag to identify headless training mode
     "-nullrhi"                  # Disable rendering for headless mode
     "-nosound"                  # Disable sound
     "-log"                      # Enable logging to console
@@ -77,8 +79,8 @@ Write-Host "`nExecuting command:" -ForegroundColor Gray
 Write-Host "$ExeName $($GameArgs -join ' ')" -ForegroundColor Gray
 
 try {
-    # Start the training process
-    $Process = Start-Process -FilePath $GameExecutable -ArgumentList $GameArgs -NoNewWindow -PassThru
+    # Start the training process (hidden window)
+    $Process = Start-Process -FilePath $GameExecutable -ArgumentList $GameArgs -WindowStyle Hidden -PassThru
     
     Write-Host "`nTraining process started with PID: $($Process.Id)" -ForegroundColor Green
     Write-Host "You can monitor the log file in another terminal with:" -ForegroundColor Cyan

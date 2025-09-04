@@ -62,7 +62,7 @@ $ConfigComplete = $true
 Write-Host "Please verify the following configuration in Unreal Editor:" -ForegroundColor Yellow
 
 Write-Host "`nSCharacterManager Configuration:" -ForegroundColor Cyan
-Write-Host "  - Run Mode set to 'Training'" -ForegroundColor White
+Write-Host "  - Run Mode: Any mode (will auto-force to Training in headless)" -ForegroundColor White
 Write-Host "  - All four neural networks assigned:" -ForegroundColor White
 Write-Host "     - Encoder Neural Network" -ForegroundColor Gray
 Write-Host "     - Policy Neural Network" -ForegroundColor Gray
