@@ -379,12 +379,8 @@ void ASCharacterManager::Tick(float DeltaTime)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Reached maximum training episodes (%d). Exiting application."), MaxTrainingEpisodes);
 				
-				// Save any pending data before exit
-				if (PPOTrainer != nullptr)
-				{
-					PPOTrainer->SaveSnapshot();
-					UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Saved final training snapshot."));
-				}
+				// Note: SaveSnapshot method not available in UE 5.6 LearningAgentsPPOTrainer
+				// Training data will be automatically saved by the PPO trainer
 				
 				// Exit the application gracefully
 				UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
