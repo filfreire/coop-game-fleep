@@ -8,7 +8,7 @@ param(
     [string]$MapName = "P_LearningAgentsTrial1",  # Default learning map
     [string]$LogFile = "scharacter_training.log",
     [string]$ExeName = "CoopGameFleep.exe",
-    [int]$MaxTrainingTime = 0  # 0 = unlimited, otherwise minutes
+    [int]$MaxTrainingEpisodes = 0  # 0 = unlimited, otherwise number of training episodes (ticks)
 )
 
 Write-Host "======================================" -ForegroundColor Cyan
@@ -64,10 +64,18 @@ $GameArgs = @(
     "-ini:Engine:[Core.Log]:LogPython=Verbose"  # Enable Python logging for Learning Agents
 )
 
-# Add timeout if specified
-if ($MaxTrainingTime -gt 0) {
-    $GameArgs += "-ExecCmds=`"Automation RunTests;timeout $MaxTrainingTime;quit`""
-    Write-Host "  Timeout: $MaxTrainingTime minutes" -ForegroundColor White
+# Add MaxTrainingEpisodes parameter to game arguments
+if ($MaxTrainingEpisodes -gt 0) {
+    $GameArgs += "-MaxTrainingEpisodes=$MaxTrainingEpisodes"
+    Write-Host "  Max Training Episodes: $MaxTrainingEpisodes" -ForegroundColor White
+} else {
+    Write-Host "  Max Training Episodes: Unlimited" -ForegroundColor White
+}
+
+# Debug: Show all game arguments
+Write-Host "`nGame Arguments:" -ForegroundColor Cyan
+foreach ($arg in $GameArgs) {
+    Write-Host "  $arg" -ForegroundColor White
 }
 
 Write-Host "`nStarting headless training..." -ForegroundColor Green
@@ -86,64 +94,32 @@ try {
     Write-Host "You can monitor the log file in another terminal with:" -ForegroundColor Cyan
     Write-Host "  Get-Content -Path '$LogFile' -Wait" -ForegroundColor White
     
-    # Wait for the process to complete with CTRL+C handling
-    $ProcessRunning = $true
-    $ExitCode = 0
+    # Wait for the process to complete
+    Write-Host "`nWaiting for training to complete..." -ForegroundColor Yellow
     
-    # Set up CTRL+C handler
-    $CtrlCPressed = $false
-    [Console]::CancelKeyPress += {
-        param($sender, $e)
-        $e.Cancel = $true  # Prevent immediate termination
-        $script:CtrlCPressed = $true
-        Write-Host "`n`nCTRL+C detected! Stopping training process..." -ForegroundColor Yellow
-    }
-    
-    # Poll the process status while checking for CTRL+C
-    while ($ProcessRunning -and !$CtrlCPressed) {
-        if ($Process.HasExited) {
-            $ProcessRunning = $false
-            $ExitCode = $Process.ExitCode
-        } else {
-            Start-Sleep -Milliseconds 500  # Check every 500ms
-        }
-    }
-    
-    # Handle CTRL+C termination
-    if ($CtrlCPressed) {
-        Write-Host "Terminating training process (PID: $($Process.Id))..." -ForegroundColor Yellow
-        try {
-            # Try graceful termination first
-            if (!$Process.HasExited) {
-                $Process.CloseMainWindow()
-                Start-Sleep -Seconds 2
-            }
-            
-            # Force kill if still running
-            if (!$Process.HasExited) {
-                Write-Host "Force terminating training process..." -ForegroundColor Red
-                $Process.Kill()
-                $Process.WaitForExit(5000)  # Wait up to 5 seconds for cleanup
-            }
-            
-            Write-Host "Training process terminated by user." -ForegroundColor Yellow
-            $ExitCode = -1
-        }
-        catch {
-            Write-Warning "Error terminating process: $($_.Exception.Message)"
-        }
-    }
-    elseif ($ExitCode -eq 0) {
-        Write-Host "`nTraining completed successfully!" -ForegroundColor Green
+    if ($MaxTrainingEpisodes -gt 0) {
+        Write-Host "Training will stop after $MaxTrainingEpisodes episodes (managed by Unreal Engine)" -ForegroundColor Green
     } else {
-        Write-Host "`nTraining ended with exit code: $ExitCode" -ForegroundColor Yellow
+        Write-Host "Training will run indefinitely (Press Ctrl+C to stop)" -ForegroundColor Cyan
     }
-}
-catch {
-    Write-Error "Failed to start training process: $($_.Exception.Message)"
+    
+    # Let Unreal Engine handle termination, just wait for it to exit
+    $Process.WaitForExit()
+    $ExitCode = $Process.ExitCode
+    
+    
+    if ($ExitCode -eq 0) {
+        Write-Host "`nTraining completed successfully!" -ForegroundColor Green
+    } elseif ($ExitCode -eq -1) {
+        Write-Host "`nTraining terminated due to timeout" -ForegroundColor Yellow
+    } else {
+        Write-Host "`nTraining completed with exit code: $ExitCode" -ForegroundColor Yellow
+    }
+    
+} catch {
+    Write-Error "Failed to start training: $_"
     exit 1
-}
-finally {
+} finally {
     # Return to original directory
     Pop-Location
 }

@@ -8,11 +8,13 @@
 #include "LearningAgentsPPOTrainer.h"
 #include "LearningAgentsCommunicator.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "SCharacter.h"
 #include "Engine/Engine.h"
 #include "AIController.h"
 #include "LearningAgentsController.h"
 #include "LearningAgentsEntitiesManagerComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ASCharacterManager::ASCharacterManager()
 {
@@ -29,6 +31,18 @@ ASCharacterManager::ASCharacterManager()
 	{
 		RunMode = ESCharacterManagerMode::Training;
 		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to Training: %d"), (int32)RunMode);
+		
+		// Parse max training episodes from command line (e.g., -MaxTrainingEpisodes=1000)
+		FString MaxEpisodesStr;
+		if (FParse::Value(*CommandLine, TEXT("-MaxTrainingEpisodes="), MaxEpisodesStr))
+		{
+			MaxTrainingEpisodes = FCString::Atoi(*MaxEpisodesStr);
+			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Max training episodes set from command line: %d"), MaxTrainingEpisodes);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: No MaxTrainingEpisodes found in command line: %s"), *CommandLine);
+		}
 	}
 	else
 	{
@@ -46,6 +60,9 @@ ASCharacterManager::ASCharacterManager()
 	// Auto-detect engine path based on hostname (same logic as packaging script)
 	FString HostName = FPlatformProcess::ComputerName();
 	FString EnginePath;
+	
+	// Platform-specific path detection
+#if PLATFORM_WINDOWS
 	// For headless training, we need to use the actual Engine installation
 	// Use absolute paths since relative paths with drive letters are problematic
 	if (HostName == TEXT("filfreire01"))
@@ -58,9 +75,59 @@ ASCharacterManager::ASCharacterManager()
 	}
 	else
 	{
-		// Default fallback
-		EnginePath = TEXT("C:/unreal/UE_5.6/Engine");
+		// Try to find Unreal Engine in typical installation locations
+		FString ProgramFiles = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles"));
+		FString ProgramFilesX86 = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles(x86)"));
+		
+		// Check common Unreal Engine installation paths
+		TArray<FString> PossiblePaths = {
+			TEXT("C:/Program Files/Epic Games/UE_5.6/Engine"),
+			TEXT("C:/Program Files (x86)/Epic Games/UE_5.6/Engine"),
+			TEXT("C:/unreal/UE_5.6/Engine"),
+			TEXT("D:/unreal/UE_5.6/Engine"),
+			ProgramFiles + TEXT("/Epic Games/UE_5.6/Engine"),
+			ProgramFilesX86 + TEXT("/Epic Games/UE_5.6/Engine")
+		};
+		
+		// Find the first existing path
+		bool bFoundPath = false;
+		for (const FString& Path : PossiblePaths)
+		{
+			if (FPaths::DirectoryExists(Path))
+			{
+				EnginePath = Path;
+				bFoundPath = true;
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Found Unreal Engine at: %s"), *EnginePath);
+				break;
+			}
+		}
+		
+		// Final fallback if no path found
+		if (!bFoundPath)
+		{
+			EnginePath = TEXT("C:/Program Files/Epic Games/UE_5.6/Engine");
+			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Unreal Engine not found in common locations, using default: %s"), *EnginePath);
+		}
 	}
+#elif PLATFORM_LINUX
+	// Linux paths - adjust as needed for your installation
+	if (HostName == TEXT("filfreire01"))
+	{
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+	else if (HostName == TEXT("filfreire02"))
+	{
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+	else
+	{
+		// Default fallback for Linux
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+#else
+	// Other platforms - use default Linux path
+	EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+#endif
 
 	TrainerProcessSettings.NonEditorEngineRelativePath = EnginePath;
 	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../../../../Intermediate");
@@ -296,6 +363,33 @@ void ASCharacterManager::Tick(float DeltaTime)
 		if (PPOTrainer != nullptr)
 		{
 			PPOTrainer->RunTraining(TrainingSettings, TrainingGameSettings, true, true);
+			
+			// Increment training episode counter
+			CurrentTrainingEpisodes++;
+			
+			// Debug logging every 100 episodes to see if counting is working
+			if (CurrentTrainingEpisodes % 100 == 0)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: DEBUG - Training episode %d, MaxEpisodes: %d"), 
+					CurrentTrainingEpisodes, MaxTrainingEpisodes);
+			}
+			
+			// Check if we've reached the maximum training episodes
+			if (MaxTrainingEpisodes > 0 && CurrentTrainingEpisodes >= MaxTrainingEpisodes)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Reached maximum training episodes (%d). Exiting application."), MaxTrainingEpisodes);
+				
+				// Save any pending data before exit
+				if (PPOTrainer != nullptr)
+				{
+					PPOTrainer->SaveSnapshot();
+					UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Saved final training snapshot."));
+				}
+				
+				// Exit the application gracefully
+				UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
+				return;
+			}
 		}
 	}
 }
