@@ -132,3 +132,11 @@ appears to have solved the issue.
 ```powershell
 .\Intermediate\PipInstall\Scripts\python.exe -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('CUDA version:', torch.version.cuda if torch.cuda.is_available() else 'N/A')"
 ```
+
+### Installing clang unreal engine toolchain for Linux cross compilation
+
+Download `https://cdn.unrealengine.com/CrossToolchain_Linux/v25_clang-18.1.0-rockylinux8.exe`
+
+Install and reboot.
+
+Run `./scripts/build-linux.ps1`

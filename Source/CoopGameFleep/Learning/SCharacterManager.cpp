@@ -26,11 +26,11 @@ ASCharacterManager::ASCharacterManager()
 	                          CommandLine.Contains(TEXT("-nullrhi")) ||
 	                          CommandLine.Contains(TEXT("-unattended"));
 
-	// Only force training mode for headless training, allow Blueprint settings in editor
+	// Only force ReInitialize mode for headless training to ensure fresh neural network initialization
 	if (bIsHeadlessTraining)
 	{
-		RunMode = ESCharacterManagerMode::Training;
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to Training: %d"), (int32)RunMode);
+		RunMode = ESCharacterManagerMode::ReInitialize;
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: %d"), (int32)RunMode);
 		
 	}
 	else
@@ -249,11 +249,11 @@ void ASCharacterManager::InitializeManager()
 	                          CommandLine.Contains(TEXT("-nullrhi")) ||
 	                          CommandLine.Contains(TEXT("-unattended"));
 
-	// Only force Training mode for headless training, respect Blueprint settings in editor
-	if (bIsHeadlessTraining && RunMode != ESCharacterManagerMode::Training)
+	// Only force ReInitialize mode for headless training, respect Blueprint settings in editor
+	if (bIsHeadlessTraining && RunMode != ESCharacterManagerMode::ReInitialize)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Headless training detected, forcing RunMode from %d to Training"), (int32)RunMode);
-		RunMode = ESCharacterManagerMode::Training;
+		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Headless training detected, forcing RunMode from %d to ReInitialize"), (int32)RunMode);
+		RunMode = ESCharacterManagerMode::ReInitialize;
 	}
 	else if (!bIsHeadlessTraining)
 	{
