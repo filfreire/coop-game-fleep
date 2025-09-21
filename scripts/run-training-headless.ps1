@@ -7,7 +7,7 @@ param(
     [string]$TrainingBuildDir = "TrainingBuild",
     [string]$MapName = "P_LearningAgentsTrial1",  # Default learning map
     [string]$LogFile = "scharacter_training.log",
-    [string]$ExeName = "CoopGameFleep.exe",
+    [string]$ExeName = "CoopGameFleep.exe"
 )
 
 Write-Host "======================================" -ForegroundColor Cyan
