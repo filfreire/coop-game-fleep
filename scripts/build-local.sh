@@ -121,7 +121,6 @@ cd "$PROJECT_PATH" || exit 1
     -Cook \
     -Stage \
     -Package \
-    -Run \
     -Project="$PROJECT_FILE" \
     -TargetPlatform="$TARGET_PLATFORM" \
     -Architecture="$ARCHITECTURE" \
