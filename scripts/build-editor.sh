@@ -1,6 +1,6 @@
 #!/bin/bash
-# Build script for CoopGameFleep project using RunUAT
-# Usage: ./scripts/build-local.sh
+# Build script for CoopGameFleep Editor using RunUAT
+# Usage: ./scripts/build-editor.sh
 
 # Default values
 UNREAL_PATH=""
@@ -87,7 +87,7 @@ YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Building CoopGameFleep project using RunUAT...${NC}"
+echo -e "${GREEN}Building CoopGameFleep Editor using RunUAT...${NC}"
 echo -e "${YELLOW}Unreal Path: $UNREAL_PATH${NC}"
 echo -e "${YELLOW}Project Path: $PROJECT_PATH${NC}"
 echo -e "${YELLOW}Project Name: $PROJECT_NAME${NC}"
@@ -110,30 +110,22 @@ if [ ! -f "$PROJECT_FILE" ]; then
     exit 1
 fi
 
-echo -e "${CYAN}Starting build process with RunUAT...${NC}"
+echo -e "${CYAN}Starting editor build process...${NC}"
 
 # Change to project directory
 cd "$PROJECT_PATH" || exit 1
 
-# Run the build command using RunUAT
-"$RUNUAT_SCRIPT" BuildCookRun \
-    -Build \
-    -Cook \
-    -Stage \
-    -Package \
-    -Run \
-    -Project="$PROJECT_FILE" \
-    -TargetPlatform="$TARGET_PLATFORM" \
-    -Architecture="$ARCHITECTURE" \
-    -Configuration="$BUILD_TYPE" \
-    -SkipEditorContent
+# Use direct Build.sh approach for editor build
+BUILD_SCRIPT="$UNREAL_PATH/Engine/Build/BatchFiles/Linux/Build.sh"
+"$BUILD_SCRIPT" CoopGameFleepEditor "$TARGET_PLATFORM" "$BUILD_TYPE" -Project="$PROJECT_FILE"
 
 BUILD_EXIT_CODE=$?
 
 if [ $BUILD_EXIT_CODE -eq 0 ]; then
-    echo -e "${GREEN}Build completed successfully!${NC}"
+    echo -e "${GREEN}Editor build completed successfully!${NC}"
+    echo -e "${CYAN}Editor executable should be available in: $UNREAL_PATH/Engine/Binaries/Linux/UnrealEditor${NC}"
     exit 0
 else
-    echo -e "${RED}Build failed with exit code: $BUILD_EXIT_CODE${NC}"
+    echo -e "${RED}Editor build failed with exit code: $BUILD_EXIT_CODE${NC}"
     exit $BUILD_EXIT_CODE
 fi
