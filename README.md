@@ -17,7 +17,10 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
   - [Problems using the project locally](#problems-using-the-project-locally)
     - [Unable to find package errors](#unable-to-find-package-errors)
     - [Error opening project about bStrictConformanceMode](#error-opening-project-about-bstrictconformancemode)
-    - [Checking CUDA is setup](#checking-cuda-is-setup)
+    - [Checking CUDA is properly setup](#checking-cuda-is-properly-setup)
+    - [Installing clang unreal engine toolchain for Linux cross compilation on Windows](#installing-clang-unreal-engine-toolchain-for-linux-cross-compilation-on-windows)
+    - [Disabling UBA when compiling on Linux](#disabling-uba-when-compiling-on-linux)
+    - [Random seed and timeout example](#random-seed-and-timeout-example)
 
 ## Prerequisites
 
@@ -153,4 +156,10 @@ Create file `~/.config/Epic/UnrealBuildTool/BuildConfiguration.xml` with content
                 <bAllowUBALocalExecutor>false</bAllowUBALocalExecutor>
         </BuildConfiguration>
 </Configuration>
+```
+
+### Random seed and timeout example
+
+```powershell
+.\scripts\run-training-headless.ps1 -RandomSeed 42 -LearningRatePolicy 0.0005 -EpsilonClip 0.1
 ```
