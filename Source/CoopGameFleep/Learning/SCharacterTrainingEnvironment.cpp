@@ -4,12 +4,14 @@
 #include "LearningAgentsManager.h"
 #include "LearningAgentsCompletions.h"
 #include "STargetActor.h"
+#include "Learning/SObstacleManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "SCharacter.h"
 
 USCharacterTrainingEnvironment::USCharacterTrainingEnvironment()
 {
 	TargetActor = nullptr;
+	ObstacleManager = nullptr;
 }
 
 void USCharacterTrainingEnvironment::GatherAgentReward_Implementation(float& OutReward, const int32 AgentId)
@@ -32,6 +34,12 @@ void USCharacterTrainingEnvironment::GatherAgentReward_Implementation(float& Out
 	{
 		OutReward += ReachTargetReward;
 		UE_LOG(LogTemp, Log, TEXT("Agent %d reached target! Reward: %f"), AgentId, ReachTargetReward);
+	}
+	// Check for obstacle collision penalty
+	else if (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(CharacterLocation, 50.0f))
+	{
+		OutReward += -10.0f; // Penalty for hitting obstacles
+		UE_LOG(LogTemp, VeryVerbose, TEXT("Agent %d hit obstacle, penalty: -10.0f"), AgentId);
 	}
 	else
 	{
@@ -145,15 +153,37 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		return;
 	}
 
+	// Initialize obstacle manager if needed
+	if (bUseObstacles && !ObstacleManager)
+	{
+		ObstacleManager = NewObject<USObstacleManager>(this);
+		ObstacleManager->EnvironmentCenter = ResetCenter;
+		ObstacleManager->EnvironmentBounds = ResetBounds;
+		ObstacleManager->MaxObstacles = MaxObstacles;
+		ObstacleManager->MinObstacleSize = MinObstacleSize;
+		ObstacleManager->MaxObstacleSize = MaxObstacleSize;
+		ObstacleManager->InitializeObstacles();
+	}
+
+	// Regenerate obstacles for dynamic mode
+	if (bUseObstacles && ObstacleManager && ObstacleManager->ObstacleMode == EObstacleMode::Dynamic)
+	{
+		ObstacleManager->RegenerateObstacles();
+	}
+
 	// Reset episode step counter
 	EpisodeSteps.Add(AgentId, 0);
 	PreviousDistances.Remove(AgentId);
 
 	// Reset character to random position with proper Z offset to avoid floor clipping
 	FVector CharacterResetLocation;
-	CharacterResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
-	CharacterResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
-	CharacterResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Ensure minimum 100 units above ground
+	int32 CharacterAttempts = 0;
+	do {
+		CharacterResetLocation.X = ResetCenter.X + FMath::RandRange(-ResetBounds.X, ResetBounds.X);
+		CharacterResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
+		CharacterResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Ensure minimum 100 units above ground
+		CharacterAttempts++;
+	} while (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(CharacterResetLocation, 50.0f) && CharacterAttempts < 50);
 
 	// Use the character's learning reset method
 	Character->ResetForLearning(CharacterResetLocation, FRotator::ZeroRotator);
@@ -169,7 +199,9 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 			TargetResetLocation.Y = ResetCenter.Y + FMath::RandRange(-ResetBounds.Y, ResetBounds.Y);
 			TargetResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Keep above ground
 			Attempts++;
-		} while (FVector::Dist(CharacterResetLocation, TargetResetLocation) < MinDistanceBetweenCharacterAndTarget && Attempts < 100);
+		} while ((FVector::Dist(CharacterResetLocation, TargetResetLocation) < MinDistanceBetweenCharacterAndTarget || 
+				 (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(TargetResetLocation, 50.0f))) && 
+				 Attempts < 100);
 
 		TargetActor->SetActorLocation(TargetResetLocation);
 		
@@ -181,4 +213,25 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		*Character->GetName(),
 		*CharacterResetLocation.ToString(),
 		FVector::Dist(CharacterResetLocation, TargetActor->GetActorLocation()));
+}
+
+void USCharacterTrainingEnvironment::ConfigureObstacles(bool bUse, int32 MaxObs, float MinSize, float MaxSize, EObstacleMode Mode)
+{
+	bUseObstacles = bUse;
+	MaxObstacles = MaxObs;
+	MinObstacleSize = MinSize;
+	MaxObstacleSize = MaxSize;
+	
+	// Update obstacle manager if it exists
+	if (ObstacleManager)
+	{
+		ObstacleManager->MaxObstacles = MaxObs;
+		ObstacleManager->MinObstacleSize = MinSize;
+		ObstacleManager->MaxObstacleSize = MaxSize;
+		ObstacleManager->SetObstacleMode(Mode);
+	}
+	
+	UE_LOG(LogTemp, Log, TEXT("SCharacterTrainingEnvironment: Obstacles configured - Use: %s, Max: %d, MinSize: %f, MaxSize: %f, Mode: %s"), 
+		bUse ? TEXT("true") : TEXT("false"), MaxObs, MinSize, MaxSize, 
+		Mode == EObstacleMode::Dynamic ? TEXT("Dynamic") : TEXT("Static"));
 }

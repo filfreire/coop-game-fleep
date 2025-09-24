@@ -105,6 +105,49 @@ ASCharacterManager::ASCharacterManager()
 		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ActionEntropyWeight set from command line: %f"), TrainingSettings.ActionEntropyWeight);
 	}
 
+	// Parse obstacle configuration parameters
+	FString UseObstaclesStr;
+	if (FParse::Value(*CommandLine, TEXT("-UseObstacles="), UseObstaclesStr))
+	{
+		ObstacleConfig.bUseObstacles = UseObstaclesStr.ToBool();
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: UseObstacles set from command line: %s"), ObstacleConfig.bUseObstacles ? TEXT("true") : TEXT("false"));
+	}
+
+	FString MaxObstaclesStr;
+	if (FParse::Value(*CommandLine, TEXT("-MaxObstacles="), MaxObstaclesStr))
+	{
+		ObstacleConfig.MaxObstacles = FCString::Atoi(*MaxObstaclesStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacles set from command line: %d"), ObstacleConfig.MaxObstacles);
+	}
+
+	FString MinObstacleSizeStr;
+	if (FParse::Value(*CommandLine, TEXT("-MinObstacleSize="), MinObstacleSizeStr))
+	{
+		ObstacleConfig.MinObstacleSize = FCString::Atof(*MinObstacleSizeStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MinObstacleSize set from command line: %f"), ObstacleConfig.MinObstacleSize);
+	}
+
+	FString MaxObstacleSizeStr;
+	if (FParse::Value(*CommandLine, TEXT("-MaxObstacleSize="), MaxObstacleSizeStr))
+	{
+		ObstacleConfig.MaxObstacleSize = FCString::Atof(*MaxObstacleSizeStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacleSize set from command line: %f"), ObstacleConfig.MaxObstacleSize);
+	}
+
+	FString ObstacleModeStr;
+	if (FParse::Value(*CommandLine, TEXT("-ObstacleMode="), ObstacleModeStr))
+	{
+		if (ObstacleModeStr.Equals(TEXT("Dynamic"), ESearchCase::IgnoreCase))
+		{
+			ObstacleConfig.ObstacleMode = EObstacleMode::Dynamic;
+		}
+		else
+		{
+			ObstacleConfig.ObstacleMode = EObstacleMode::Static;
+		}
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ObstacleMode set from command line: %s"), ObstacleModeStr.Equals(TEXT("Dynamic"), ESearchCase::IgnoreCase) ? TEXT("Dynamic") : TEXT("Static"));
+	}
+
 	// Only force ReInitialize mode for headless training to ensure fresh neural network initialization
 	if (bIsHeadlessTraining)
 	{
@@ -394,6 +437,15 @@ void ASCharacterManager::InitializeManager()
 		return;
 	}
 	TrainingEnvironment->TargetActor = TargetActor;
+	
+	// Configure obstacles from command line parameters
+	TrainingEnvironment->ConfigureObstacles(
+		ObstacleConfig.bUseObstacles,
+		ObstacleConfig.MaxObstacles,
+		ObstacleConfig.MinObstacleSize,
+		ObstacleConfig.MaxObstacleSize,
+		ObstacleConfig.ObstacleMode
+	);
 	TrainingEnvironmentBase = TrainingEnvironment;
 
 	// Create a shared memory communicator to spawn a training process (following car example)
