@@ -26,6 +26,85 @@ ASCharacterManager::ASCharacterManager()
 	                          CommandLine.Contains(TEXT("-nullrhi")) ||
 	                          CommandLine.Contains(TEXT("-unattended"));
 
+	// Parse command line arguments for hyperparameters
+	FString RandomSeedStr;
+	if (FParse::Value(*CommandLine, TEXT("-RandomSeed="), RandomSeedStr))
+	{
+		RandomSeed = FCString::Atoi(*RandomSeedStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: RandomSeed set from command line: %d"), RandomSeed);
+	}
+
+	// Parse PPO training hyperparameters
+	FString LearningRatePolicyStr;
+	if (FParse::Value(*CommandLine, TEXT("-LearningRatePolicy="), LearningRatePolicyStr))
+	{
+		TrainingSettings.LearningRatePolicy = FCString::Atof(*LearningRatePolicyStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRatePolicy set from command line: %f"), TrainingSettings.LearningRatePolicy);
+	}
+
+	FString LearningRateCriticStr;
+	if (FParse::Value(*CommandLine, TEXT("-LearningRateCritic="), LearningRateCriticStr))
+	{
+		TrainingSettings.LearningRateCritic = FCString::Atof(*LearningRateCriticStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRateCritic set from command line: %f"), TrainingSettings.LearningRateCritic);
+	}
+
+	FString EpsilonClipStr;
+	if (FParse::Value(*CommandLine, TEXT("-EpsilonClip="), EpsilonClipStr))
+	{
+		TrainingSettings.EpsilonClip = FCString::Atof(*EpsilonClipStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: EpsilonClip set from command line: %f"), TrainingSettings.EpsilonClip);
+	}
+
+	FString PolicyBatchSizeStr;
+	if (FParse::Value(*CommandLine, TEXT("-PolicyBatchSize="), PolicyBatchSizeStr))
+	{
+		TrainingSettings.PolicyBatchSize = FCString::Atoi(*PolicyBatchSizeStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: PolicyBatchSize set from command line: %d"), TrainingSettings.PolicyBatchSize);
+	}
+
+	FString CriticBatchSizeStr;
+	if (FParse::Value(*CommandLine, TEXT("-CriticBatchSize="), CriticBatchSizeStr))
+	{
+		TrainingSettings.CriticBatchSize = FCString::Atoi(*CriticBatchSizeStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: CriticBatchSize set from command line: %d"), TrainingSettings.CriticBatchSize);
+	}
+
+	FString IterationsPerGatherStr;
+	if (FParse::Value(*CommandLine, TEXT("-IterationsPerGather="), IterationsPerGatherStr))
+	{
+		TrainingSettings.IterationsPerGather = FCString::Atoi(*IterationsPerGatherStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: IterationsPerGather set from command line: %d"), TrainingSettings.IterationsPerGather);
+	}
+
+	FString NumberOfIterationsStr;
+	if (FParse::Value(*CommandLine, TEXT("-NumberOfIterations="), NumberOfIterationsStr))
+	{
+		TrainingSettings.NumberOfIterations = FCString::Atoi(*NumberOfIterationsStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: NumberOfIterations set from command line: %d"), TrainingSettings.NumberOfIterations);
+	}
+
+	FString DiscountFactorStr;
+	if (FParse::Value(*CommandLine, TEXT("-DiscountFactor="), DiscountFactorStr))
+	{
+		TrainingSettings.DiscountFactor = FCString::Atof(*DiscountFactorStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: DiscountFactor set from command line: %f"), TrainingSettings.DiscountFactor);
+	}
+
+	FString GaeLambdaStr;
+	if (FParse::Value(*CommandLine, TEXT("-GaeLambda="), GaeLambdaStr))
+	{
+		TrainingSettings.GaeLambda = FCString::Atof(*GaeLambdaStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: GaeLambda set from command line: %f"), TrainingSettings.GaeLambda);
+	}
+
+	FString ActionEntropyWeightStr;
+	if (FParse::Value(*CommandLine, TEXT("-ActionEntropyWeight="), ActionEntropyWeightStr))
+	{
+		TrainingSettings.ActionEntropyWeight = FCString::Atof(*ActionEntropyWeightStr);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ActionEntropyWeight set from command line: %f"), TrainingSettings.ActionEntropyWeight);
+	}
+
 	// Only force ReInitialize mode for headless training to ensure fresh neural network initialization
 	if (bIsHeadlessTraining)
 	{
