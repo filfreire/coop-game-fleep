@@ -17,6 +17,7 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
   - [Problems using the project locally](#problems-using-the-project-locally)
     - [Unable to find package errors](#unable-to-find-package-errors)
     - [Error opening project about bStrictConformanceMode](#error-opening-project-about-bstrictconformancemode)
+    - [Checking CUDA is setup](#checking-cuda-is-setup)
 
 ## Prerequisites
 
@@ -125,3 +126,31 @@ bOverrideBuildEnvironment = true;
 ```
 
 appears to have solved the issue.
+
+### Checking CUDA is properly setup
+
+```powershell
+.\Intermediate\PipInstall\Scripts\python.exe -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('CUDA version:', torch.version.cuda if torch.cuda.is_available() else 'N/A')"
+```
+
+### Installing clang unreal engine toolchain for Linux cross compilation on Windows
+
+Download `https://cdn.unrealengine.com/CrossToolchain_Linux/v25_clang-18.1.0-rockylinux8.exe`
+
+Install and reboot.
+
+Run `./scripts/build-linux.ps1`
+
+### Disabling UBA when compiling on Linux
+
+Create file `~/.config/Epic/UnrealBuildTool/BuildConfiguration.xml` with contents like:
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration xmlns="https://www.unrealengine.com/BuildConfiguration">
+        <BuildConfiguration>
+                <bAllowUBAExecutor>false</bAllowUBAExecutor>
+                <bAllowUBALocalExecutor>false</bAllowUBALocalExecutor>
+        </BuildConfiguration>
+</Configuration>
+```

@@ -80,7 +80,10 @@ Before using the learning system, you need to create Neural Network Data Assets 
 In the SCharacterManager's details panel:
 
 **Manager Settings**:
-- **Run Mode**: Set to Training or Inference
+- **Run Mode**: 
+  - **Training**: For editor testing (loads existing neural networks)
+  - **Inference**: For using trained models
+  - **ReInitialize**: For fresh training (automatically used in headless mode)
 - **Random Seed**: Set a seed for reproducible results
 
 **Neural Networks**:
@@ -191,7 +194,10 @@ The system now includes full PPO (Proximal Policy Optimization) training capabil
 
 - **Shared Memory Communicator**: Enables communication with external training processes
 - **PPO Trainer**: Handles the complete training loop with policy and critic updates
-- **Training Modes**: Support for Training, Inference, and ReInitialize modes
+- **Training Modes**: 
+  - **Training**: Loads existing neural networks for continued training
+  - **Inference**: Uses trained models for testing
+  - **ReInitialize**: Fresh neural network initialization (used automatically in headless training)
 - **Real-time Learning**: Characters learn while the game is running
 
 ### Training Process

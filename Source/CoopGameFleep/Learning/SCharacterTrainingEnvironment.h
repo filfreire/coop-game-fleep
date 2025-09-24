@@ -56,6 +56,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
 	float MinDistanceBetweenCharacterAndTarget = 500.0f;
 
+	// Additional clearance above the reset center to prevent floor clipping
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	float GroundClearance = 200.0f;
+
 private:
 	// Store previous distances for reward calculation
 	TMap<int32, float> PreviousDistances;

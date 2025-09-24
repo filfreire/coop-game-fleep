@@ -82,3 +82,7 @@ PackageResults.zip
 Platforms/HoloLens/Config/HoloLensEngine.ini
 
 Packaged/*
+
+
+TrainingBuild/*
+

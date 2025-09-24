@@ -8,19 +8,123 @@
 #include "LearningAgentsPPOTrainer.h"
 #include "LearningAgentsCommunicator.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "SCharacter.h"
 #include "Engine/Engine.h"
 #include "AIController.h"
 #include "LearningAgentsController.h"
 #include "LearningAgentsEntitiesManagerComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ASCharacterManager::ASCharacterManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
+	// Check command line arguments to determine if we're in headless training mode
+	FString CommandLine = FCommandLine::Get();
+	bool bIsHeadlessTraining = CommandLine.Contains(TEXT("-headless-training")) ||
+	                          CommandLine.Contains(TEXT("-nullrhi")) ||
+	                          CommandLine.Contains(TEXT("-unattended"));
+
+	// Only force ReInitialize mode for headless training to ensure fresh neural network initialization
+	if (bIsHeadlessTraining)
+	{
+		RunMode = ESCharacterManagerMode::ReInitialize;
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: %d"), (int32)RunMode);
+		
+	}
+	else
+	{
+		// In editor mode, use Blueprint default (Training) but allow override
+		RunMode = ESCharacterManagerMode::Training;
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Editor mode detected, using Blueprint RunMode: %d"), (int32)RunMode);
+	}
+
 	// set training settings for headless training
 	TrainingSettings.bUseTensorboard = true;
 	TrainingSettings.bSaveSnapshots = true;
+
+	// Configure trainer process settings for headless training
+	// These paths are relative to the packaged executable location
+	// Auto-detect engine path based on hostname (same logic as packaging script)
+	FString HostName = FPlatformProcess::ComputerName();
+	FString EnginePath;
+	
+	// Platform-specific path detection
+#if PLATFORM_WINDOWS
+	// For headless training, we need to use the actual Engine installation
+	// Use absolute paths since relative paths with drive letters are problematic
+	if (HostName == TEXT("filfreire01"))
+	{
+		EnginePath = TEXT("C:/unreal/UE_5.6/Engine");
+	}
+	else if (HostName == TEXT("filfreire02"))
+	{
+		EnginePath = TEXT("D:/unreal/UE_5.6/Engine");
+	}
+	else
+	{
+		// Try to find Unreal Engine in typical installation locations
+		FString ProgramFiles = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles"));
+		FString ProgramFilesX86 = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles(x86)"));
+		
+		// Check common Unreal Engine installation paths
+		TArray<FString> PossiblePaths = {
+			TEXT("C:/Program Files/Epic Games/UE_5.6/Engine"),
+			TEXT("C:/Program Files (x86)/Epic Games/UE_5.6/Engine"),
+			TEXT("C:/unreal/UE_5.6/Engine"),
+			TEXT("D:/unreal/UE_5.6/Engine"),
+			ProgramFiles + TEXT("/Epic Games/UE_5.6/Engine"),
+			ProgramFilesX86 + TEXT("/Epic Games/UE_5.6/Engine")
+		};
+		
+		// Find the first existing path
+		bool bFoundPath = false;
+		for (const FString& Path : PossiblePaths)
+		{
+			if (FPaths::DirectoryExists(Path))
+			{
+				EnginePath = Path;
+				bFoundPath = true;
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Found Unreal Engine at: %s"), *EnginePath);
+				break;
+			}
+		}
+		
+		// Final fallback if no path found
+		if (!bFoundPath)
+		{
+			EnginePath = TEXT("C:/Program Files/Epic Games/UE_5.6/Engine");
+			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Unreal Engine not found in common locations, using default: %s"), *EnginePath);
+		}
+	}
+#elif PLATFORM_LINUX
+	// Linux paths - adjust as needed for your installation
+	if (HostName == TEXT("filfreire01"))
+	{
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+	else if (HostName == TEXT("filfreire02"))
+	{
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+	else
+	{
+		// Default fallback for Linux
+		EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+	}
+#else
+	// Other platforms - use default Linux path
+	EnginePath = TEXT("/opt/unreal/UE_5.6/Engine");
+#endif
+
+	TrainerProcessSettings.NonEditorEngineRelativePath = EnginePath;
+	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../../../../Intermediate");
+
+	// Log the configured paths for debugging
+	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Configured trainer paths for hostname '%s':"), *HostName);
+	UE_LOG(LogTemp, Log, TEXT("  Engine Path: %s"), *TrainerProcessSettings.NonEditorEngineRelativePath);
+	UE_LOG(LogTemp, Log, TEXT("  Intermediate Path: %s"), *TrainerProcessSettings.NonEditorIntermediateRelativePath);
 
 	LearningAgentsManager = CreateDefaultSubobject<USCharacterManagerComponent>(TEXT("Learning Agents Manager"));
 }
@@ -28,7 +132,7 @@ ASCharacterManager::ASCharacterManager()
 void ASCharacterManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Initialize the learning system
 	InitializeAgents();
 	InitializeManager();
@@ -39,11 +143,11 @@ void ASCharacterManager::InitializeAgents()
 	// Get all SCharacter agents (including Blueprint-derived ones)
 	TArray<AActor*> Agents;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASCharacter::StaticClass(), Agents);
-	
+
 	// Also try to find any Character-derived actors that might be blueprints
 	TArray<AActor*> AllCharacters;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacter::StaticClass(), AllCharacters);
-	
+
 	// Filter characters to only include SCharacter and its derivatives
 	for (AActor* Actor : AllCharacters)
 	{
@@ -58,15 +162,15 @@ void ASCharacterManager::InitializeAgents()
 
 	UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Found %d total characters in world"), AllCharacters.Num());
 	UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Found %d SCharacter agents"), Agents.Num());
-	
+
 	// Log details about what we found
 	for (int32 i = 0; i < AllCharacters.Num(); i++)
 	{
 		AActor* Actor = AllCharacters[i];
 		ASCharacter* SChar = Cast<ASCharacter>(Actor);
-		UE_LOG(LogTemp, Warning, TEXT("Character %d: %s (Class: %s) - SCharacter Cast: %s"), 
-			i, 
-			*Actor->GetName(), 
+		UE_LOG(LogTemp, Warning, TEXT("Character %d: %s (Class: %s) - SCharacter Cast: %s"),
+			i,
+			*Actor->GetName(),
 			*Actor->GetClass()->GetName(),
 			SChar ? TEXT("SUCCESS") : TEXT("FAILED"));
 	}
@@ -97,22 +201,22 @@ void ASCharacterManager::InitializeAgents()
 			}
 			else
 			{
-				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Agent %s already has controller %s"), 
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Agent %s already has controller %s"),
 					*Agent->GetName(), *ExistingController->GetClass()->GetName());
 			}
 		}
-		
+
 		// Add agent to the Learning Agents Manager
 		int32 AgentId = LearningAgentsManager->AddAgent(Agent);
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Added agent %s to manager with ID %d"), *Agent->GetName(), AgentId);
-		
+
 		// Initialize agent for learning (disable player input, prepare for AI control)
 		if (ASCharacter* SChar = Cast<ASCharacter>(Agent))
 		{
 			SChar->ResetForLearning(SChar->GetActorLocation(), SChar->GetActorRotation());
 			UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Initialized %s for learning"), *Agent->GetName());
 		}
-		
+
 		// Make sure manager ticks first
 		Agent->AddTickPrerequisiteActor(this);
 
@@ -125,7 +229,7 @@ void ASCharacterManager::InitializeAgents()
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Initialized %d character agents"), Agents.Num());
-	
+
 	if (Agents.Num() == 0)
 	{
 		UE_LOG(LogTemp, Error, TEXT("SCharacterManager: No SCharacter agents found! Make sure to:"));
@@ -137,6 +241,25 @@ void ASCharacterManager::InitializeAgents()
 
 void ASCharacterManager::InitializeManager()
 {
+	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: InitializeManager called with RunMode: %d"), (int32)RunMode);
+
+	// Check if we're in headless training mode and force Training if needed
+	FString CommandLine = FCommandLine::Get();
+	bool bIsHeadlessTraining = CommandLine.Contains(TEXT("-headless-training")) ||
+	                          CommandLine.Contains(TEXT("-nullrhi")) ||
+	                          CommandLine.Contains(TEXT("-unattended"));
+
+	// Only force ReInitialize mode for headless training, respect Blueprint settings in editor
+	if (bIsHeadlessTraining && RunMode != ESCharacterManagerMode::ReInitialize)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Headless training detected, forcing RunMode from %d to ReInitialize"), (int32)RunMode);
+		RunMode = ESCharacterManagerMode::ReInitialize;
+	}
+	else if (!bIsHeadlessTraining)
+	{
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Editor mode - respecting Blueprint RunMode: %d"), (int32)RunMode);
+	}
+
 	// Should neural networks be re-initialized
 	const bool ReInitialize = (RunMode == ESCharacterManagerMode::ReInitialize);
 
@@ -153,7 +276,7 @@ void ASCharacterManager::InitializeManager()
 	LearningAgentsInteractorBase = Interactor;
 
 	// Warn if neural networks are not set
-	if (EncoderNeuralNetwork == nullptr || PolicyNeuralNetwork == nullptr || 
+	if (EncoderNeuralNetwork == nullptr || PolicyNeuralNetwork == nullptr ||
 		DecoderNeuralNetwork == nullptr || CriticNeuralNetwork == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: One or more neural networks are not set."));
@@ -163,8 +286,8 @@ void ASCharacterManager::InitializeManager()
 	// Make Policy Instance
 	ULearningAgentsInteractor* InteractorPtr = Interactor;
 	Policy = ULearningAgentsPolicy::MakePolicy(
-		ManagerPtr, InteractorPtr, ULearningAgentsPolicy::StaticClass(), TEXT("SCharacter Policy"), 
-		EncoderNeuralNetwork, PolicyNeuralNetwork, DecoderNeuralNetwork, 
+		ManagerPtr, InteractorPtr, ULearningAgentsPolicy::StaticClass(), TEXT("SCharacter Policy"),
+		EncoderNeuralNetwork, PolicyNeuralNetwork, DecoderNeuralNetwork,
 		ReInitialize, ReInitialize, ReInitialize, PolicySettings, RandomSeed);
 	if (Policy == nullptr)
 	{
@@ -175,7 +298,7 @@ void ASCharacterManager::InitializeManager()
 	// Make Critic Instance
 	ULearningAgentsPolicy* PolicyPtr = Policy;
 	Critic = ULearningAgentsCritic::MakeCritic(
-		ManagerPtr, InteractorPtr, PolicyPtr, ULearningAgentsCritic::StaticClass(), TEXT("SCharacter Critic"), 
+		ManagerPtr, InteractorPtr, PolicyPtr, ULearningAgentsCritic::StaticClass(), TEXT("SCharacter Critic"),
 		CriticNeuralNetwork, ReInitialize, CriticSettings, RandomSeed);
 	if (Critic == nullptr)
 	{
@@ -229,6 +352,7 @@ void ASCharacterManager::Tick(float DeltaTime)
 		if (PPOTrainer != nullptr)
 		{
 			PPOTrainer->RunTraining(TrainingSettings, TrainingGameSettings, true, true);
+			
 		}
 	}
-} 
+}
