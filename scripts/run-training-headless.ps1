@@ -203,6 +203,22 @@ try {
             # Enhanced process termination for SSH environments
             $terminationSuccess = $false
             
+            # First, try to find and kill any CoopGameFleep processes that might be running
+            $GameProcesses = Get-Process -Name "CoopGameFleep" -ErrorAction SilentlyContinue
+            if ($GameProcesses) {
+                Write-Host "Found $($GameProcesses.Count) CoopGameFleep.exe process(es) to terminate" -ForegroundColor Cyan
+                foreach ($GameProc in $GameProcesses) {
+                    Write-Host "Terminating CoopGameFleep.exe (PID: $($GameProc.Id))..." -ForegroundColor Yellow
+                    try {
+                        & taskkill /PID $GameProc.Id /T /F 2>$null
+                        Write-Host "CoopGameFleep.exe (PID: $($GameProc.Id)) terminated successfully" -ForegroundColor Green
+                        $terminationSuccess = $true
+                    } catch {
+                        Write-Warning "Failed to terminate CoopGameFleep.exe (PID: $($GameProc.Id)): $($_.Exception.Message)"
+                    }
+                }
+            }
+            
             if ($KillTreeOnTimeout) {
                 # Try taskkill first (most effective for process trees)
                 Write-Host "Attempting to kill process tree with taskkill..." -ForegroundColor Yellow
