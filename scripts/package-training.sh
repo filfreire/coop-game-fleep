@@ -197,11 +197,14 @@ fi
 
 echo -e "${CYAN}Starting packaging process for training...${NC}"
 echo -e "${YELLOW}This may take several minutes...${NC}"
+echo -e "${GRAY}Note: This script assumes the project is already built.${NC}"
+echo -e "${GRAY}Run './scripts/build-local.sh' first for optimal performance.${NC}"
 
 # Change to project directory
 cd "$PROJECT_PATH" || exit 1
 
 # Build the RunUAT command arguments for training build
+# Note: Assumes project is already built (run build-local.sh first)
 UAT_ARGS=(
     "BuildCookRun"
     "-project=\"$PROJECT_FILE\""
@@ -209,15 +212,10 @@ UAT_ARGS=(
     "-utf8output"
     "-nocompileeditor"
     "-skipbuildeditor"
-    "-cook"
-    "-project=\"$PROJECT_FILE\""
-    "-target=$TARGET"
-    "-platform=$PLATFORM"
-    "-installed"
+    "-cook"  # Required for staging builds
     "-stage"
     "-archive"
     "-package"
-    "-build"
     "-pak"
     "-compressed"
     "-archivedirectory=\"$PACKAGE_FOLDER\""
@@ -239,6 +237,15 @@ if [ $PACKAGE_EXIT_CODE -eq 0 ]; then
     echo -e "${GREEN}PACKAGING COMPLETED SUCCESSFULLY!${NC}"
     echo -e "${CYAN}======================================${NC}"
     echo -e "${CYAN}Training build location: $PACKAGE_FOLDER${NC}"
+    
+    # Copy LearningAgents Python content for headless training
+    echo -e "\n${CYAN}Copying LearningAgents Python content...${NC}"
+    if "$PROJECT_PATH/scripts/copy-learning-agents-python.sh" --project-path "$PROJECT_PATH" --training-build-dir "$OUTPUT_DIR" --unreal-path "$UNREAL_PATH"; then
+        echo -e "${GREEN}LearningAgents Python content copied successfully!${NC}"
+    else
+        echo -e "${YELLOW}Warning: Failed to copy LearningAgents Python content${NC}"
+        echo -e "${YELLOW}You may need to copy it manually for headless training to work${NC}"
+    fi
     
     # Try to find the executable
     EXE_FILES=$(find "$PACKAGE_FOLDER" -name "$TARGET" -type f 2>/dev/null)
