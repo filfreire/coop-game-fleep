@@ -126,7 +126,7 @@ cd "$PROJECT_PATH" || exit 1
     -Architecture="$ARCHITECTURE" \
     -Configuration="$BUILD_TYPE" \
     -SkipEditorContent \
-    -AdditionalCookerOptions="-cookprocesscount=8 -fastcook"
+    -AdditionalCookerOptions="-cookprocesscount=4 -fastcook"
 
 BUILD_EXIT_CODE=$?
 
