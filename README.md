@@ -21,6 +21,14 @@ It was forked and is related to [@tomlooman](https://github.com/tomlooman)'s ori
     - [Installing clang unreal engine toolchain for Linux cross compilation on Windows](#installing-clang-unreal-engine-toolchain-for-linux-cross-compilation-on-windows)
     - [Disabling UBA when compiling on Linux](#disabling-uba-when-compiling-on-linux)
     - [Random seed and timeout example](#random-seed-and-timeout-example)
+  - [Headless Training Examples](#headless-training-examples)
+    - [Example 1: Basic Training with Timeout](#example-1-basic-training-with-timeout)
+    - [Example 2: Advanced Hyperparameter Tuning](#example-2-advanced-hyperparameter-tuning)
+    - [Example 3: Training with Obstacles](#example-3-training-with-obstacles)
+    - [Available Parameters](#available-parameters)
+    - [Monitoring Training](#monitoring-training)
+    - [Example Training Scripts](#example-training-scripts)
+  - [Multiple headless runs](#multiple-headless-runs)
 
 ## Prerequisites
 
@@ -268,3 +276,7 @@ Run pre-configured examples:
 # See all obstacle configuration examples
 .\scripts\run-training-with-obstacles.ps1
 ```
+
+## Multiple headless runs
+
+- Logs are saved into `\coop-game-fleep\TrainingBuild\Windo ws\CoopGameFleep\Saved\Logs\{logfilename}.log`
