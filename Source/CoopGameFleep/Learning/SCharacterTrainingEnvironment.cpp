@@ -165,12 +165,6 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		ObstacleManager->InitializeObstacles();
 	}
 
-	// Regenerate obstacles for dynamic mode
-	if (bUseObstacles && ObstacleManager && ObstacleManager->ObstacleMode == EObstacleMode::Dynamic)
-	{
-		ObstacleManager->RegenerateObstacles();
-	}
-
 	// Reset episode step counter
 	EpisodeSteps.Add(AgentId, 0);
 	PreviousDistances.Remove(AgentId);
@@ -184,6 +178,13 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		CharacterResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Ensure minimum 100 units above ground
 		CharacterAttempts++;
 	} while (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(CharacterResetLocation, 50.0f) && CharacterAttempts < 50);
+
+	// Regenerate obstacles for dynamic mode
+	if (bUseObstacles && ObstacleManager && ObstacleManager->ObstacleMode == EObstacleMode::Dynamic)
+	{
+		// Use smart placement for dynamic obstacles
+		ObstacleManager->InitializeObstaclesWithSmartPlacement(CharacterResetLocation, TargetActor->GetActorLocation());
+	}
 
 	// Use the character's learning reset method
 	Character->ResetForLearning(CharacterResetLocation, FRotator::ZeroRotator);
