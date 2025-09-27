@@ -136,15 +136,9 @@ echo -e "${WHITE}  - SCharacter instances placed${NC}"
 echo -e "${WHITE}  - STargetActor placed${NC}"
 echo -e "${WHITE}  - SCharacterManager placed and configured${NC}"
 
-echo -e "\n${YELLOW}Have you completed all the above configuration? (y/N)${NC}"
-read -r confirmation
-if [[ ! $confirmation =~ ^[Yy]$ ]]; then
-    echo -e "\n${YELLOW}Please complete the configuration in Unreal Editor first.${NC}"
-    echo -e "${CYAN}Refer to docs/headless-training-setup.md for detailed instructions.${NC}"
-    CONFIG_COMPLETE=false
-else
-    CONFIG_COMPLETE=true
-fi
+echo -e "\n${YELLOW}Please ensure you have completed all the above configuration in Unreal Editor.${NC}"
+echo -e "${CYAN}Refer to docs/headless-training-setup.md for detailed instructions.${NC}"
+CONFIG_COMPLETE=true
 
 # Step 5: Ready to train
 echo -e "\n${GREEN}[5/5] Training Setup Complete${NC}"
@@ -163,12 +157,8 @@ if [ "$CONFIG_COMPLETE" = true ]; then
     echo -e "${WHITE}  cd TrainingBuild/Linux/CoopGameFleep/Binaries/Linux${NC}"
     echo -e "${WHITE}  tail -f scharacter_training.log${NC}"
     
-    echo -e "\n${YELLOW}Would you like to start training now? (y/N)${NC}"
-    read -r start_training
-    if [[ $start_training =~ ^[Yy]$ ]]; then
-        echo -e "\n${GREEN}Starting headless training...${NC}"
-        "$PROJECT_PATH/scripts/run-training-headless.sh"
-    fi
+    echo -e "\n${GREEN}Starting headless training...${NC}"
+    "$PROJECT_PATH/scripts/run-training-headless.sh"
 else
     echo -e "${YELLOW}Configuration incomplete. Please complete the setup first.${NC}"
 fi
