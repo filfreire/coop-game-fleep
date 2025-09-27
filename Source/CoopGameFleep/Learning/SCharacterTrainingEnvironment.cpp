@@ -162,6 +162,7 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		ObstacleManager->MaxObstacles = MaxObstacles;
 		ObstacleManager->MinObstacleSize = MinObstacleSize;
 		ObstacleManager->MaxObstacleSize = MaxObstacleSize;
+		ObstacleManager->FindAndSetLocationVolume(); // Try to find LocationVolume
 		ObstacleManager->InitializeObstacles();
 	}
 
