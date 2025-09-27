@@ -39,7 +39,7 @@ void USCharacterTrainingEnvironment::GatherAgentReward_Implementation(float& Out
 	else if (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(CharacterLocation, 50.0f))
 	{
 		OutReward += -10.0f; // Penalty for hitting obstacles
-		UE_LOG(LogTemp, VeryVerbose, TEXT("Agent %d hit obstacle, penalty: -10.0f"), AgentId);
+		// UE_LOG(LogTemp, VeryVerbose, TEXT("Agent %d hit obstacle, penalty: -10.0f"), AgentId);
 	}
 	else
 	{
@@ -243,7 +243,7 @@ void USCharacterTrainingEnvironment::ConfigureObstacles(bool bUse, int32 MaxObs,
 		ObstacleManager->SetObstacleMode(Mode);
 	}
 	
-	UE_LOG(LogTemp, Log, TEXT("SCharacterTrainingEnvironment: Obstacles configured - Use: %s, Max: %d, MinSize: %f, MaxSize: %f, Mode: %s"), 
-		bUse ? TEXT("true") : TEXT("false"), MaxObs, MinSize, MaxSize, 
-		Mode == EObstacleMode::Dynamic ? TEXT("Dynamic") : TEXT("Static"));
+	// UE_LOG(LogTemp, Log, TEXT("SCharacterTrainingEnvironment: Obstacles configured - Use: %s, Max: %d, MinSize: %f, MaxSize: %f, Mode: %s"), 
+		// bUse ? TEXT("true") : TEXT("false"), MaxObs, MinSize, MaxSize, 
+		// Mode == EObstacleMode::Dynamic ? TEXT("Dynamic") : TEXT("Static"));
 }
