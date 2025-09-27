@@ -162,13 +162,9 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		ObstacleManager->MaxObstacles = MaxObstacles;
 		ObstacleManager->MinObstacleSize = MinObstacleSize;
 		ObstacleManager->MaxObstacleSize = MaxObstacleSize;
-		ObstacleManager->InitializeObstacles();
-	}
-
-	// Regenerate obstacles for dynamic mode
-	if (bUseObstacles && ObstacleManager && ObstacleManager->ObstacleMode == EObstacleMode::Dynamic)
-	{
-		ObstacleManager->RegenerateObstacles();
+		ObstacleManager->SetObstacleMode(ObstacleMode); // Set the stored mode
+		ObstacleManager->FindAndSetLocationVolume(); // Try to find LocationVolume
+		// Don't initialize obstacles here - let the mode-specific logic handle it
 	}
 
 	// Reset episode step counter
@@ -184,6 +180,21 @@ void USCharacterTrainingEnvironment::ResetAgentEpisode_Implementation(const int3
 		CharacterResetLocation.Z = ResetCenter.Z + FMath::Max(ResetBounds.Z, 100.0f); // Ensure minimum 100 units above ground
 		CharacterAttempts++;
 	} while (bUseObstacles && ObstacleManager && ObstacleManager->IsLocationBlocked(CharacterResetLocation, 50.0f) && CharacterAttempts < 50);
+
+	// Initialize or regenerate obstacles based on mode
+	if (bUseObstacles && ObstacleManager)
+	{
+		if (ObstacleManager->ObstacleMode == EObstacleMode::Dynamic)
+		{
+			// Use smart placement for dynamic obstacles
+			ObstacleManager->InitializeObstaclesWithSmartPlacement(CharacterResetLocation, TargetActor->GetActorLocation());
+		}
+		else if (ObstacleManager->ObstacleMode == EObstacleMode::Static && ObstacleManager->CurrentObstacles.Num() == 0)
+		{
+			// Initialize static obstacles only if they haven't been created yet
+			ObstacleManager->InitializeObstacles();
+		}
+	}
 
 	// Use the character's learning reset method
 	Character->ResetForLearning(CharacterResetLocation, FRotator::ZeroRotator);
@@ -221,6 +232,7 @@ void USCharacterTrainingEnvironment::ConfigureObstacles(bool bUse, int32 MaxObs,
 	MaxObstacles = MaxObs;
 	MinObstacleSize = MinSize;
 	MaxObstacleSize = MaxSize;
+	ObstacleMode = Mode; // Store the mode for later use
 	
 	// Update obstacle manager if it exists
 	if (ObstacleManager)
