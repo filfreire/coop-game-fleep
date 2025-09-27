@@ -107,3 +107,5 @@ tps_*/
 # Shared memory config files (generated during training)
 **/shared-memory-*.json
 
+# other files
+*.zip
