@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
-
 class UCameraComponent;
 class USpringArmComponent;
 class ASWeapon;
@@ -17,11 +16,11 @@ class COOPGAMEFLEEP_API ASCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	// Sets default values for this character's properties
 	ASCharacter();
 
-protected:
+  protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -73,20 +72,20 @@ protected:
 	int RifleAmmo;
 
 	UFUNCTION()
-	void OnHealthChanged(USHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+	void OnHealthChanged(USHealthComponent* OwningHealthComp, float Health, float HealthDelta,
+	                     const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 	/* Pawn Died previously */
 	UPROPERTY(BlueprintReadOnly, Category = "Player")
 	bool bDied;
 
-public:
+  public:
 	// Learning Agents support - make bDied accessible
 	UFUNCTION(BlueprintCallable, Category = "Learning")
 	bool IsDead() const { return bDied; }
 
-protected:
-
-public:
+  protected:
+  public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -113,5 +112,4 @@ public:
 	// Flag to control whether player input is enabled (useful during learning)
 	UPROPERTY(BlueprintReadWrite, Category = "Learning")
 	bool bPlayerInputEnabled = true;
-
 };

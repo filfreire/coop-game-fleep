@@ -117,7 +117,7 @@ if ($ConfigComplete) {
     Write-Host "Setup completed successfully!" -ForegroundColor Green
     Write-Host "`nYou can now start headless training with:" -ForegroundColor Cyan
     Write-Host "  .\scripts\run-training-headless.ps1" -ForegroundColor White
-    
+
     Write-Host "`nOptional monitoring commands:" -ForegroundColor Cyan
     Write-Host "  # Start TensorBoard (in another terminal)" -ForegroundColor Gray
     Write-Host "  .\scripts\run-tensorboard.ps1" -ForegroundColor White
@@ -125,7 +125,7 @@ if ($ConfigComplete) {
     Write-Host "`n  # Monitor training logs (in another terminal)" -ForegroundColor Gray
     Write-Host "  cd TrainingBuild\Windows\CoopGameFleep\Binaries\Win64" -ForegroundColor White
     Write-Host "  Get-Content -Path scharacter_training.log -Wait" -ForegroundColor White
-    
+
     Write-Host "`nReady to start training when you are!" -ForegroundColor Green
 } else {
     Write-Host "Configuration incomplete. Please complete the setup first." -ForegroundColor Yellow

@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SCharacterInteractor.h"
-#include "LearningAgentsObservations.h"
+
+#include "GameFramework/CharacterMovementComponent.h"
 #include "LearningAgentsActions.h"
 #include "LearningAgentsManager.h"
-#include "STargetActor.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "LearningAgentsObservations.h"
 #include "SCharacter.h"
+#include "STargetActor.h"
 
 USCharacterInteractor::USCharacterInteractor()
 {
@@ -14,53 +15,54 @@ USCharacterInteractor::USCharacterInteractor()
 }
 
 void USCharacterInteractor::SpecifyAgentObservation_Implementation(
-	FLearningAgentsObservationSchemaElement& OutObservationSchemaElement,
-	ULearningAgentsObservationSchema* InObservationSchema)
+    FLearningAgentsObservationSchemaElement& OutObservationSchemaElement,
+    ULearningAgentsObservationSchema* InObservationSchema)
 {
 	// Define observations for the character learning task
 	TMap<FName, FLearningAgentsObservationSchemaElement> CharacterObservations;
 
 	// Character position relative to world
-	CharacterObservations.Add("CharacterLocation", 
-		ULearningAgentsObservations::SpecifyLocationObservation(
-			InObservationSchema, MaxObservationDistance, "LocationObservation"));
+	CharacterObservations.Add("CharacterLocation",
+	                          ULearningAgentsObservations::SpecifyLocationObservation(
+	                              InObservationSchema, MaxObservationDistance, "LocationObservation"));
 
 	// Character velocity
-	CharacterObservations.Add("CharacterVelocity", 
-		ULearningAgentsObservations::SpecifyVelocityObservation(InObservationSchema, MaxVelocity));
+	CharacterObservations.Add(
+	    "CharacterVelocity", ULearningAgentsObservations::SpecifyVelocityObservation(InObservationSchema, MaxVelocity));
 
 	// Character forward direction
-	CharacterObservations.Add("CharacterDirection", 
-		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "DirectionObservation"));
+	CharacterObservations.Add("CharacterDirection", ULearningAgentsObservations::SpecifyDirectionObservation(
+	                                                    InObservationSchema, "DirectionObservation"));
 
 	// Target position relative to world
-	CharacterObservations.Add("TargetLocation", 
-		ULearningAgentsObservations::SpecifyLocationObservation(
-			InObservationSchema, MaxObservationDistance, "LocationObservation"));
+	CharacterObservations.Add("TargetLocation",
+	                          ULearningAgentsObservations::SpecifyLocationObservation(
+	                              InObservationSchema, MaxObservationDistance, "LocationObservation"));
 
 	// Direction from character to target
-	CharacterObservations.Add("DirectionToTarget", 
-		ULearningAgentsObservations::SpecifyDirectionObservation(InObservationSchema, "DirectionObservation"));
+	CharacterObservations.Add("DirectionToTarget", ULearningAgentsObservations::SpecifyDirectionObservation(
+	                                                   InObservationSchema, "DirectionObservation"));
 
 	// Distance to target (normalized)
-	CharacterObservations.Add("DistanceToTarget", 
-		ULearningAgentsObservations::SpecifyFloatObservation(InObservationSchema, MaxObservationDistance));
+	CharacterObservations.Add("DistanceToTarget", ULearningAgentsObservations::SpecifyFloatObservation(
+	                                                  InObservationSchema, MaxObservationDistance));
 
 	// Facing alignment to target (-1 to 1, where 1 means perfectly facing target)
-	CharacterObservations.Add("FacingAlignment", 
-		ULearningAgentsObservations::SpecifyFloatObservation(InObservationSchema, 1.0f));
+	CharacterObservations.Add("FacingAlignment",
+	                          ULearningAgentsObservations::SpecifyFloatObservation(InObservationSchema, 1.0f));
 
 	// Set the complete observation schema
-	OutObservationSchemaElement = ULearningAgentsObservations::SpecifyStructObservation(InObservationSchema, CharacterObservations);
+	OutObservationSchemaElement =
+	    ULearningAgentsObservations::SpecifyStructObservation(InObservationSchema, CharacterObservations);
 }
 
 void USCharacterInteractor::GatherAgentObservation_Implementation(
-	FLearningAgentsObservationObjectElement& OutObservationObjectElement,
-	ULearningAgentsObservationObject* InObservationObject, const int32 AgentId)
+    FLearningAgentsObservationObjectElement& OutObservationObjectElement,
+    ULearningAgentsObservationObject* InObservationObject, const int32 AgentId)
 {
 	// Get the character agent
 	const ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
-	
+
 	if (!Character || !TargetActor)
 	{
 		if (!Character)
@@ -69,7 +71,8 @@ void USCharacterInteractor::GatherAgentObservation_Implementation(
 		}
 		if (!TargetActor)
 		{
-			UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: TargetActor is NULL - make sure SCharacterManager.TargetActor is set!"));
+			UE_LOG(LogTemp, Error,
+			       TEXT("SCharacterInteractor: TargetActor is NULL - make sure SCharacterManager.TargetActor is set!"));
 		}
 		return;
 	}
@@ -78,8 +81,8 @@ void USCharacterInteractor::GatherAgentObservation_Implementation(
 	TMap<FName, FLearningAgentsObservationObjectElement> CharacterObservationObject;
 
 	// Character location
-	CharacterObservationObject.Add("CharacterLocation", 
-		ULearningAgentsObservations::MakeLocationObservation(InObservationObject, Character->GetActorLocation()));
+	CharacterObservationObject.Add("CharacterLocation", ULearningAgentsObservations::MakeLocationObservation(
+	                                                        InObservationObject, Character->GetActorLocation()));
 
 	// Character velocity
 	FVector CharacterVelocity = FVector::ZeroVector;
@@ -87,71 +90,69 @@ void USCharacterInteractor::GatherAgentObservation_Implementation(
 	{
 		CharacterVelocity = MovementComp->Velocity;
 	}
-	CharacterObservationObject.Add("CharacterVelocity", 
-		ULearningAgentsObservations::MakeVelocityObservation(InObservationObject, CharacterVelocity));
+	CharacterObservationObject.Add("CharacterVelocity", ULearningAgentsObservations::MakeVelocityObservation(
+	                                                        InObservationObject, CharacterVelocity));
 
 	// Character forward direction
-	CharacterObservationObject.Add("CharacterDirection", 
-		ULearningAgentsObservations::MakeDirectionObservation(InObservationObject, Character->GetActorForwardVector()));
+	CharacterObservationObject.Add("CharacterDirection", ULearningAgentsObservations::MakeDirectionObservation(
+	                                                         InObservationObject, Character->GetActorForwardVector()));
 
 	// Target location
-	CharacterObservationObject.Add("TargetLocation", 
-		ULearningAgentsObservations::MakeLocationObservation(InObservationObject, TargetActor->GetActorLocation()));
+	CharacterObservationObject.Add("TargetLocation", ULearningAgentsObservations::MakeLocationObservation(
+	                                                     InObservationObject, TargetActor->GetActorLocation()));
 
 	// Direction from character to target
 	FVector DirectionToTarget = (TargetActor->GetActorLocation() - Character->GetActorLocation()).GetSafeNormal();
-	CharacterObservationObject.Add("DirectionToTarget", 
-		ULearningAgentsObservations::MakeDirectionObservation(InObservationObject, DirectionToTarget));
+	CharacterObservationObject.Add("DirectionToTarget", ULearningAgentsObservations::MakeDirectionObservation(
+	                                                        InObservationObject, DirectionToTarget));
 
 	// Distance to target
 	float DistanceToTarget = FVector::Dist(Character->GetActorLocation(), TargetActor->GetActorLocation());
-	CharacterObservationObject.Add("DistanceToTarget", 
-		ULearningAgentsObservations::MakeFloatObservation(InObservationObject, DistanceToTarget));
+	CharacterObservationObject.Add(
+	    "DistanceToTarget", ULearningAgentsObservations::MakeFloatObservation(InObservationObject, DistanceToTarget));
 
 	// Facing angle to target (how well aligned the character is with the target)
 	FVector CharacterForward = Character->GetActorForwardVector();
 	float FacingAlignment = FVector::DotProduct(CharacterForward, DirectionToTarget);
-	CharacterObservationObject.Add("FacingAlignment", 
-		ULearningAgentsObservations::MakeFloatObservation(InObservationObject, FacingAlignment));
+	CharacterObservationObject.Add(
+	    "FacingAlignment", ULearningAgentsObservations::MakeFloatObservation(InObservationObject, FacingAlignment));
 
 	// Set the complete observation object
-	OutObservationObjectElement = ULearningAgentsObservations::MakeStructObservation(InObservationObject, CharacterObservationObject);
+	OutObservationObjectElement =
+	    ULearningAgentsObservations::MakeStructObservation(InObservationObject, CharacterObservationObject);
 }
 
 void USCharacterInteractor::SpecifyAgentAction_Implementation(
-	FLearningAgentsActionSchemaElement& OutActionSchemaElement,
-	ULearningAgentsActionSchema* InActionSchema)
+    FLearningAgentsActionSchemaElement& OutActionSchemaElement, ULearningAgentsActionSchema* InActionSchema)
 {
 	// Define actions for character movement
 	TMap<FName, FLearningAgentsActionSchemaElement> CharacterActions;
 
 	// Movement input (forward/backward)
-	CharacterActions.Add("MoveForward", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
+	CharacterActions.Add("MoveForward",
+	                     ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Movement input (left/right)
-	CharacterActions.Add("MoveRight", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
+	CharacterActions.Add("MoveRight", ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Rotation input (yaw)
-	CharacterActions.Add("Turn", 
-		ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
+	CharacterActions.Add("Turn", ULearningAgentsActions::SpecifyFloatAction(InActionSchema, 1.0f, "FloatAction"));
 
 	// Set the complete action schema
 	OutActionSchemaElement = ULearningAgentsActions::SpecifyStructAction(InActionSchema, CharacterActions);
 }
 
 void USCharacterInteractor::PerformAgentAction_Implementation(
-	const ULearningAgentsActionObject* InActionObject,
-	const FLearningAgentsActionObjectElement& InActionObjectElement,
-	const int32 AgentId)
+    const ULearningAgentsActionObject* InActionObject, const FLearningAgentsActionObjectElement& InActionObjectElement,
+    const int32 AgentId)
 {
 	// Get the character agent
 	ASCharacter* Character = Cast<ASCharacter>(Manager->GetAgent(AgentId, ASCharacter::StaticClass()));
-	
+
 	if (!Character)
 	{
-		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character for agent %d in PerformAgentAction"), AgentId);
+		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get character for agent %d in PerformAgentAction"),
+		       AgentId);
 		return;
 	}
 
@@ -169,7 +170,8 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 	float TurnValue = 0.0f;
 
 	const FLearningAgentsActionObjectElement* MoveForwardAction = CharacterActionObjects.Find("MoveForward");
-	if (MoveForwardAction && !ULearningAgentsActions::GetFloatAction(MoveForwardValue, InActionObject, *MoveForwardAction))
+	if (MoveForwardAction &&
+	    !ULearningAgentsActions::GetFloatAction(MoveForwardValue, InActionObject, *MoveForwardAction))
 	{
 		UE_LOG(LogTemp, Error, TEXT("SCharacterInteractor: Failed to get MoveForward action for agent %d"), AgentId);
 	}
@@ -190,15 +192,15 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 	if (Character)
 	{
 		// Log action execution for debugging multi-agent issues
-		// UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Actions - Forward:%.2f, Right:%.2f, Turn:%.2f"), 
-		//	AgentId, *Character->GetName(), MoveForwardValue, MoveRightValue, TurnValue);
-		
+		// UE_LOG(LogTemp, Log, TEXT("Agent %d (%s): Actions - Forward:%.2f, Right:%.2f, Turn:%.2f"),
+		//    AgentId, *Character->GetName(), MoveForwardValue, MoveRightValue, TurnValue);
+
 		// Apply forward/backward movement
 		Character->AddMovementInput(Character->GetActorForwardVector(), MoveForwardValue);
-		
-		// Apply left/right movement  
+
+		// Apply left/right movement
 		Character->AddMovementInput(Character->GetActorRightVector(), MoveRightValue);
-		
+
 		// Apply rotation (yaw) with increased sensitivity for better target facing
 		if (FMath::Abs(TurnValue) > 0.01f) // Only rotate if meaningful input
 		{
@@ -207,4 +209,4 @@ void USCharacterInteractor::PerformAgentAction_Implementation(
 			Character->AddControllerYawInput(TurnValue * TurnScale);
 		}
 	}
-} 
+}

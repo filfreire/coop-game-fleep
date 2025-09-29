@@ -2,10 +2,10 @@
 
 #pragma once
 
+#include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Components/StaticMeshComponent.h"
-#include "Components/BoxComponent.h"
 #include "SObstacleActor.generated.h"
 
 /**
@@ -16,14 +16,14 @@ UCLASS()
 class COOPGAMEFLEEP_API ASObstacleActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+  public:
 	ASObstacleActor();
 
-protected:
+  protected:
 	virtual void BeginPlay() override;
 
-public:	
+  public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Static mesh component for visual representation
@@ -56,8 +56,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Obstacle")
 	void InitializeObstacle(float Width, float Height, float Depth);
 
-private:
+  private:
 	// Update collision box size based on obstacle dimensions
 	void UpdateCollisionBox();
 };
-

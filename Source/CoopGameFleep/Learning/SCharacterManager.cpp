@@ -1,20 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SCharacterManager.h"
-#include "SCharacterManagerComponent.h"
-#include "SCharacterInteractor.h"
-#include "SCharacterTrainingEnvironment.h"
-#include "STargetActor.h"
-#include "LearningAgentsPPOTrainer.h"
-#include "LearningAgentsCommunicator.h"
+
+#include "AIController.h"
+#include "Engine/Engine.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "SCharacter.h"
-#include "Engine/Engine.h"
-#include "AIController.h"
+#include "LearningAgentsCommunicator.h"
 #include "LearningAgentsController.h"
 #include "LearningAgentsEntitiesManagerComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "LearningAgentsPPOTrainer.h"
+#include "SCharacter.h"
+#include "SCharacterInteractor.h"
+#include "SCharacterManagerComponent.h"
+#include "SCharacterTrainingEnvironment.h"
+#include "STargetActor.h"
 
 ASCharacterManager::ASCharacterManager()
 {
@@ -23,8 +24,7 @@ ASCharacterManager::ASCharacterManager()
 	// Check command line arguments to determine if we're in headless training mode
 	FString CommandLine = FCommandLine::Get();
 	bool bIsHeadlessTraining = CommandLine.Contains(TEXT("-headless-training")) ||
-	                          CommandLine.Contains(TEXT("-nullrhi")) ||
-	                          CommandLine.Contains(TEXT("-unattended"));
+	                           CommandLine.Contains(TEXT("-nullrhi")) || CommandLine.Contains(TEXT("-unattended"));
 
 	// Parse command line arguments for hyperparameters
 	FString RandomSeedStr;
@@ -39,70 +39,80 @@ ASCharacterManager::ASCharacterManager()
 	if (FParse::Value(*CommandLine, TEXT("-LearningRatePolicy="), LearningRatePolicyStr))
 	{
 		TrainingSettings.LearningRatePolicy = FCString::Atof(*LearningRatePolicyStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRatePolicy set from command line: %f"), TrainingSettings.LearningRatePolicy);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRatePolicy set from command line: %f"),
+		       TrainingSettings.LearningRatePolicy);
 	}
 
 	FString LearningRateCriticStr;
 	if (FParse::Value(*CommandLine, TEXT("-LearningRateCritic="), LearningRateCriticStr))
 	{
 		TrainingSettings.LearningRateCritic = FCString::Atof(*LearningRateCriticStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRateCritic set from command line: %f"), TrainingSettings.LearningRateCritic);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: LearningRateCritic set from command line: %f"),
+		       TrainingSettings.LearningRateCritic);
 	}
 
 	FString EpsilonClipStr;
 	if (FParse::Value(*CommandLine, TEXT("-EpsilonClip="), EpsilonClipStr))
 	{
 		TrainingSettings.EpsilonClip = FCString::Atof(*EpsilonClipStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: EpsilonClip set from command line: %f"), TrainingSettings.EpsilonClip);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: EpsilonClip set from command line: %f"),
+		       TrainingSettings.EpsilonClip);
 	}
 
 	FString PolicyBatchSizeStr;
 	if (FParse::Value(*CommandLine, TEXT("-PolicyBatchSize="), PolicyBatchSizeStr))
 	{
 		TrainingSettings.PolicyBatchSize = FCString::Atoi(*PolicyBatchSizeStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: PolicyBatchSize set from command line: %d"), TrainingSettings.PolicyBatchSize);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: PolicyBatchSize set from command line: %d"),
+		       TrainingSettings.PolicyBatchSize);
 	}
 
 	FString CriticBatchSizeStr;
 	if (FParse::Value(*CommandLine, TEXT("-CriticBatchSize="), CriticBatchSizeStr))
 	{
 		TrainingSettings.CriticBatchSize = FCString::Atoi(*CriticBatchSizeStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: CriticBatchSize set from command line: %d"), TrainingSettings.CriticBatchSize);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: CriticBatchSize set from command line: %d"),
+		       TrainingSettings.CriticBatchSize);
 	}
 
 	FString IterationsPerGatherStr;
 	if (FParse::Value(*CommandLine, TEXT("-IterationsPerGather="), IterationsPerGatherStr))
 	{
 		TrainingSettings.IterationsPerGather = FCString::Atoi(*IterationsPerGatherStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: IterationsPerGather set from command line: %d"), TrainingSettings.IterationsPerGather);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: IterationsPerGather set from command line: %d"),
+		       TrainingSettings.IterationsPerGather);
 	}
 
 	FString NumberOfIterationsStr;
 	if (FParse::Value(*CommandLine, TEXT("-NumberOfIterations="), NumberOfIterationsStr))
 	{
 		TrainingSettings.NumberOfIterations = FCString::Atoi(*NumberOfIterationsStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: NumberOfIterations set from command line: %d"), TrainingSettings.NumberOfIterations);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: NumberOfIterations set from command line: %d"),
+		       TrainingSettings.NumberOfIterations);
 	}
 
 	FString DiscountFactorStr;
 	if (FParse::Value(*CommandLine, TEXT("-DiscountFactor="), DiscountFactorStr))
 	{
 		TrainingSettings.DiscountFactor = FCString::Atof(*DiscountFactorStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: DiscountFactor set from command line: %f"), TrainingSettings.DiscountFactor);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: DiscountFactor set from command line: %f"),
+		       TrainingSettings.DiscountFactor);
 	}
 
 	FString GaeLambdaStr;
 	if (FParse::Value(*CommandLine, TEXT("-GaeLambda="), GaeLambdaStr))
 	{
 		TrainingSettings.GaeLambda = FCString::Atof(*GaeLambdaStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: GaeLambda set from command line: %f"), TrainingSettings.GaeLambda);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: GaeLambda set from command line: %f"),
+		       TrainingSettings.GaeLambda);
 	}
 
 	FString ActionEntropyWeightStr;
 	if (FParse::Value(*CommandLine, TEXT("-ActionEntropyWeight="), ActionEntropyWeightStr))
 	{
 		TrainingSettings.ActionEntropyWeight = FCString::Atof(*ActionEntropyWeightStr);
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ActionEntropyWeight set from command line: %f"), TrainingSettings.ActionEntropyWeight);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ActionEntropyWeight set from command line: %f"),
+		       TrainingSettings.ActionEntropyWeight);
 	}
 
 	// Parse obstacle configuration parameters
@@ -110,28 +120,32 @@ ASCharacterManager::ASCharacterManager()
 	if (FParse::Value(*CommandLine, TEXT("-UseObstacles="), UseObstaclesStr))
 	{
 		ObstacleConfig.bUseObstacles = UseObstaclesStr.ToBool();
-		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: UseObstacles set from command line: %s"), ObstacleConfig.bUseObstacles ? TEXT("true") : TEXT("false"));
+		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: UseObstacles set from command line: %s"),
+		// ObstacleConfig.bUseObstacles ? TEXT("true") : TEXT("false"));
 	}
 
 	FString MaxObstaclesStr;
 	if (FParse::Value(*CommandLine, TEXT("-MaxObstacles="), MaxObstaclesStr))
 	{
 		ObstacleConfig.MaxObstacles = FCString::Atoi(*MaxObstaclesStr);
-		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacles set from command line: %d"), ObstacleConfig.MaxObstacles);
+		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacles set from command line: %d"),
+		// ObstacleConfig.MaxObstacles);
 	}
 
 	FString MinObstacleSizeStr;
 	if (FParse::Value(*CommandLine, TEXT("-MinObstacleSize="), MinObstacleSizeStr))
 	{
 		ObstacleConfig.MinObstacleSize = FCString::Atof(*MinObstacleSizeStr);
-		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MinObstacleSize set from command line: %f"), ObstacleConfig.MinObstacleSize);
+		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MinObstacleSize set from command line: %f"),
+		// ObstacleConfig.MinObstacleSize);
 	}
 
 	FString MaxObstacleSizeStr;
 	if (FParse::Value(*CommandLine, TEXT("-MaxObstacleSize="), MaxObstacleSizeStr))
 	{
 		ObstacleConfig.MaxObstacleSize = FCString::Atof(*MaxObstacleSizeStr);
-		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacleSize set from command line: %f"), ObstacleConfig.MaxObstacleSize);
+		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: MaxObstacleSize set from command line: %f"),
+		// ObstacleConfig.MaxObstacleSize);
 	}
 
 	FString ObstacleModeStr;
@@ -145,21 +159,23 @@ ASCharacterManager::ASCharacterManager()
 		{
 			ObstacleConfig.ObstacleMode = EObstacleMode::Static;
 		}
-		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ObstacleMode set from command line: %s"), ObstacleModeStr.Equals(TEXT("Dynamic"), ESearchCase::IgnoreCase) ? TEXT("Dynamic") : TEXT("Static"));
+		// UE_LOG(LogTemp, Log, TEXT("SCharacterManager: ObstacleMode set from command line: %s"),
+		// ObstacleModeStr.Equals(TEXT("Dynamic"), ESearchCase::IgnoreCase) ? TEXT("Dynamic") : TEXT("Static"));
 	}
 
 	// Only force ReInitialize mode for headless training to ensure fresh neural network initialization
 	if (bIsHeadlessTraining)
 	{
 		RunMode = ESCharacterManagerMode::ReInitialize;
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: %d"), (int32)RunMode);
-		
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: %d"),
+		       (int32)RunMode);
 	}
 	else
 	{
 		// In editor mode, use Blueprint default (Training) but allow override
 		RunMode = ESCharacterManagerMode::Training;
-		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Editor mode detected, using Blueprint RunMode: %d"), (int32)RunMode);
+		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Editor mode detected, using Blueprint RunMode: %d"),
+		       (int32)RunMode);
 	}
 
 	// set training settings for headless training
@@ -171,7 +187,7 @@ ASCharacterManager::ASCharacterManager()
 	// Auto-detect engine path based on hostname (same logic as packaging script)
 	FString HostName = FPlatformProcess::ComputerName();
 	FString EnginePath;
-	
+
 	// Platform-specific path detection
 #if PLATFORM_WINDOWS
 	// For headless training, we need to use the actual Engine installation
@@ -197,18 +213,16 @@ ASCharacterManager::ASCharacterManager()
 		// Try to find Unreal Engine in typical installation locations
 		FString ProgramFiles = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles"));
 		FString ProgramFilesX86 = FPlatformMisc::GetEnvironmentVariable(TEXT("ProgramFiles(x86)"));
-		
+
 		// Check common Unreal Engine installation paths
-		TArray<FString> PossiblePaths = {
-			TEXT("C:/Program Files/Epic Games/UE_5.6/Engine"),
-			TEXT("C:/Program Files (x86)/Epic Games/UE_5.6/Engine"),
-			TEXT("C:/unreal/UE_5.6/Engine"),
-			TEXT("D:/unreal/UE_5.6/Engine"),
-			TEXT("E:/unreal/UE_5.6/Engine"),
-			ProgramFiles + TEXT("/Epic Games/UE_5.6/Engine"),
-			ProgramFilesX86 + TEXT("/Epic Games/UE_5.6/Engine")
-		};
-		
+		TArray<FString> PossiblePaths = {TEXT("C:/Program Files/Epic Games/UE_5.6/Engine"),
+		                                 TEXT("C:/Program Files (x86)/Epic Games/UE_5.6/Engine"),
+		                                 TEXT("C:/unreal/UE_5.6/Engine"),
+		                                 TEXT("D:/unreal/UE_5.6/Engine"),
+		                                 TEXT("E:/unreal/UE_5.6/Engine"),
+		                                 ProgramFiles + TEXT("/Epic Games/UE_5.6/Engine"),
+		                                 ProgramFilesX86 + TEXT("/Epic Games/UE_5.6/Engine")};
+
 		// Find the first existing path
 		bool bFoundPath = false;
 		for (const FString& Path : PossiblePaths)
@@ -221,12 +235,14 @@ ASCharacterManager::ASCharacterManager()
 				break;
 			}
 		}
-		
+
 		// Final fallback if no path found
 		if (!bFoundPath)
 		{
 			EnginePath = TEXT("C:/Program Files/Epic Games/UE_5.6/Engine");
-			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Unreal Engine not found in common locations, using default: %s"), *EnginePath);
+			UE_LOG(LogTemp, Warning,
+			       TEXT("SCharacterManager: Unreal Engine not found in common locations, using default: %s"),
+			       *EnginePath);
 		}
 	}
 #elif PLATFORM_LINUX
@@ -287,11 +303,8 @@ void ASCharacterManager::InitializeAgents()
 	{
 		AActor* Actor = AllCharacters[i];
 		ASCharacter* SChar = Cast<ASCharacter>(Actor);
-		UE_LOG(LogTemp, Warning, TEXT("Character %d: %s (Class: %s) - SCharacter Cast: %s"),
-			i,
-			*Actor->GetName(),
-			*Actor->GetClass()->GetName(),
-			SChar ? TEXT("SUCCESS") : TEXT("FAILED"));
+		UE_LOG(LogTemp, Warning, TEXT("Character %d: %s (Class: %s) - SCharacter Cast: %s"), i, *Actor->GetName(),
+		       *Actor->GetClass()->GetName(), SChar ? TEXT("SUCCESS") : TEXT("FAILED"));
 	}
 
 	for (AActor* Agent : Agents)
@@ -310,24 +323,27 @@ void ASCharacterManager::InitializeAgents()
 					if (NewController)
 					{
 						NewController->Possess(Pawn);
-						UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Created AIController for agent %s"), *Agent->GetName());
+						UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Created AIController for agent %s"),
+						       *Agent->GetName());
 					}
 					else
 					{
-						UE_LOG(LogTemp, Error, TEXT("SCharacterManager: Failed to create AIController for agent %s"), *Agent->GetName());
+						UE_LOG(LogTemp, Error, TEXT("SCharacterManager: Failed to create AIController for agent %s"),
+						       *Agent->GetName());
 					}
 				}
 			}
 			else
 			{
-				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Agent %s already has controller %s"),
-					*Agent->GetName(), *ExistingController->GetClass()->GetName());
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Agent %s already has controller %s"), *Agent->GetName(),
+				       *ExistingController->GetClass()->GetName());
 			}
 		}
 
 		// Add agent to the Learning Agents Manager
 		int32 AgentId = LearningAgentsManager->AddAgent(Agent);
-		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Added agent %s to manager with ID %d"), *Agent->GetName(), AgentId);
+		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Added agent %s to manager with ID %d"), *Agent->GetName(),
+		       AgentId);
 
 		// Initialize agent for learning (disable player input, prepare for AI control)
 		if (ASCharacter* SChar = Cast<ASCharacter>(Agent))
@@ -353,7 +369,8 @@ void ASCharacterManager::InitializeAgents()
 	{
 		UE_LOG(LogTemp, Error, TEXT("SCharacterManager: No SCharacter agents found! Make sure to:"));
 		UE_LOG(LogTemp, Error, TEXT("1. Place SCharacter (or Blueprint derived from SCharacter) actors in your level"));
-		UE_LOG(LogTemp, Error, TEXT("2. Don't just set SCharacter as PlayerPawn - you need actual actors in the world"));
+		UE_LOG(LogTemp, Error,
+		       TEXT("2. Don't just set SCharacter as PlayerPawn - you need actual actors in the world"));
 		UE_LOG(LogTemp, Error, TEXT("3. Check that your Blueprint inherits from SCharacter, not just Character"));
 	}
 }
@@ -365,13 +382,14 @@ void ASCharacterManager::InitializeManager()
 	// Check if we're in headless training mode and force Training if needed
 	FString CommandLine = FCommandLine::Get();
 	bool bIsHeadlessTraining = CommandLine.Contains(TEXT("-headless-training")) ||
-	                          CommandLine.Contains(TEXT("-nullrhi")) ||
-	                          CommandLine.Contains(TEXT("-unattended"));
+	                           CommandLine.Contains(TEXT("-nullrhi")) || CommandLine.Contains(TEXT("-unattended"));
 
 	// Only force ReInitialize mode for headless training, respect Blueprint settings in editor
 	if (bIsHeadlessTraining && RunMode != ESCharacterManagerMode::ReInitialize)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Headless training detected, forcing RunMode from %d to ReInitialize"), (int32)RunMode);
+		UE_LOG(LogTemp, Warning,
+		       TEXT("SCharacterManager: Headless training detected, forcing RunMode from %d to ReInitialize"),
+		       (int32)RunMode);
 		RunMode = ESCharacterManagerMode::ReInitialize;
 	}
 	else if (!bIsHeadlessTraining)
@@ -385,7 +403,7 @@ void ASCharacterManager::InitializeManager()
 	// Make Interactor Instance
 	ULearningAgentsManager* ManagerPtr = LearningAgentsManager;
 	Interactor = Cast<USCharacterInteractor>(ULearningAgentsInteractor::MakeInteractor(
-		ManagerPtr, USCharacterInteractor::StaticClass(), TEXT("SCharacter Interactor")));
+	    ManagerPtr, USCharacterInteractor::StaticClass(), TEXT("SCharacter Interactor")));
 	if (Interactor == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make interactor object."));
@@ -395,8 +413,8 @@ void ASCharacterManager::InitializeManager()
 	LearningAgentsInteractorBase = Interactor;
 
 	// Warn if neural networks are not set
-	if (EncoderNeuralNetwork == nullptr || PolicyNeuralNetwork == nullptr ||
-		DecoderNeuralNetwork == nullptr || CriticNeuralNetwork == nullptr)
+	if (EncoderNeuralNetwork == nullptr || PolicyNeuralNetwork == nullptr || DecoderNeuralNetwork == nullptr ||
+	    CriticNeuralNetwork == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: One or more neural networks are not set."));
 		return;
@@ -404,10 +422,10 @@ void ASCharacterManager::InitializeManager()
 
 	// Make Policy Instance
 	ULearningAgentsInteractor* InteractorPtr = Interactor;
-	Policy = ULearningAgentsPolicy::MakePolicy(
-		ManagerPtr, InteractorPtr, ULearningAgentsPolicy::StaticClass(), TEXT("SCharacter Policy"),
-		EncoderNeuralNetwork, PolicyNeuralNetwork, DecoderNeuralNetwork,
-		ReInitialize, ReInitialize, ReInitialize, PolicySettings, RandomSeed);
+	Policy = ULearningAgentsPolicy::MakePolicy(ManagerPtr, InteractorPtr, ULearningAgentsPolicy::StaticClass(),
+	                                           TEXT("SCharacter Policy"), EncoderNeuralNetwork, PolicyNeuralNetwork,
+	                                           DecoderNeuralNetwork, ReInitialize, ReInitialize, ReInitialize,
+	                                           PolicySettings, RandomSeed);
 	if (Policy == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make policy object."));
@@ -416,9 +434,9 @@ void ASCharacterManager::InitializeManager()
 
 	// Make Critic Instance
 	ULearningAgentsPolicy* PolicyPtr = Policy;
-	Critic = ULearningAgentsCritic::MakeCritic(
-		ManagerPtr, InteractorPtr, PolicyPtr, ULearningAgentsCritic::StaticClass(), TEXT("SCharacter Critic"),
-		CriticNeuralNetwork, ReInitialize, CriticSettings, RandomSeed);
+	Critic = ULearningAgentsCritic::MakeCritic(ManagerPtr, InteractorPtr, PolicyPtr,
+	                                           ULearningAgentsCritic::StaticClass(), TEXT("SCharacter Critic"),
+	                                           CriticNeuralNetwork, ReInitialize, CriticSettings, RandomSeed);
 	if (Critic == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make critic object."));
@@ -426,34 +444,30 @@ void ASCharacterManager::InitializeManager()
 	}
 
 	// Make Training Environment Instance
-	TrainingEnvironment = Cast<USCharacterTrainingEnvironment>(ULearningAgentsTrainingEnvironment::MakeTrainingEnvironment(
-		ManagerPtr, USCharacterTrainingEnvironment::StaticClass(), TEXT("SCharacter Training Environment")));
+	TrainingEnvironment =
+	    Cast<USCharacterTrainingEnvironment>(ULearningAgentsTrainingEnvironment::MakeTrainingEnvironment(
+	        ManagerPtr, USCharacterTrainingEnvironment::StaticClass(), TEXT("SCharacter Training Environment")));
 	if (TrainingEnvironment == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make training environment object."));
 		return;
 	}
 	TrainingEnvironment->TargetActor = TargetActor;
-	
+
 	// Configure obstacles from command line parameters
-	TrainingEnvironment->ConfigureObstacles(
-		ObstacleConfig.bUseObstacles,
-		ObstacleConfig.MaxObstacles,
-		ObstacleConfig.MinObstacleSize,
-		ObstacleConfig.MaxObstacleSize,
-		ObstacleConfig.ObstacleMode
-	);
+	TrainingEnvironment->ConfigureObstacles(ObstacleConfig.bUseObstacles, ObstacleConfig.MaxObstacles,
+	                                        ObstacleConfig.MinObstacleSize, ObstacleConfig.MaxObstacleSize,
+	                                        ObstacleConfig.ObstacleMode);
 	TrainingEnvironmentBase = TrainingEnvironment;
 
 	// Create a shared memory communicator to spawn a training process (following car example)
 	FLearningAgentsCommunicator Communicator = ULearningAgentsCommunicatorLibrary::MakeSharedMemoryTrainingProcess(
-		TrainerProcessSettings, SharedMemorySettings
-	);
+	    TrainerProcessSettings, SharedMemorySettings);
 
 	// Make PPO Trainer Instance
 	PPOTrainer = ULearningAgentsPPOTrainer::MakePPOTrainer(
-		ManagerPtr, InteractorPtr, TrainingEnvironmentBase, Policy, Critic,
-		Communicator, ULearningAgentsPPOTrainer::StaticClass(), TEXT("SCharacter PPO Trainer"), TrainerSettings);
+	    ManagerPtr, InteractorPtr, TrainingEnvironmentBase, Policy, Critic, Communicator,
+	    ULearningAgentsPPOTrainer::StaticClass(), TEXT("SCharacter PPO Trainer"), TrainerSettings);
 	if (PPOTrainer == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to make PPO trainer object."));
@@ -480,7 +494,6 @@ void ASCharacterManager::Tick(float DeltaTime)
 		if (PPOTrainer != nullptr)
 		{
 			PPOTrainer->RunTraining(TrainingSettings, TrainingGameSettings, true, true);
-			
 		}
 	}
 }

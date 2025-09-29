@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "STargetActor.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
 
@@ -50,4 +51,4 @@ bool ASTargetActor::IsLocationWithinReach(FVector Location, float Distance) cons
 {
 	float ActualDistance = FVector::Dist(GetActorLocation(), Location);
 	return ActualDistance <= Distance;
-} 
+}

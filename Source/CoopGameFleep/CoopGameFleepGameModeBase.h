@@ -2,16 +2,15 @@
 
 #pragma once
 
+#include "CoopGameFleepGameModeBase.generated.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "CoopGameFleepGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class COOPGAMEFLEEP_API ACoopGameFleepGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
 };

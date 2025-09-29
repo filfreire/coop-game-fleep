@@ -66,7 +66,7 @@ Before using the learning system, you need to create Neural Network Data Assets 
 2. Create the following neural networks:
    - **Encoder Neural Network**: Input processing
    - **Policy Neural Network**: Action selection
-   - **Decoder Neural Network**: Action output processing  
+   - **Decoder Neural Network**: Action output processing
    - **Critic Neural Network**: Value estimation for training
 
 ### 2. Place Actors in Level
@@ -80,7 +80,7 @@ Before using the learning system, you need to create Neural Network Data Assets 
 In the SCharacterManager's details panel:
 
 **Manager Settings**:
-- **Run Mode**: 
+- **Run Mode**:
   - **Training**: For editor testing (loads existing neural networks)
   - **Inference**: For using trained models
   - **ReInitialize**: For fresh training (automatically used in headless mode)
@@ -194,7 +194,7 @@ The system now includes full PPO (Proximal Policy Optimization) training capabil
 
 - **Shared Memory Communicator**: Enables communication with external training processes
 - **PPO Trainer**: Handles the complete training loop with policy and critic updates
-- **Training Modes**: 
+- **Training Modes**:
   - **Training**: Loads existing neural networks for continued training
   - **Inference**: Uses trained models for testing
   - **ReInitialize**: Fresh neural network initialization (used automatically in headless training)
@@ -222,4 +222,4 @@ This implementation provides a foundation that can be extended with:
 
 - Unreal Engine 5.6
 - Learning Agents Plugin (Experimental)
-- Required modules: Learning, LearningAgents, LearningTraining, LearningAgentsTraining 
+- Required modules: Learning, LearningAgents, LearningTraining, LearningAgentsTraining
