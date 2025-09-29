@@ -9,6 +9,6 @@ USCharacterManagerComponent::USCharacterManagerComponent()
 
 void USCharacterManagerComponent::PostInitProperties()
 {
-	MaxAgentNum = 32; // Set maximum number of agents this manager can handle
+	MaxAgentNum = 256; // Set maximum number of agents this manager can handle
 	Super::PostInitProperties();
 } 
