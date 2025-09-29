@@ -15,12 +15,11 @@ class COOPGAMEFLEEP_API ASWeapon : public AActor
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	// Sets default values for this actor's properties
 	ASWeapon();
 
-protected:
-
+  protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -42,7 +41,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem* DefaultImpactEffect;
-
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	UParticleSystem* FleshImpactEffect;
@@ -69,10 +67,8 @@ protected:
 	/* Derived from FireRate on BeginPlay */
 	float TimeBetweenShots;
 
-public:
-
+  public:
 	void StartFire();
 
 	void StopFire();
-
 };

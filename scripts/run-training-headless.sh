@@ -170,7 +170,7 @@ echo -e "${GRAY}$EXE_NAME ${GAME_ARGS[*]}${NC}"
 # Function to handle cleanup on exit
 cleanup() {
     echo -e "\n${YELLOW}Stopping training...${NC}"
-    if [ ! -z "$TRAINING_PID" ]; then
+    if [ -n "$TRAINING_PID" ]; then
         kill "$TRAINING_PID" 2>/dev/null
         wait "$TRAINING_PID" 2>/dev/null
     fi

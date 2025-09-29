@@ -2,23 +2,25 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
 #include "SHealthComponent.generated.h"
 
 // OnHealthChange Event
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangedSignature, USHealthComponent*, HealthComp, float, Health, float, HealthDelta, const class UDamageType*, DamageType, class AController*, InstigatedBy, AActor*, DamageCauser);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangedSignature, USHealthComponent*, HealthComp, float, Health,
+                                             float, HealthDelta, const class UDamageType*, DamageType,
+                                             class AController*, InstigatedBy, AActor*, DamageCauser);
 
-UCLASS( ClassGroup=(COOP), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (COOP), meta = (BlueprintSpawnableComponent))
 class COOPGAMEFLEEP_API USHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+  public:
 	// Sets default values for this component's properties
 	USHealthComponent();
 
-protected:
+  protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -29,9 +31,10 @@ protected:
 	float Health;
 
 	UFUNCTION()
-	void HandleTakeAnyDamange(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+	void HandleTakeAnyDamange(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
+	                          class AController* InstigatedBy, AActor* DamageCauser);
 
-public:
+  public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnHealthChangedSignature OnHealthChanged;
 
@@ -42,6 +45,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	float GetCurrentHealth() const { return Health; }
 
-	UFUNCTION(BlueprintCallable, Category = "HealthComponent") 
+	UFUNCTION(BlueprintCallable, Category = "HealthComponent")
 	float GetDefaultHealth() const { return DefaultHealth; }
 };

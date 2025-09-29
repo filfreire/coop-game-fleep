@@ -1,21 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SWeapon.h"
+
+#include "Chaos/ChaosEngineInterface.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
-#include "Chaos/ChaosEngineInterface.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "TimerManager.h"
+
 #include <CoopGameFleep/CoopGameFleep.h>
 #include <SCharacter.h>
 
-
 static int32 DebugWeaponDrawing = 0;
-FAutoConsoleVariableRef CVarDebugWeapon(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"), ECVF_Cheat);
+FAutoConsoleVariableRef CVarDebugWeapon(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing,
+                                        TEXT("Draw Debug Lines for Weapons"), ECVF_Cheat);
 
 // Sets default values
 ASWeapon::ASWeapon()
@@ -29,7 +30,6 @@ ASWeapon::ASWeapon()
 	BaseDamage = 20.0f;
 
 	FireRate = 600;
-
 }
 
 void ASWeapon::BeginPlay()
@@ -73,7 +73,6 @@ void ASWeapon::Fire()
 			AActor* HitActor = Hit.GetActor();
 			EPhysicalSurface SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
 
-
 			float FinalDamage = BaseDamage;
 			// if we hit vulnerable spot, multipy base damage by 4
 			if (SurfaceType == SURFACE_FLESH_VULNERABLE)
@@ -81,31 +80,34 @@ void ASWeapon::Fire()
 				FinalDamage *= 4.0f;
 			}
 
-			UGameplayStatics::ApplyPointDamage(HitActor, FinalDamage, ShotDirection, Hit, WeaponOwner->GetInstigatorController(), this, DamageType);
+			UGameplayStatics::ApplyPointDamage(HitActor, FinalDamage, ShotDirection, Hit,
+			                                   WeaponOwner->GetInstigatorController(), this, DamageType);
 
 			UParticleSystem* SelectedEffect = nullptr;
 
 			switch (SurfaceType)
 			{
-			case SURFACE_FLESH_DEFAULT:
-			case SURFACE_FLESH_VULNERABLE:
-				SelectedEffect = FleshImpactEffect;
-				break;
-			case SurfaceType_Default:
-			default:
-				SelectedEffect = DefaultImpactEffect;
-				break;
+				case SURFACE_FLESH_DEFAULT:
+				case SURFACE_FLESH_VULNERABLE:
+					SelectedEffect = FleshImpactEffect;
+					break;
+				case SurfaceType_Default:
+				default:
+					SelectedEffect = DefaultImpactEffect;
+					break;
 			}
 
 			if (SelectedEffect)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), true);
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, Hit.ImpactPoint,
+				                                         Hit.ImpactNormal.Rotation(), true);
 			}
 
 			TracerEndpoint = Hit.ImpactPoint;
 		}
 
-		if (DebugWeaponDrawing != 0) {
+		if (DebugWeaponDrawing != 0)
+		{
 			DrawDebugLine(GetWorld(), EyeLocation, TraceEnd, FColor::White, false, 1.0f, 0, 1.0f);
 		}
 
@@ -114,14 +116,16 @@ void ASWeapon::Fire()
 		LastFireTime = GetWorld()->TimeSeconds;
 		WeaponOwnerCharacter->UpdatePlayerRifleAmmoCount(-1);
 
-		UE_LOG(LogTemp, Log, TEXT("Ammo changed: %s"), *FString::FromInt(WeaponOwnerCharacter->CurrentPlayerRifleAmmoCount()));
+		UE_LOG(LogTemp, Log, TEXT("Ammo changed: %s"),
+		       *FString::FromInt(WeaponOwnerCharacter->CurrentPlayerRifleAmmoCount()));
 	}
 }
 
 void ASWeapon::StartFire()
 {
 	float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
-	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShoots, this, &ASWeapon::Fire, TimeBetweenShots, true, FirstDelay);
+	GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShoots, this, &ASWeapon::Fire, TimeBetweenShots, true,
+	                                FirstDelay);
 }
 
 void ASWeapon::StopFire()
@@ -131,17 +135,16 @@ void ASWeapon::StopFire()
 
 void ASWeapon::PlayFireEffects(FVector TracerEnd)
 {
-
 	if (MuzzleEffect)
 	{
 		UGameplayStatics::SpawnEmitterAttached(MuzzleEffect, MeshComp, MuzzleSocketName);
 	}
 
-
 	if (TracerEffect)
 	{
 		FVector MuzzleLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
-		UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
+		UParticleSystemComponent* TracerComp =
+		    UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
 		if (TracerComp)
 		{
 			TracerComp->SetVectorParameter(TracerTargetName, TracerEnd);
@@ -159,7 +162,4 @@ void ASWeapon::PlayFireEffects(FVector TracerEnd)
 			PlayerController->ClientStartCameraShake(FireCamShake);
 		}
 	}
-
-
 }
-

@@ -14,9 +14,9 @@ class COOPGAMEFLEEP_API USCharacterManagerComponent : public ULearningAgentsMana
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	USCharacterManagerComponent();
 
-protected:
+  protected:
 	virtual void PostInitProperties() override;
-}; 
+};

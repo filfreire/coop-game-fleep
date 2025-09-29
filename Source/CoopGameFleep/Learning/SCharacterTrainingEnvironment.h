@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "LearningAgentsTrainingEnvironment.h"
 #include "Learning/ObstacleTypes.h"
+#include "LearningAgentsTrainingEnvironment.h"
 #include "SCharacterTrainingEnvironment.generated.h"
 
 class ASTargetActor;
@@ -18,11 +18,12 @@ class COOPGAMEFLEEP_API USCharacterTrainingEnvironment : public ULearningAgentsT
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	USCharacterTrainingEnvironment();
 
 	virtual void GatherAgentReward_Implementation(float& OutReward, const int32 AgentId) override;
-	virtual void GatherAgentCompletion_Implementation(ELearningAgentsCompletion& OutCompletion, const int32 AgentId) override;
+	virtual void GatherAgentCompletion_Implementation(ELearningAgentsCompletion& OutCompletion,
+	                                                  const int32 AgentId) override;
 	virtual void ResetAgentEpisode_Implementation(const int32 AgentId) override;
 
 	// Target actor reference
@@ -86,8 +87,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Obstacles")
 	void ConfigureObstacles(bool bUse, int32 MaxObs, float MinSize, float MaxSize, EObstacleMode Mode);
 
-private:
+  private:
 	// Store previous distances for reward calculation
 	TMap<int32, float> PreviousDistances;
 	TMap<int32, int32> EpisodeSteps;
-}; 
+};

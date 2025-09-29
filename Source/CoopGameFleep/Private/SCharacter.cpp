@@ -1,19 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "SCharacter.h"
+
 #include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
-#include "SWeapon.h"
 #include "Components/CapsuleComponent.h"
-#include <CoopGameFleep/CoopGameFleep.h>
 #include "Components/SHealthComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "SWeapon.h"
+
+#include <CoopGameFleep/CoopGameFleep.h>
 
 // Sets default values
 ASCharacter::ASCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need
+	// it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
@@ -45,20 +47,19 @@ void ASCharacter::BeginPlay()
 	// Spawn a default weapon
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	CurrentWeapon = GetWorld()->SpawnActor<ASWeapon>(StarterWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+	CurrentWeapon =
+	    GetWorld()->SpawnActor<ASWeapon>(StarterWeaponClass, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->SetOwner(this);
-		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponAttachSocketName);
+		CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+		                                 WeaponAttachSocketName);
 	}
-
 
 	RifleAmmo = 30;
 
-
 	HealthComp->OnHealthChanged.AddDynamic(this, &ASCharacter::OnHealthChanged);
-
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -101,21 +102,23 @@ void ASCharacter::EndZoom()
 
 void ASCharacter::StartFire()
 {
-	if (CurrentWeapon && !bDied) {
+	if (CurrentWeapon && !bDied)
+	{
 		CurrentWeapon->StartFire();
 	}
 }
 
 void ASCharacter::StopFire()
 {
-	if (CurrentWeapon) {
+	if (CurrentWeapon)
+	{
 		CurrentWeapon->StopFire();
 	}
 }
 
-
-void ASCharacter::OnHealthChanged(USHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType,
-	class AController* InstigatedBy, AActor* DamageCauser)
+void ASCharacter::OnHealthChanged(USHealthComponent* OwningHealthComp, float Health, float HealthDelta,
+                                  const class UDamageType* DamageType, class AController* InstigatedBy,
+                                  AActor* DamageCauser)
 {
 	if (Health <= 0.0f && !bDied)
 	{
@@ -139,7 +142,6 @@ void ASCharacter::Tick(float DeltaTime)
 	float NewFOV = FMath::FInterpTo(CameraComp->FieldOfView, TargetFOV, DeltaTime, ZoomInterpSpeed);
 
 	CameraComp->SetFieldOfView(NewFOV);
-
 }
 
 // Called to bind functionality to input
@@ -165,7 +167,6 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ASCharacter::StopFire);
 
 	PlayerInputComponent->BindAction("ResetPosition", IE_Pressed, this, &ASCharacter::ResetCharacterPosition);
-
 }
 
 FVector ASCharacter::GetPawnViewLocation() const
@@ -181,22 +182,24 @@ bool ASCharacter::UpdatePlayerRifleAmmoCount(int ammount)
 {
 	// TODO: simplify logic, this is just a dumb first pass
 
-	if (ammount == 0) {
+	if (ammount == 0)
+	{
 		return false;
 	}
 
-	if (ammount > 0) {
+	if (ammount > 0)
+	{
 		RifleAmmo += ammount;
 		return true;
 	}
 
-	if (ammount < 0 && RifleAmmo > 0 && RifleAmmo + ammount >= 0) {
+	if (ammount < 0 && RifleAmmo > 0 && RifleAmmo + ammount >= 0)
+	{
 		RifleAmmo += ammount;
 		return true;
 	}
 
 	return false;
-
 }
 
 int ASCharacter::CurrentPlayerRifleAmmoCount()
@@ -209,17 +212,17 @@ void ASCharacter::ResetCharacterPosition()
 	// Reset character position to world origin
 	FVector ResetLocation = FVector(0.0f, 0.0f, 100.0f); // Slightly above ground to avoid falling through
 	FRotator ResetRotation = FRotator::ZeroRotator;
-	
+
 	// Reset the character's transform
 	SetActorLocation(ResetLocation);
 	SetActorRotation(ResetRotation);
-	
+
 	// Reset velocity to prevent momentum carrying over
 	if (GetMovementComponent())
 	{
 		GetMovementComponent()->StopMovementImmediately();
 	}
-	
+
 	// Reset controller rotation as well
 	if (GetController())
 	{
@@ -231,29 +234,29 @@ void ASCharacter::ResetForLearning(FVector NewLocation, FRotator NewRotation)
 {
 	// Reset death state if needed
 	bDied = false;
-	
+
 	// Disable player input during learning (AI will control movement)
 	bPlayerInputEnabled = false;
-	
+
 	// Reset collision if it was disabled
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	
+
 	// Reset the character's transform
 	SetActorLocation(NewLocation);
 	SetActorRotation(NewRotation);
-	
+
 	// Reset velocity to prevent momentum carrying over
 	if (GetMovementComponent())
 	{
 		GetMovementComponent()->StopMovementImmediately();
 	}
-	
+
 	// Reset controller rotation
 	if (GetController())
 	{
 		GetController()->SetControlRotation(NewRotation);
 	}
-	
+
 	// Reset health to full
 	if (HealthComp)
 	{
@@ -266,4 +269,3 @@ bool ASCharacter::IsAvailableForLearning() const
 	// Character is available for learning if it's not dead and has valid components
 	return !bDied && GetMovementComponent() != nullptr;
 }
-

@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Learning/SObstacleManager.h"
-#include "Engine/World.h"
+
 #include "Engine/Engine.h"
-#include "GameFramework/Volume.h"
+#include "Engine/World.h"
 #include "EngineUtils.h"
+#include "GameFramework/Volume.h"
 
 USObstacleManager::USObstacleManager()
 {
@@ -15,10 +16,10 @@ USObstacleManager::USObstacleManager()
 void USObstacleManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	// Try to find location volume automatically
 	FindAndSetLocationVolume();
-	
+
 	// Initialize obstacles based on mode
 	if (ObstacleMode == EObstacleMode::Static)
 	{
@@ -32,15 +33,16 @@ void USObstacleManager::BeginPlay()
 	}
 }
 
-void USObstacleManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void USObstacleManager::TickComponent(float DeltaTime, ELevelTick TickType,
+                                      FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
 	// Only shuffle in dynamic mode
 	if (ObstacleMode == EObstacleMode::Dynamic)
 	{
 		ShuffleTimer += DeltaTime;
-		
+
 		// Shuffle obstacles every 60 seconds
 		if (ShuffleTimer >= 60.0f)
 		{
@@ -66,12 +68,13 @@ void USObstacleManager::InitializeObstacles()
 		}
 	}
 
-	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Initialized %d obstacles in %s mode"), 
-	//		CurrentObstacles.Num(), 
-	//		ObstacleMode == EObstacleMode::Static ? TEXT("Static") : TEXT("Dynamic"));
+	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Initialized %d obstacles in %s mode"),
+	//        CurrentObstacles.Num(),
+	//        ObstacleMode == EObstacleMode::Static ? TEXT("Static") : TEXT("Dynamic"));
 }
 
-void USObstacleManager::InitializeObstaclesWithSmartPlacement(const FVector& AgentLocation, const FVector& TargetLocation)
+void USObstacleManager::InitializeObstaclesWithSmartPlacement(const FVector& AgentLocation,
+                                                              const FVector& TargetLocation)
 {
 	// Clear existing obstacles
 	ClearObstacles();
@@ -87,27 +90,28 @@ void USObstacleManager::InitializeObstaclesWithSmartPlacement(const FVector& Age
 		// Try to find a valid position that avoids agents and targets
 		do
 		{
-		if (LocationVolume)
-		{
-			// Use LocationVolume for positioning
-			FVector VolumeOrigin = LocationVolume->GetActorLocation();
-			FVector VolumeExtent;
-			LocationVolume->GetActorBounds(false, VolumeOrigin, VolumeExtent);
-			
-			// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Volume Origin: %s, Extent: %s"), 
+			if (LocationVolume)
+			{
+				// Use LocationVolume for positioning
+				FVector VolumeOrigin = LocationVolume->GetActorLocation();
+				FVector VolumeExtent;
+				LocationVolume->GetActorBounds(false, VolumeOrigin, VolumeExtent);
+
+				// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Volume Origin: %s, Extent: %s"),
 				// *VolumeOrigin.ToString(), *VolumeExtent.ToString());
-			
-			// Generate random point within volume bounds
-			ObstaclePosition.X = FMath::RandRange(VolumeOrigin.X - VolumeExtent.X, VolumeOrigin.X + VolumeExtent.X);
-			ObstaclePosition.Y = FMath::RandRange(VolumeOrigin.Y - VolumeExtent.Y, VolumeOrigin.Y + VolumeExtent.Y);
-			ObstaclePosition.Z = VolumeOrigin.Z + VolumeExtent.Z; // Start from top of volume
-			
-			// Find ground level
-			ObstaclePosition.Z = FindGroundLevel(ObstaclePosition);
-			
-			// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Generated obstacle position: %s"), *ObstaclePosition.ToString());
-		}
-		else
+
+				// Generate random point within volume bounds
+				ObstaclePosition.X = FMath::RandRange(VolumeOrigin.X - VolumeExtent.X, VolumeOrigin.X + VolumeExtent.X);
+				ObstaclePosition.Y = FMath::RandRange(VolumeOrigin.Y - VolumeExtent.Y, VolumeOrigin.Y + VolumeExtent.Y);
+				ObstaclePosition.Z = VolumeOrigin.Z + VolumeExtent.Z; // Start from top of volume
+
+				// Find ground level
+				ObstaclePosition.Z = FindGroundLevel(ObstaclePosition);
+
+				// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Generated obstacle position: %s"),
+				// *ObstaclePosition.ToString());
+			}
+			else
 			{
 				// Fallback to environment bounds
 				ObstaclePosition.X = EnvironmentCenter.X + FMath::RandRange(-EnvironmentBounds.X, EnvironmentBounds.X);
@@ -115,14 +119,14 @@ void USObstacleManager::InitializeObstaclesWithSmartPlacement(const FVector& Age
 				ObstaclePosition.Z = EnvironmentCenter.Z;
 				ObstaclePosition.Z = FindGroundLevel(ObstaclePosition);
 			}
-			
+
 			// Ensure obstacle is properly above ground
 			ObstaclePosition.Z += 10.0f;
-			
+
 			// Check if position is valid (avoids agents and targets)
-			ValidPosition = IsValidObstaclePosition(ObstaclePosition, AgentLocation, 150.0f) && 
-							IsValidObstaclePosition(ObstaclePosition, TargetLocation, 150.0f);
-			
+			ValidPosition = IsValidObstaclePosition(ObstaclePosition, AgentLocation, 150.0f) &&
+			                IsValidObstaclePosition(ObstaclePosition, TargetLocation, 150.0f);
+
 			Attempts++;
 		} while (!ValidPosition && Attempts < MaxAttempts);
 
@@ -137,7 +141,8 @@ void USObstacleManager::InitializeObstaclesWithSmartPlacement(const FVector& Age
 		}
 	}
 
-	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Initialized %d obstacles with smart placement (avoiding agents/targets)"), CurrentObstacles.Num());
+	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Initialized %d obstacles with smart placement (avoiding
+	// agents/targets)"), CurrentObstacles.Num());
 }
 
 void USObstacleManager::ClearObstacles()
@@ -181,7 +186,7 @@ bool USObstacleManager::IsLocationBlocked(const FVector& Location, float AgentRa
 void USObstacleManager::SetObstacleMode(EObstacleMode NewMode)
 {
 	ObstacleMode = NewMode;
-	
+
 	// If switching to static mode, initialize obstacles
 	if (ObstacleMode == EObstacleMode::Static)
 	{
@@ -208,12 +213,12 @@ FVector USObstacleManager::GenerateRandomObstaclePosition(const FVector& AvoidLo
 			FVector VolumeOrigin = LocationVolume->GetActorLocation();
 			FVector VolumeExtent;
 			LocationVolume->GetActorBounds(false, VolumeOrigin, VolumeExtent);
-			
+
 			// Generate random point within volume bounds
 			Position.X = FMath::RandRange(VolumeOrigin.X - VolumeExtent.X, VolumeOrigin.X + VolumeExtent.X);
 			Position.Y = FMath::RandRange(VolumeOrigin.Y - VolumeExtent.Y, VolumeOrigin.Y + VolumeExtent.Y);
 			Position.Z = VolumeOrigin.Z + VolumeExtent.Z; // Start from top of volume
-			
+
 			// Find ground level
 			Position.Z = FindGroundLevel(Position);
 		}
@@ -225,17 +230,18 @@ FVector USObstacleManager::GenerateRandomObstaclePosition(const FVector& AvoidLo
 			Position.Z = EnvironmentCenter.Z;
 			Position.Z = FindGroundLevel(Position);
 		}
-		
+
 		// Ensure obstacle is properly above ground
 		Position.Z += 10.0f; // Small offset to prevent clipping
-		
+
 		Attempts++;
 	} while (!IsValidObstaclePosition(Position, AvoidLocation, AvoidRadius) && Attempts < MaxAttempts);
 
 	return Position;
 }
 
-bool USObstacleManager::IsValidObstaclePosition(const FVector& Position, const FVector& AvoidLocation, float AvoidRadius) const
+bool USObstacleManager::IsValidObstaclePosition(const FVector& Position, const FVector& AvoidLocation,
+                                                float AvoidRadius) const
 {
 	// Check if position is within bounds
 	if (LocationVolume)
@@ -244,9 +250,9 @@ bool USObstacleManager::IsValidObstaclePosition(const FVector& Position, const F
 		FVector VolumeOrigin = LocationVolume->GetActorLocation();
 		FVector VolumeExtent;
 		LocationVolume->GetActorBounds(false, VolumeOrigin, VolumeExtent);
-		
+
 		if (Position.X < VolumeOrigin.X - VolumeExtent.X || Position.X > VolumeOrigin.X + VolumeExtent.X ||
-			Position.Y < VolumeOrigin.Y - VolumeExtent.Y || Position.Y > VolumeOrigin.Y + VolumeExtent.Y)
+		    Position.Y < VolumeOrigin.Y - VolumeExtent.Y || Position.Y > VolumeOrigin.Y + VolumeExtent.Y)
 		{
 			return false;
 		}
@@ -254,8 +260,10 @@ bool USObstacleManager::IsValidObstaclePosition(const FVector& Position, const F
 	else
 	{
 		// Fallback to environment bounds
-		if (Position.X < EnvironmentCenter.X - EnvironmentBounds.X || Position.X > EnvironmentCenter.X + EnvironmentBounds.X ||
-			Position.Y < EnvironmentCenter.Y - EnvironmentBounds.Y || Position.Y > EnvironmentCenter.Y + EnvironmentBounds.Y)
+		if (Position.X < EnvironmentCenter.X - EnvironmentBounds.X ||
+		    Position.X > EnvironmentCenter.X + EnvironmentBounds.X ||
+		    Position.Y < EnvironmentCenter.Y - EnvironmentBounds.Y ||
+		    Position.Y > EnvironmentCenter.Y + EnvironmentBounds.Y)
 		{
 			return false;
 		}
@@ -287,8 +295,8 @@ ASObstacleActor* USObstacleManager::CreateObstacleAtPosition(const FVector& Posi
 {
 	if (!GetWorld() || !ObstacleClass)
 	{
-		// UE_LOG(LogTemp, Warning, TEXT("SObstacleManager: Cannot create obstacle - World: %s, ObstacleClass: %s"), 
-			// GetWorld() ? TEXT("Valid") : TEXT("NULL"), ObstacleClass ? TEXT("Valid") : TEXT("NULL"));
+		// UE_LOG(LogTemp, Warning, TEXT("SObstacleManager: Cannot create obstacle - World: %s, ObstacleClass: %s"),
+		// GetWorld() ? TEXT("Valid") : TEXT("NULL"), ObstacleClass ? TEXT("Valid") : TEXT("NULL"));
 		return nullptr;
 	}
 
@@ -297,16 +305,17 @@ ASObstacleActor* USObstacleManager::CreateObstacleAtPosition(const FVector& Posi
 	// Spawn obstacle
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	
-	ASObstacleActor* NewObstacle = GetWorld()->SpawnActor<ASObstacleActor>(ObstacleClass, Position, FRotator::ZeroRotator, SpawnParams);
-	
+
+	ASObstacleActor* NewObstacle =
+	    GetWorld()->SpawnActor<ASObstacleActor>(ObstacleClass, Position, FRotator::ZeroRotator, SpawnParams);
+
 	if (NewObstacle)
 	{
 		// Calculate obstacle dimensions based on volume
 		float VolumeHeight = 1000.0f; // Default height if no volume
 		float VolumeWidthX = 200.0f;  // Default width if no volume
 		float VolumeWidthY = 200.0f;  // Default width if no volume
-		
+
 		// Get dimensions from location volume if available
 		if (LocationVolume)
 		{
@@ -314,8 +323,8 @@ ASObstacleActor* USObstacleManager::CreateObstacleAtPosition(const FVector& Posi
 			FVector VolumeExtent;
 			LocationVolume->GetActorBounds(false, VolumeOrigin, VolumeExtent);
 			VolumeHeight = VolumeExtent.Z * 2.0f; // Full height of volume
-			VolumeWidthX = VolumeExtent.X * 2.0f;  // Full width of volume
-			VolumeWidthY = VolumeExtent.Y * 2.0f;  // Full width of volume
+			VolumeWidthX = VolumeExtent.X * 2.0f; // Full width of volume
+			VolumeWidthY = VolumeExtent.Y * 2.0f; // Full width of volume
 		}
 		else
 		{
@@ -324,17 +333,17 @@ ASObstacleActor* USObstacleManager::CreateObstacleAtPosition(const FVector& Posi
 			VolumeWidthX = EnvironmentBounds.X * 2.0f;
 			VolumeWidthY = EnvironmentBounds.Y * 2.0f;
 		}
-		
+
 		// Create obstacles that span the full height and are randomly wide
 		float WidthX = FMath::RandRange(MinObstacleSize, FMath::Min(MaxObstacleSize, VolumeWidthX * 0.8f));
 		float WidthY = FMath::RandRange(MinObstacleSize, FMath::Min(MaxObstacleSize, VolumeWidthY * 0.8f));
-		float Height = VolumeHeight; // Use full volume height
+		float Height = VolumeHeight;                                  // Use full volume height
 		float Depth = FMath::RandRange(WidthX * 0.1f, WidthX * 0.3f); // Thin walls
-		
+
 		NewObstacle->InitializeObstacle(WidthX, Height, WidthY);
-		
-		// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Created obstacle at %s with WX:%f WY:%f H:%f D:%f (Volume: %fx%fx%f)"), 
-			// *Position.ToString(), WidthX, WidthY, Height, Depth, VolumeWidthX, VolumeWidthY, VolumeHeight);
+
+		// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Created obstacle at %s with WX:%f WY:%f H:%f D:%f (Volume:
+		// %fx%fx%f)"), *Position.ToString(), WidthX, WidthY, Height, Depth, VolumeWidthX, VolumeWidthY, VolumeHeight);
 	}
 
 	return NewObstacle;
@@ -350,25 +359,25 @@ float USObstacleManager::FindGroundLevel(const FVector& Position) const
 	// Line trace from above to find ground
 	FVector TraceStart = FVector(Position.X, Position.Y, EnvironmentCenter.Z + 1000.0f);
 	FVector TraceEnd = FVector(Position.X, Position.Y, EnvironmentCenter.Z - 1000.0f);
-	
+
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = false;
-	
+
 	float GroundZ = EnvironmentCenter.Z; // Default to environment center if no ground found
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_WorldStatic, QueryParams))
 	{
 		GroundZ = HitResult.Location.Z;
 	}
-	
+
 	return GroundZ;
 }
 
 void USObstacleManager::SetLocationVolume(AVolume* NewLocationVolume)
 {
 	LocationVolume = NewLocationVolume;
-	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: LocationVolume set to %s"), 
-		// LocationVolume ? *LocationVolume->GetName() : TEXT("NULL"));
+	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: LocationVolume set to %s"),
+	// LocationVolume ? *LocationVolume->GetName() : TEXT("NULL"));
 }
 
 void USObstacleManager::FindAndSetLocationVolume()
@@ -387,9 +396,9 @@ void USObstacleManager::FindAndSetLocationVolume()
 	{
 		AVolume* FoundVolume = *ActorItr;
 		VolumeCount++;
-		// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Found Volume %d: %s (Class: %s)"), 
-			// VolumeCount, *FoundVolume->GetName(), *FoundVolume->GetClass()->GetName());
-		
+		// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Found Volume %d: %s (Class: %s)"),
+		// VolumeCount, *FoundVolume->GetName(), *FoundVolume->GetClass()->GetName());
+
 		if (IsValid(FoundVolume))
 		{
 			SetLocationVolume(FoundVolume);
@@ -398,7 +407,8 @@ void USObstacleManager::FindAndSetLocationVolume()
 		}
 	}
 
-	// UE_LOG(LogTemp, Warning, TEXT("SObstacleManager: No valid Volume found (checked %d volumes), using environment bounds"), VolumeCount);
+	// UE_LOG(LogTemp, Warning, TEXT("SObstacleManager: No valid Volume found (checked %d volumes), using environment
+	// bounds"), VolumeCount);
 }
 
 void USObstacleManager::ShuffleObstaclePositions()
@@ -413,10 +423,10 @@ void USObstacleManager::ShuffleObstaclePositions()
 
 	// Store current obstacle count
 	int32 ObstacleCount = CurrentObstacles.Num();
-	
+
 	// Clear existing obstacles
 	ClearObstacles();
-	
+
 	// Recreate obstacles with new random positions
 	for (int32 i = 0; i < ObstacleCount; i++)
 	{
@@ -430,4 +440,3 @@ void USObstacleManager::ShuffleObstaclePositions()
 
 	// UE_LOG(LogTemp, Log, TEXT("SObstacleManager: Shuffled %d obstacles to new positions"), CurrentObstacles.Num());
 }
-
