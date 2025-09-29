@@ -169,7 +169,7 @@ function Copy-TrainingResults {
 
 # Define the three training configurations
 $ConservativeParams = @{
-    TimeoutMinutes = 5
+    TimeoutMinutes = 35
     RandomSeed = 1001
     LearningRatePolicy = 0.00005
     LearningRateCritic = 0.0005
@@ -183,7 +183,7 @@ $ConservativeParams = @{
 }
 
 $AggressiveParams = @{
-    TimeoutMinutes = 5
+    TimeoutMinutes = 35
     RandomSeed = 2002
     LearningRatePolicy = 0.0003
     LearningRateCritic = 0.003
@@ -197,7 +197,7 @@ $AggressiveParams = @{
 }
 
 $BalancedParams = @{
-    TimeoutMinutes = 5
+    TimeoutMinutes = 35
     RandomSeed = 3003
     LearningRatePolicy = 0.0001
     LearningRateCritic = 0.001
