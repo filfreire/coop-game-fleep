@@ -44,7 +44,12 @@ function Invoke-TrainingRun {
     $cmdArgs = @()
     foreach ($key in $Parameters.Keys) {
         $cmdArgs += "-$key"
-        $cmdArgs += $Parameters[$key]
+        # Ensure RandomSeed is passed as integer to avoid type conversion issues
+        if ($key -eq "RandomSeed") {
+            $cmdArgs += [int]$Parameters[$key]
+        } else {
+            $cmdArgs += $Parameters[$key]
+        }
     }
     
     Write-Host "Executing training run..." -ForegroundColor Green
