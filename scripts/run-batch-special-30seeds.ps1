@@ -1,6 +1,6 @@
-# Batch Training Runner for Coopgame - 10 seeds Version
+# Batch Training Runner for CoopGameFleep - 30 Seeds Version
 # This script runs multiple training configurations with 30 random seeds each
-# All 10 seeds run in parallel for each flavor
+# All 30 seeds run in parallel for each flavor
 # Usage: .\scripts\run-batch-special-30seeds.ps1
 
 param(
@@ -8,11 +8,11 @@ param(
     [switch]$SkipAggressive = $false,
     [switch]$SkipModerate = $false,
     [switch]$StopOnError = $false,
-    [string]$ResultsDir = "SpecialBatchResults_10Seeds"
+    [string]$ResultsDir = "SpecialBatchResults_30Seeds"
 )
 
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "Coopgame BATCH TRAINING RUNNER - 10 seeds" -ForegroundColor Green
+Write-Host "COOPGAMEFLEEP BATCH TRAINING RUNNER - 30 SEEDS" -ForegroundColor Green
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -56,7 +56,7 @@ function Stop-OrphanedTrainingProcesses {
     Write-Host "CHECKING FOR ORPHANED TRAINING PROCESSES" -ForegroundColor Yellow
     Write-Host "======================================" -ForegroundColor Cyan
     
-    # Find and kill any running FPSGame processes
+    # Find and kill any running CoopGameFleep processes
     $GameProcesses = Get-Process -Name "CoopGameFleep" -ErrorAction SilentlyContinue
     if ($GameProcesses) {
         Write-Host "Found $($GameProcesses.Count) orphaned CoopGameFleep.exe process(es)" -ForegroundColor Yellow
@@ -100,9 +100,9 @@ function Stop-OrphanedTrainingProcesses {
             $verificationAttempt++
             Write-Host "Verification attempt $verificationAttempt/$maxVerificationAttempts..." -ForegroundColor Cyan
             
-            $RemainingGameProcesses = Get-Process -Name "FPSGame" -ErrorAction SilentlyContinue
+            $RemainingGameProcesses = Get-Process -Name "CoopGameFleep" -ErrorAction SilentlyContinue
             if ($RemainingGameProcesses) {
-                Write-Warning "Warning: $($RemainingGameProcesses.Count) FPSGame.exe process(es) still running"
+                Write-Warning "Warning: $($RemainingGameProcesses.Count) CoopGameFleep.exe process(es) still running"
                 
                 # Try one more aggressive termination attempt
                 foreach ($remainingProc in $RemainingGameProcesses) {
@@ -125,23 +125,23 @@ function Stop-OrphanedTrainingProcesses {
                 Start-Sleep -Seconds 2
             } else {
                 $allProcessesTerminated = $true
-                Write-Host "All FPSGame.exe processes successfully terminated" -ForegroundColor Green
+                Write-Host "All CoopGameFleep.exe processes successfully terminated" -ForegroundColor Green
             }
         }
         
         # Final verification
-        $FinalGameProcesses = Get-Process -Name "FPSGame" -ErrorAction SilentlyContinue
+        $FinalGameProcesses = Get-Process -Name "CoopGameFleep" -ErrorAction SilentlyContinue
         if ($FinalGameProcesses) {
-            Write-Error "CRITICAL: $($FinalGameProcesses.Count) FPSGame.exe process(es) still running after all termination attempts!"
+            Write-Error "CRITICAL: $($FinalGameProcesses.Count) CoopGameFleep.exe process(es) still running after all termination attempts!"
             Write-Error "Manual intervention may be required to terminate these processes."
             foreach ($proc in $FinalGameProcesses) {
                 Write-Error "  - PID: $($proc.Id), ProcessName: $($proc.ProcessName)"
             }
         } else {
-            Write-Host "SUCCESS: All FPSGame.exe processes confirmed terminated" -ForegroundColor Green
+            Write-Host "SUCCESS: All CoopGameFleep.exe processes confirmed terminated" -ForegroundColor Green
         }
     } else {
-        Write-Host "No orphaned FPSGame.exe processes found" -ForegroundColor Green
+        Write-Host "No orphaned CoopGameFleep.exe processes found" -ForegroundColor Green
     }
     
     Write-Host ""
@@ -318,7 +318,7 @@ function Invoke-TrainingBatch {
     }
     
     Write-Host "Started $($Jobs.Count) parallel training jobs. Waiting for completion..." -ForegroundColor Cyan
-    Write-Host "Training will run for 20 minutes per instance..." -ForegroundColor Yellow
+    Write-Host "Training will run for 30 minutes per instance..." -ForegroundColor Yellow
     Write-Host ""
     
     # Wait for all jobs to complete
@@ -371,8 +371,8 @@ function Copy-TrainingResults {
     
     # Copy log file - check multiple possible locations
     $PossibleLogPaths = @(
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\FPSGame\Saved\Logs") $LogFile,
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\FPSGame") $LogFile,
+        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs") $LogFile,
+        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep") $LogFile,
         Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows") $LogFile,
         Join-Path $ProjectDir $LogFile
     )
@@ -419,7 +419,7 @@ Stop-OrphanedTrainingProcesses
 
 # Define the three training configurations
 $ConservativeParams = @{
-    TimeoutMinutes = 20
+    TimeoutMinutes = 30
     LearningRatePolicy = 0.00005
     LearningRateCritic = 0.0005
     EpsilonClip = 0.1
@@ -432,7 +432,7 @@ $ConservativeParams = @{
 }
 
 $AggressiveParams = @{
-    TimeoutMinutes = 20
+    TimeoutMinutes = 30
     LearningRatePolicy = 0.0003
     LearningRateCritic = 0.003
     EpsilonClip = 0.3
@@ -445,7 +445,7 @@ $AggressiveParams = @{
 }
 
 $ModerateParams = @{
-    TimeoutMinutes = 20
+    TimeoutMinutes = 30
     LearningRatePolicy = 0.0001
     LearningRateCritic = 0.001
     EpsilonClip = 0.2
@@ -461,8 +461,8 @@ $ModerateParams = @{
 $AllResults = @{}
 $StartTime = Get-Date
 
-$AllSeeds = 1..10
-# USING 1..10 for testing purposes; 
+# Define all seeds (1-30)
+$AllSeeds = 1..30
 
 # Conservative: Low learning rate, small batches
 if (-not $SkipConservative) {
@@ -471,8 +471,8 @@ if (-not $SkipConservative) {
     Write-Host "======================================" -ForegroundColor Green
     Write-Host ""
     
-    # Run all 10 seeds in parallel
-    Write-Host "Running Conservative (All 10 Seeds in Parallel)..." -ForegroundColor Yellow
+    # Run all 30 seeds in parallel
+    Write-Host "Running Conservative (All 30 Seeds in Parallel)..." -ForegroundColor Yellow
     $ConservativeResults = Invoke-TrainingBatch -RunName "Conservative" -Description "CONSERVATIVE / LOW LEARNING RATE" -Parameters $ConservativeParams -Seeds $AllSeeds
     $AllResults["Conservative"] = $ConservativeResults
     
@@ -490,8 +490,8 @@ if (-not $SkipAggressive) {
     Write-Host "======================================" -ForegroundColor Green
     Write-Host ""
     
-    # Run all 10 seeds in parallel
-    Write-Host "Running Aggressive (All 10 Seeds in Parallel)..." -ForegroundColor Yellow
+    # Run all 30 seeds in parallel
+    Write-Host "Running Aggressive (All 30 Seeds in Parallel)..." -ForegroundColor Yellow
     $AggressiveResults = Invoke-TrainingBatch -RunName "Aggressive" -Description "AGGRESSIVE / HIGH LEARNING RATE" -Parameters $AggressiveParams -Seeds $AllSeeds
     $AllResults["Aggressive"] = $AggressiveResults
     
@@ -509,8 +509,8 @@ if (-not $SkipModerate) {
     Write-Host "======================================" -ForegroundColor Green
     Write-Host ""
     
-    # Run all 10 seeds in parallel
-    Write-Host "Running Moderate (All 10 seeds in Parallel)..." -ForegroundColor Yellow
+    # Run all 30 seeds in parallel
+    Write-Host "Running Moderate (All 30 Seeds in Parallel)..." -ForegroundColor Yellow
     $ModerateResults = Invoke-TrainingBatch -RunName "Moderate" -Description "MODERATE / MEDIUM LEARNING RATE" -Parameters $ModerateParams -Seeds $AllSeeds
     $AllResults["Moderate"] = $ModerateResults
     
@@ -549,11 +549,21 @@ foreach ($flavor in @("Conservative", "Aggressive", "Moderate")) {
 }
 
 $SummaryReport = @"
-Coopgame SPECIAL BATCH TRAINING SUMMARY REPORT - 10 seeds
-=============================================================================
+COOPGAMEFLEEP SPECIAL BATCH TRAINING SUMMARY REPORT - 30 SEEDS
+===============================================================
 Start Time: $($StartTime.ToString("yyyy-MM-dd HH:mm:ss"))
 End Time: $($EndTime.ToString("yyyy-MM-dd HH:mm:ss"))
 Total Duration: $($TotalDuration.ToString("hh\:mm\:ss"))
+
+CONFIGURATION:
+- Conservative: Low learning rate, small batches (30 min timeout)
+- Aggressive: High learning rate, large batches (30 min timeout)  
+- Moderate: Medium learning rate, moderate batches (30 min timeout)
+
+BATCH STRUCTURE:
+- Each flavor runs 30 seeds total (seeds 1-30)
+- All 30 instances run in parallel for each flavor
+- 30-minute training per instance
 
 OVERALL RESULTS:
 - Total successful runs: $TotalSuccessful
@@ -584,12 +594,12 @@ NEXT STEPS:
 4. Analyze results to determine optimal hyperparameters and seed sensitivity
 "@
 
-$SummaryFile = Join-Path $SummaryDir "special_batch_training_10seeds_summary_$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').txt"
+$SummaryFile = Join-Path $SummaryDir "special_batch_training_30seeds_summary_$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').txt"
 $SummaryReport | Out-File -FilePath $SummaryFile -Encoding UTF8
 
 # Summary
 Write-Host "======================================" -ForegroundColor Cyan
-Write-Host "BATCH TRAINING SUMMARY - 10 seeds" -ForegroundColor Yellow
+Write-Host "BATCH TRAINING SUMMARY - 30 SEEDS" -ForegroundColor Yellow
 Write-Host "======================================" -ForegroundColor Cyan
 
 foreach ($flavor in @("Conservative", "Aggressive", "Moderate")) {
