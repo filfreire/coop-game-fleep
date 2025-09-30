@@ -15,6 +15,8 @@
 #include "LearningAgentsController.h"
 #include "LearningAgentsEntitiesManagerComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Misc/Paths.h"
+#include "HAL/FileManager.h"
 
 ASCharacterManager::ASCharacterManager()
 {
@@ -239,6 +241,34 @@ ASCharacterManager::ASCharacterManager()
 
 	TrainerProcessSettings.NonEditorEngineRelativePath = EnginePath;
 	TrainerProcessSettings.NonEditorIntermediateRelativePath = TEXT("../../../../../Intermediate");
+
+	FString TrainingIntermediateSuffix;
+	if (FParse::Value(*CommandLine, TEXT("-TrainingIntermediateSuffix="), TrainingIntermediateSuffix))
+	{
+		TrainingIntermediateSuffix = TrainingIntermediateSuffix.TrimStartAndEnd();
+		if (!TrainingIntermediateSuffix.IsEmpty())
+		{
+			const FString SanitizedSuffix = FPaths::MakeValidFileName(TrainingIntermediateSuffix);
+			if (!SanitizedSuffix.IsEmpty())
+			{
+				TrainerProcessSettings.NonEditorIntermediateRelativePath = FString::Printf(TEXT("../../../../../Intermediate/%s"), *SanitizedSuffix);
+
+				const FString ProjectIntermediateDir = FPaths::ProjectIntermediateDir();
+				const FString RunIntermediateDir = FPaths::Combine(ProjectIntermediateDir, SanitizedSuffix);
+				IFileManager::Get().MakeDirectory(*RunIntermediateDir, true);
+				const FString LearningAgentsDir = FPaths::Combine(RunIntermediateDir, TEXT("LearningAgents"));
+				IFileManager::Get().MakeDirectory(*LearningAgentsDir, true);
+
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Using TrainingIntermediateSuffix '%s' -> %s"),
+					*SanitizedSuffix, *TrainerProcessSettings.NonEditorIntermediateRelativePath);
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Absolute intermediate override: %s"), *RunIntermediateDir);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: TrainingIntermediateSuffix '%s' sanitized to empty string; keeping default intermediate path."), *TrainingIntermediateSuffix);
+			}
+		}
+	}
 
 	// Log the configured paths for debugging
 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Configured trainer paths for hostname '%s':"), *HostName);

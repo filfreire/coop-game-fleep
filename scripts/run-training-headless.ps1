@@ -21,6 +21,7 @@ param(
     [float]$ActionEntropyWeight = 0.0,
     [int]$TimeoutMinutes = 0,       # 0 or negative => run indefinitely
     [switch]$KillTreeOnTimeout = $true,
+    [string]$IntermediateSuffix = "",
     # Obstacle configuration parameters
     [string]$UseObstacles = "true",
     [int]$MaxObstacles = 8,
@@ -40,6 +41,9 @@ Write-Host "Training Build Dir: $TrainingBuildDir" -ForegroundColor Yellow
 Write-Host "Map Name: $MapName" -ForegroundColor Yellow
 Write-Host "Log File: $LogFile" -ForegroundColor Yellow
 Write-Host "Executable: $ExeName" -ForegroundColor Yellow
+if ($IntermediateSuffix) {
+    Write-Host "Intermediate Suffix: $IntermediateSuffix" -ForegroundColor Yellow
+}
 Write-Host ""
 Write-Host "PPO Hyperparameters:" -ForegroundColor Cyan
 Write-Host "  Random Seed: $RandomSeed" -ForegroundColor White
@@ -60,6 +64,17 @@ Write-Host "  Max Obstacles: $MaxObstacles" -ForegroundColor White
 Write-Host "  Min Obstacle Size: $MinObstacleSize" -ForegroundColor White
 Write-Host "  Max Obstacle Size: $MaxObstacleSize" -ForegroundColor White
 Write-Host "  Obstacle Mode: $ObstacleMode" -ForegroundColor White
+
+$tensorBoardRelativePath = if ($IntermediateSuffix) {
+    "Intermediate\\$IntermediateSuffix\\LearningAgents\\TensorBoard\\runs"
+} else {
+    "Intermediate\\LearningAgents\\TensorBoard\\runs"
+}
+$snapshotsRelativePath = if ($IntermediateSuffix) {
+    "Intermediate\\$IntermediateSuffix\\LearningAgents\\Training0"
+} else {
+    "Intermediate\\LearningAgents\\Training0"
+}
 
 # Helper function to kill process tree
 function Stop-ProcessTree {
@@ -134,6 +149,10 @@ $GameArgs = @(
     "-ObstacleMode=$ObstacleMode"  # Obstacle mode (Static/Dynamic)
 )
 
+if ($IntermediateSuffix) {
+    $GameArgs += "-TrainingIntermediateSuffix=$IntermediateSuffix"
+}
+
 
 # Debug: Show all game arguments
 Write-Host "`nGame Arguments:" -ForegroundColor Cyan
@@ -145,6 +164,9 @@ Write-Host "`nStarting headless training..." -ForegroundColor Green
 Write-Host "Press Ctrl+C to stop training" -ForegroundColor Yellow
 Write-Host "Monitor progress in: $LogFile" -ForegroundColor Cyan
 Write-Host "TensorBoard logs will be in: Intermediate/LearningAgents/TensorBoard/runs" -ForegroundColor Cyan
+if ($IntermediateSuffix) {
+    Write-Host "Intermediate override active. TensorBoard logs: $tensorBoardRelativePath" -ForegroundColor Cyan
+}
 
 Write-Host "`nExecuting command:" -ForegroundColor Gray
 Write-Host "$ExeName $($GameArgs -join ' ')" -ForegroundColor Gray
@@ -307,8 +329,13 @@ Write-Host "TRAINING SESSION ENDED" -ForegroundColor Yellow
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host "Check the following for results:" -ForegroundColor White
 Write-Host "  - Log file: $ExeDirectory\$LogFile" -ForegroundColor Cyan
-Write-Host "  - TensorBoard logs: $ProjectPath\Intermediate\LearningAgents\TensorBoard\runs" -ForegroundColor Cyan
-Write-Host "  - Neural network snapshots in project Intermediate directory" -ForegroundColor Cyan
+if ($IntermediateSuffix) {
+    Write-Host "  - TensorBoard logs (override): $ProjectPath\$tensorBoardRelativePath" -ForegroundColor Cyan
+    Write-Host "  - Neural network snapshots: $ProjectPath\$snapshotsRelativePath" -ForegroundColor Cyan
+} else {
+    Write-Host "  - TensorBoard logs: $ProjectPath\Intermediate\LearningAgents\TensorBoard\runs" -ForegroundColor Cyan
+    Write-Host "  - Neural network snapshots in project Intermediate directory" -ForegroundColor Cyan
+}
 
 Write-Host "`nTo view TensorBoard, run: .\scripts\run-tensorboard.ps1" -ForegroundColor Green
 

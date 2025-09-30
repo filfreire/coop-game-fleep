@@ -9,6 +9,7 @@ TRAINING_BUILD_DIR="TrainingBuild"
 MAP_NAME="P_LearningAgentsTrial1"  # Default learning map
 LOG_FILE="scharacter_training.log"
 EXE_NAME="CoopGameFleep"
+INTERMEDIATE_SUFFIX=""
 # Obstacle configuration parameters
 USE_OBSTACLES=false
 MAX_OBSTACLES=8
@@ -33,6 +34,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --exe-name)
             EXE_NAME="$2"
+            shift 2
+            ;;
+        --intermediate-suffix)
+            INTERMEDIATE_SUFFIX="$2"
             shift 2
             ;;
         --use-obstacles)
@@ -62,6 +67,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --map-name MAP              Map name to load (default: P_LearningAgentsTrial1)"
             echo "  --log-file FILE             Log file name (default: scharacter_training.log)"
             echo "  --exe-name NAME             Executable name (default: CoopGameFleep)"
+            echo "  --intermediate-suffix NAME  Optional suffix for Intermediate output isolation"
             echo "  --use-obstacles BOOL        Enable/disable obstacles (default: false)"
             echo "  --max-obstacles NUM         Maximum number of obstacles (default: 8)"
             echo "  --min-obstacle-size SIZE    Minimum obstacle size (default: 100.0)"
@@ -95,6 +101,9 @@ echo -e "${YELLOW}Training Build Dir: $TRAINING_BUILD_DIR${NC}"
 echo -e "${YELLOW}Map Name: $MAP_NAME${NC}"
 echo -e "${YELLOW}Log File: $LOG_FILE${NC}"
 echo -e "${YELLOW}Executable: $EXE_NAME${NC}"
+if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
+    echo -e "${YELLOW}Intermediate Suffix: $INTERMEDIATE_SUFFIX${NC}"
+fi
 
 # Find the executable
 BUILD_PATH="$PROJECT_PATH/$TRAINING_BUILD_DIR"
@@ -132,6 +141,14 @@ echo -e "${WHITE}  Min Obstacle Size: $MIN_OBSTACLE_SIZE${NC}"
 echo -e "${WHITE}  Max Obstacle Size: $MAX_OBSTACLE_SIZE${NC}"
 echo -e "${WHITE}  Obstacle Mode: $OBSTACLE_MODE${NC}"
 
+if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
+    TENSORBOARD_RELATIVE_PATH="Intermediate/$INTERMEDIATE_SUFFIX/LearningAgents/TensorBoard/runs"
+    SNAPSHOTS_RELATIVE_PATH="Intermediate/$INTERMEDIATE_SUFFIX/LearningAgents/Training0"
+else
+    TENSORBOARD_RELATIVE_PATH="Intermediate/LearningAgents/TensorBoard/runs"
+    SNAPSHOTS_RELATIVE_PATH="Intermediate/LearningAgents/Training0"
+fi
+
 # Build command line arguments for headless training
 GAME_ARGS=(
     "$MAP_NAME"                    # Load the training map
@@ -153,6 +170,10 @@ GAME_ARGS=(
     "-ObstacleMode=$OBSTACLE_MODE"  # Obstacle mode (Static/Dynamic)
 )
 
+if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
+    GAME_ARGS+=("-TrainingIntermediateSuffix=$INTERMEDIATE_SUFFIX")
+fi
+
 # Debug: Show all game arguments
 echo -e "\n${CYAN}Game Arguments:${NC}"
 for arg in "${GAME_ARGS[@]}"; do
@@ -162,7 +183,7 @@ done
 echo -e "\n${GREEN}Starting headless training...${NC}"
 echo -e "${YELLOW}Press Ctrl+C to stop training${NC}"
 echo -e "${CYAN}Monitor progress in: $LOG_FILE${NC}"
-echo -e "${CYAN}TensorBoard logs will be in: Intermediate/LearningAgents/TensorBoard/runs${NC}"
+echo -e "${CYAN}TensorBoard logs will be in: $TENSORBOARD_RELATIVE_PATH${NC}"
 
 echo -e "\n${GRAY}Executing command:${NC}"
 echo -e "${GRAY}$EXE_NAME ${GAME_ARGS[*]}${NC}"
@@ -211,8 +232,13 @@ echo -e "${YELLOW}TRAINING SESSION ENDED${NC}"
 echo -e "${CYAN}======================================${NC}"
 echo -e "${WHITE}Check the following for results:${NC}"
 echo -e "${CYAN}  - Log file: $EXE_DIRECTORY/$LOG_FILE${NC}"
-echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/Intermediate/LearningAgents/TensorBoard/runs${NC}"
-echo -e "${CYAN}  - Neural network snapshots in project Intermediate directory${NC}"
+if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
+    echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/$TENSORBOARD_RELATIVE_PATH${NC}"
+    echo -e "${CYAN}  - Neural network snapshots: $PROJECT_PATH/$SNAPSHOTS_RELATIVE_PATH${NC}"
+else
+    echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/Intermediate/LearningAgents/TensorBoard/runs${NC}"
+    echo -e "${CYAN}  - Neural network snapshots in project Intermediate directory${NC}"
+fi
 
 echo -e "\n${GREEN}To view TensorBoard, run: ./scripts/run-tensorboard.sh${NC}"
 

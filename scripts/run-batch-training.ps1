@@ -76,7 +76,8 @@ $StartTime = Get-Date
 function Start-TrainingSession {
     param(
         [int]$Seed,
-        [string]$SessionId
+        [string]$SessionId,
+        [string]$IntermediateSuffix
     )
     
     $LogFile = "training_seed_$Seed.log"
@@ -88,7 +89,7 @@ function Start-TrainingSession {
         return "SKIPPED"
     }
     
-    Write-Host "`nStarting training session $SessionId (Seed: $Seed)..." -ForegroundColor Green
+    Write-Host "`nStarting training session $SessionId (Seed: $Seed, Intermediate: $IntermediateSuffix)..." -ForegroundColor Green
     Write-Host "Log file: $LogFile" -ForegroundColor Cyan
     
     try {
@@ -99,6 +100,7 @@ function Start-TrainingSession {
             "-RandomSeed", $Seed,
             "-LogFile", $LogFile,
             "-TimeoutMinutes", $TimeoutMinutes,
+            "-IntermediateSuffix", $IntermediateSuffix,
             "-UseObstacles", $UseObstacles.ToString().ToLower(),
             "-MaxObstacles", $MaxObstacles,
             "-MinObstacleSize", $MinObstacleSize,
@@ -255,7 +257,8 @@ function Start-TrainingSession {
 function Copy-TrainingResults {
     param(
         [int]$Seed,
-        [string]$Status
+        [string]$Status,
+        [string]$IntermediateSuffix
     )
     
     if ($Status -eq "SUCCESS" -or $Status -eq "TIMEOUT") {
@@ -289,7 +292,12 @@ function Copy-TrainingResults {
         }
         
         # Copy TensorBoard runs
-        $TensorBoardSource = Join-Path $ProjectPath "Intermediate\LearningAgents\TensorBoard\runs"
+        $IntermediateRoot = Join-Path $ProjectPath "Intermediate"
+        if (-not [string]::IsNullOrWhiteSpace($IntermediateSuffix)) {
+            $IntermediateRoot = Join-Path $IntermediateRoot $IntermediateSuffix
+        }
+        $LearningAgentsRoot = Join-Path $IntermediateRoot "LearningAgents"
+        $TensorBoardSource = Join-Path (Join-Path $LearningAgentsRoot "TensorBoard") "runs"
         if (Test-Path $TensorBoardSource) {
             $LatestRun = Get-ChildItem $TensorBoardSource | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if ($LatestRun) {
@@ -299,7 +307,7 @@ function Copy-TrainingResults {
         }
         
         # Copy neural network files
-        $NeuralNetSource = Join-Path $ProjectPath "Intermediate\LearningAgents\Training0"
+        $NeuralNetSource = Join-Path $LearningAgentsRoot "Training0"
         if (Test-Path $NeuralNetSource) {
             $NeuralNetDest = Join-Path $NeuralNetworksDir "seed_$Seed"
             Copy-Item $NeuralNetSource $NeuralNetDest -Recurse -Force
@@ -329,7 +337,9 @@ for ($Seed = $StartSeed; $Seed -le $EndSeed; $Seed++) {
     $SessionId = "Run $CurrentRun/$TotalRuns"
     Write-Host "`n[$SessionId] Processing seed $Seed..." -ForegroundColor Cyan
     
-    $Status = Start-TrainingSession -Seed $Seed -SessionId $SessionId
+    $IntermediateSuffix = "seed_$Seed"
+
+    $Status = Start-TrainingSession -Seed $Seed -SessionId $SessionId -IntermediateSuffix $IntermediateSuffix
     
     # Track results
     switch ($Status) {
@@ -341,7 +351,7 @@ for ($Seed = $StartSeed; $Seed -le $EndSeed; $Seed++) {
     }
     
     # Copy results
-    Copy-TrainingResults -Seed $Seed -Status $Status
+    Copy-TrainingResults -Seed $Seed -Status $Status -IntermediateSuffix $IntermediateSuffix
     
     $CurrentRun++
     
