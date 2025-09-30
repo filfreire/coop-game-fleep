@@ -76,12 +76,25 @@ try {
     Write-Host "Configuration: $buildConfiguration" -ForegroundColor Yellow
     Write-Host "Output Directory: $PackageFolder" -ForegroundColor Yellow
 
-    # Step 1: Build code once
+    # Step 1: Build required targets once each
     Write-Host "\n[1/3] Building code..." -ForegroundColor Green
-    & (Join-Path $PSScriptRoot "build.ps1") -UnrealPath $ResolvedUnrealPath -ProjectPath $ResolvedProjectPath -ProjectName $ProjectName -Target $Target -Platform $Platform -Configuration $buildConfiguration
-    $exitCode = $LASTEXITCODE
-    if ($exitCode -ne 0) {
-        throw "Build step failed with exit code $exitCode."
+
+    $buildScriptPath = Join-Path $PSScriptRoot "build.ps1"
+    $buildTargets = @(
+        [pscustomobject]@{ Target = "CoopGameFleepEditor"; Configuration = "Development" },
+        [pscustomobject]@{ Target = $Target; Configuration = $buildConfiguration }
+    ) | Where-Object { -not [string]::IsNullOrEmpty($_.Target) -and -not [string]::IsNullOrEmpty($_.Configuration) }
+
+    $uniqueBuildTargets = $buildTargets | Sort-Object Target, Configuration -Unique
+    $buildIndex = 1
+    foreach ($entry in $uniqueBuildTargets) {
+        Write-Host "  - [$buildIndex/$($uniqueBuildTargets.Count)] $($entry.Target) ($($entry.Configuration))" -ForegroundColor Yellow
+        & $buildScriptPath -UnrealPath $ResolvedUnrealPath -ProjectPath $ResolvedProjectPath -ProjectName $ProjectName -Target $entry.Target -Platform $Platform -Configuration $entry.Configuration
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -ne 0) {
+            throw "Build step failed for target '$($entry.Target)' with exit code $exitCode."
+        }
+        $buildIndex++
     }
 
     # Step 2: Setup dependencies (optional)
