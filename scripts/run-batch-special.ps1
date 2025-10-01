@@ -456,6 +456,7 @@ if (-not $SkipConservative) {
     $ConfigTemplates += [pscustomobject]@{
         Name        = "Conservative"
         Description = "CONSERVATIVE / LOW LEARNING RATE"
+        Seeds       = @()
         Parameters  = [ordered]@{
             LearningRatePolicy = 0.00005
             LearningRateCritic = 0.0005
@@ -476,6 +477,7 @@ if (-not $SkipAggressive) {
     $ConfigTemplates += [pscustomobject]@{
         Name        = "Aggressive"
         Description = "AGGRESSIVE / HIGH LEARNING RATE"
+        Seeds       = @()
         Parameters  = [ordered]@{
             LearningRatePolicy = 0.0003
             LearningRateCritic = 0.003
@@ -496,6 +498,7 @@ if (-not $SkipBalanced) {
     $ConfigTemplates += [pscustomobject]@{
         Name        = "Balanced"
         Description = "BALANCED / MEDIUM LEARNING RATE"
+        Seeds       = @()
         Parameters  = [ordered]@{
             LearningRatePolicy = 0.0001
             LearningRateCritic = 0.001
