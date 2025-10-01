@@ -1,7 +1,7 @@
 #!/bin/bash
 # Headless Training Launcher for CoopGameFleep
 # This script launches the packaged game in headless mode for training
-# Usage: ./scripts/run-training-headless.sh [--training-build-dir "TrainingBuild"] [--map-name "P_LearningAgentsTrial"] [--log-file "training_log.log"]
+# Usage: ./scripts/run-training-headless.sh [--training-build-dir "TrainingBuild"] [--map-name "P_LearningAgentsTrial"] [--log-file "training_log.log"] [--training-task-name "RunA"]
 
 # Default values
 PROJECT_PATH="$(pwd)"
@@ -9,13 +9,109 @@ TRAINING_BUILD_DIR="TrainingBuild"
 MAP_NAME="P_LearningAgentsTrial1"  # Default learning map
 LOG_FILE="scharacter_training.log"
 EXE_NAME="CoopGameFleep"
-INTERMEDIATE_SUFFIX=""
+TRAINING_TASK_NAME_ARG=""
 # Obstacle configuration parameters
 USE_OBSTACLES=false
 MAX_OBSTACLES=8
 MIN_OBSTACLE_SIZE=100.0
 MAX_OBSTACLE_SIZE=300.0
 OBSTACLE_MODE="Static"
+
+# Helper to sanitize task names for filesystem and CLI usage
+sanitize_task_name() {
+    local name="$1"
+
+    # Trim leading/trailing whitespace
+    name="$(echo -n "$name" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    # Replace invalid characters with underscore
+    name="${name//[^A-Za-z0-9_-]/_}"
+    # Trim leading/trailing underscores
+    name="$(echo -n "$name" | sed -e 's/^_*//' -e 's/_*$//')"
+
+    if [[ -z "$name" ]]; then
+        echo ""
+        return
+    fi
+
+    if [[ ${#name} -gt 60 ]]; then
+        name="${name:0:60}"
+    fi
+
+    echo "$name"
+}
+
+generate_guid_segment() {
+    if command -v uuidgen >/dev/null 2>&1; then
+        uuidgen 2>/dev/null | tr '[:upper:]' '[:lower:]' | tr -d '-' | cut -c1-8
+        return
+    fi
+
+    if [[ -r /proc/sys/kernel/random/uuid ]]; then
+        head -c 36 /proc/sys/kernel/random/uuid | tr '[:upper:]' '[:lower:]' | tr -d '-' | cut -c1-8
+        return
+    fi
+
+    if command -v openssl >/dev/null 2>&1; then
+        openssl rand -hex 8 | cut -c1-8
+        return
+    fi
+
+    if command -v python3 >/dev/null 2>&1; then
+        python3 - <<'PY'
+import sys, uuid
+print(uuid.uuid4().hex[:8])
+PY
+        return
+    fi
+
+    if command -v python >/dev/null 2>&1; then
+        python - <<'PY'
+import sys, uuid
+print(uuid.uuid4().hex[:8])
+PY
+        return
+    fi
+
+    # Fallback: use date-based entropy hashed via sha1sum if available
+    if command -v sha1sum >/dev/null 2>&1; then
+        date +%s%N | sha1sum | cut -c1-8
+        return
+    fi
+
+    # Final fallback: use random from /dev/urandom if accessible
+    if [[ -r /dev/urandom ]]; then
+        od -An -tx1 -N4 /dev/urandom | tr -d ' \n'
+        return
+    fi
+
+    # Absolute fallback: current timestamp in hex
+    printf "%08x" "$(date +%s)"
+}
+
+generate_unique_task_name() {
+    local base="$1"
+    local safe_base
+    safe_base="$(sanitize_task_name "$base")"
+    if [[ -z "$safe_base" ]]; then
+        safe_base="run"
+    fi
+
+    local guid_segment
+    guid_segment="$(generate_guid_segment)"
+    if [[ -z "$guid_segment" ]]; then
+        guid_segment="$(date +%s)"
+    fi
+
+    local candidate="${safe_base}-${guid_segment}"
+    local sanitized
+    sanitized="$(sanitize_task_name "$candidate")"
+
+    if [[ -z "$sanitized" ]]; then
+        echo "$guid_segment"
+    else
+        echo "$sanitized"
+    fi
+}
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -36,8 +132,8 @@ while [[ $# -gt 0 ]]; do
             EXE_NAME="$2"
             shift 2
             ;;
-        --intermediate-suffix)
-            INTERMEDIATE_SUFFIX="$2"
+        --training-task-name)
+            TRAINING_TASK_NAME_ARG="$2"
             shift 2
             ;;
         --use-obstacles)
@@ -67,7 +163,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --map-name MAP              Map name to load (default: P_LearningAgentsTrial1)"
             echo "  --log-file FILE             Log file name (default: scharacter_training.log)"
             echo "  --exe-name NAME             Executable name (default: CoopGameFleep)"
-            echo "  --intermediate-suffix NAME  Optional suffix for Intermediate output isolation"
+            echo "  --training-task-name NAME   Preferred identifier for Learning Agents task"
             echo "  --use-obstacles BOOL        Enable/disable obstacles (default: false)"
             echo "  --max-obstacles NUM         Maximum number of obstacles (default: 8)"
             echo "  --min-obstacle-size SIZE    Minimum obstacle size (default: 100.0)"
@@ -101,8 +197,29 @@ echo -e "${YELLOW}Training Build Dir: $TRAINING_BUILD_DIR${NC}"
 echo -e "${YELLOW}Map Name: $MAP_NAME${NC}"
 echo -e "${YELLOW}Log File: $LOG_FILE${NC}"
 echo -e "${YELLOW}Executable: $EXE_NAME${NC}"
-if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
-    echo -e "${YELLOW}Intermediate Suffix: $INTERMEDIATE_SUFFIX${NC}"
+REQUESTED_IDENTIFIER="$TRAINING_TASK_NAME_ARG"
+SANITIZED_REQUESTED="$(sanitize_task_name "$REQUESTED_IDENTIFIER")"
+TRAINING_TASK_NAME="$SANITIZED_REQUESTED"
+AUTO_GENERATED_TASK_NAME=false
+
+if [[ -n "$REQUESTED_IDENTIFIER" ]]; then
+    echo -e "${YELLOW}Run Identifier (requested): $REQUESTED_IDENTIFIER${NC}"
+    if [[ -n "$SANITIZED_REQUESTED" && "$SANITIZED_REQUESTED" != "$REQUESTED_IDENTIFIER" ]]; then
+        echo -e "${YELLOW}Sanitized Task Name: $SANITIZED_REQUESTED${NC}"
+    elif [[ -z "$SANITIZED_REQUESTED" ]]; then
+        echo -e "${YELLOW}Requested task name sanitized to empty; generating unique identifier.${NC}"
+    fi
+fi
+
+if [[ -z "$TRAINING_TASK_NAME" ]]; then
+    TRAINING_TASK_NAME="$(generate_unique_task_name "$SANITIZED_REQUESTED")"
+    AUTO_GENERATED_TASK_NAME=true
+fi
+
+if [[ "$AUTO_GENERATED_TASK_NAME" == true ]]; then
+    echo -e "${YELLOW}Generated Task Name: $TRAINING_TASK_NAME${NC}"
+else
+    echo -e "${YELLOW}Trainer Task Name: $TRAINING_TASK_NAME${NC}"
 fi
 
 # Find the executable
@@ -141,12 +258,12 @@ echo -e "${WHITE}  Min Obstacle Size: $MIN_OBSTACLE_SIZE${NC}"
 echo -e "${WHITE}  Max Obstacle Size: $MAX_OBSTACLE_SIZE${NC}"
 echo -e "${WHITE}  Obstacle Mode: $OBSTACLE_MODE${NC}"
 
-if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
-    TENSORBOARD_RELATIVE_PATH="Intermediate/$INTERMEDIATE_SUFFIX/LearningAgents/TensorBoard/runs"
-    SNAPSHOTS_RELATIVE_PATH="Intermediate/$INTERMEDIATE_SUFFIX/LearningAgents/Training0"
+if [[ -n "$TRAINING_TASK_NAME" ]]; then
+    TENSORBOARD_HINT="Intermediate/LearningAgents/${TRAINING_TASK_NAME}*/TensorBoard/runs"
+    SNAPSHOTS_HINT="Intermediate/LearningAgents/${TRAINING_TASK_NAME}*/NeuralNetworks"
 else
-    TENSORBOARD_RELATIVE_PATH="Intermediate/LearningAgents/TensorBoard/runs"
-    SNAPSHOTS_RELATIVE_PATH="Intermediate/LearningAgents/Training0"
+    TENSORBOARD_HINT="Intermediate/LearningAgents/TensorBoard/runs"
+    SNAPSHOTS_HINT="Intermediate/LearningAgents/Training*"
 fi
 
 # Build command line arguments for headless training
@@ -170,8 +287,8 @@ GAME_ARGS=(
     "-ObstacleMode=$OBSTACLE_MODE"  # Obstacle mode (Static/Dynamic)
 )
 
-if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
-    GAME_ARGS+=("-TrainingIntermediateSuffix=$INTERMEDIATE_SUFFIX")
+if [[ -n "$TRAINING_TASK_NAME" ]]; then
+    GAME_ARGS+=("-TrainingTaskName=$TRAINING_TASK_NAME")
 fi
 
 # Debug: Show all game arguments
@@ -183,7 +300,7 @@ done
 echo -e "\n${GREEN}Starting headless training...${NC}"
 echo -e "${YELLOW}Press Ctrl+C to stop training${NC}"
 echo -e "${CYAN}Monitor progress in: $LOG_FILE${NC}"
-echo -e "${CYAN}TensorBoard logs will be in: $TENSORBOARD_RELATIVE_PATH${NC}"
+echo -e "${CYAN}TensorBoard logs hint: $TENSORBOARD_HINT${NC}"
 
 echo -e "\n${GRAY}Executing command:${NC}"
 echo -e "${GRAY}$EXE_NAME ${GAME_ARGS[*]}${NC}"
@@ -232,9 +349,9 @@ echo -e "${YELLOW}TRAINING SESSION ENDED${NC}"
 echo -e "${CYAN}======================================${NC}"
 echo -e "${WHITE}Check the following for results:${NC}"
 echo -e "${CYAN}  - Log file: $EXE_DIRECTORY/$LOG_FILE${NC}"
-if [[ -n "$INTERMEDIATE_SUFFIX" ]]; then
-    echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/$TENSORBOARD_RELATIVE_PATH${NC}"
-    echo -e "${CYAN}  - Neural network snapshots: $PROJECT_PATH/$SNAPSHOTS_RELATIVE_PATH${NC}"
+if [[ -n "$TRAINING_TASK_NAME" ]]; then
+    echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/$TENSORBOARD_HINT${NC}"
+    echo -e "${CYAN}  - Neural network snapshots: $PROJECT_PATH/$SNAPSHOTS_HINT${NC}"
 else
     echo -e "${CYAN}  - TensorBoard logs: $PROJECT_PATH/Intermediate/LearningAgents/TensorBoard/runs${NC}"
     echo -e "${CYAN}  - Neural network snapshots in project Intermediate directory${NC}"
