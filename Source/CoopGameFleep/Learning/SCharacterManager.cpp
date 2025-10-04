@@ -243,7 +243,7 @@ ASCharacterManager::ASCharacterManager()
 
 	FString RequestedTaskName;
 	const bool bHasRequestedTaskName = FParse::Value(*CommandLine, TEXT("-TrainingTaskName="), RequestedTaskName);
-	bool bAppliedRequestedTaskName = false;
+	// bool bAppliedRequestedTaskName = false;
 
 	if (bHasRequestedTaskName)
 	{
@@ -254,33 +254,35 @@ ASCharacterManager::ASCharacterManager()
 			if (!SanitizedTaskName.IsEmpty())
 			{
 				TrainerProcessSettings.TaskName = SanitizedTaskName;
-				bAppliedRequestedTaskName = true;
-				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Trainer TaskName set to '%s'"), *TrainerProcessSettings.TaskName);
+				// bAppliedRequestedTaskName = true;
+				UE_LOG(LogTemp, Log, TEXT("SCharacterManager: 1Trainer TaskName set to '%s'"), *TrainerProcessSettings.TaskName);
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Provided TrainingTaskName '%s' sanitized to empty string; auto-generating TaskName (previous default '%s')."),
+				UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: 2Provided TrainingTaskName '%s' sanitized to empty string; auto-generating TaskName (previous default '%s')."),
 					*RequestedTaskName, *TrainerProcessSettings.TaskName);
 			}
 		}
 	}
 
-	if (!bAppliedRequestedTaskName)
-	{
-		const FString GuidString = FGuid::NewGuid().ToString(EGuidFormats::Digits);
-		const FString GuidSegment = GuidString.Left(8);
-		const FString AutoTaskName = FString::Printf(TEXT("run-%s"), *GuidSegment);
-		const FString SanitizedAutoTaskName = FPaths::MakeValidFileName(AutoTaskName);
-		if (!SanitizedAutoTaskName.IsEmpty())
-		{
-			TrainerProcessSettings.TaskName = SanitizedAutoTaskName;
-			UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Auto-generated Trainer TaskName '%s'"), *TrainerProcessSettings.TaskName);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to auto-generate valid TaskName, keeping existing value '%s'."), *TrainerProcessSettings.TaskName);
-		}
-	}
+	// if (!bAppliedRequestedTaskName)
+	// {
+	// 	const FString GuidString = FGuid::NewGuid().ToString(EGuidFormats::Digits);
+	// 	const FString GuidSegment = GuidString.Left(8);
+	// 	const FString AutoTaskName = FString::Printf(TEXT("run-%s"), *GuidSegment);
+	// 	const FString SanitizedAutoTaskName = FPaths::MakeValidFileName(AutoTaskName);
+	// 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Auto-generating Trainer TaskName '%s' (previous default '%s')."),
+	// 		*SanitizedAutoTaskName, *TrainerProcessSettings.TaskName);
+	// 	if (!SanitizedAutoTaskName.IsEmpty())
+	// 	{
+	// 		TrainerProcessSettings.TaskName = SanitizedAutoTaskName;
+	// 		UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Auto-generated Trainer TaskName '%s'"), *TrainerProcessSettings.TaskName);
+	// 	}
+	// 	else
+	// 	{
+	// 		UE_LOG(LogTemp, Warning, TEXT("SCharacterManager: Failed to auto-generate valid TaskName, keeping existing value '%s'."), *TrainerProcessSettings.TaskName);
+	// 	}
+	// }
 
 	// Log the configured paths for debugging
 	UE_LOG(LogTemp, Log, TEXT("SCharacterManager: Configured trainer paths for hostname '%s':"), *HostName);

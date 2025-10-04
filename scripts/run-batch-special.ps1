@@ -9,7 +9,7 @@ param(
     [switch]$StopOnError = $false,
     [string]$ResultsDir = "SpecialBatchResults",
     [int]$SeedsPerConfig = 30,
-    [int]$ConcurrentRuns = 15,
+    [int]$ConcurrentRuns = 8,
     [int]$TimeoutMinutes = 5,
     [int]$SeedMinimum = 1,
     [int]$SeedMaximum = 2000000000,
@@ -210,8 +210,9 @@ function Get-SafeTaskName {
         return $Fallback
     }
 
-    if ($Safe.Length -gt 60) {
-        $Safe = $Safe.Substring(0, 60)
+    # Allow longer names so unique GUID suffixes aren't truncated
+    if ($Safe.Length -gt 128) {
+        $Safe = $Safe.Substring(0, 128)
     }
 
     return $Safe
@@ -228,7 +229,8 @@ function New-UniqueTaskName {
         $SafeBase = "run"
     }
 
-    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 12).ToLower()
+    # Use a full GUID (32 hex chars) to guarantee uniqueness across concurrent runs
+    $GuidSegment = ([Guid]::NewGuid().ToString("N")).ToLower()
     $Segments = @($SafeBase)
 
     if ($PSBoundParameters.ContainsKey('Seed') -and $Seed -ne $null) {
