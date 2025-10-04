@@ -10,7 +10,7 @@ param(
     [string]$ResultsDir = "SpecialBatchResults",
     [int]$SeedsPerConfig = 30,
     [int]$ConcurrentRuns = 15,
-    [int]$TimeoutMinutes = 30,
+    [int]$TimeoutMinutes = 5,
     [int]$SeedMinimum = 1,
     [int]$SeedMaximum = 2000000000,
     [string]$TrainingBuildDir = "TrainingBuild",
