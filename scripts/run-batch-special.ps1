@@ -218,15 +218,27 @@ function Get-SafeTaskName {
 }
 
 function New-UniqueTaskName {
-    param([string]$BaseName = "")
+    param(
+        [string]$BaseName = "",
+        [object]$Seed = $null
+    )
 
     $SafeBase = Get-SafeTaskName -Name $BaseName -Fallback "run"
     if ([string]::IsNullOrWhiteSpace($SafeBase)) {
         $SafeBase = "run"
     }
 
-    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 8).ToLower()
-    $Candidate = Get-SafeTaskName -Name "$SafeBase-$GuidSegment" -Fallback $GuidSegment
+    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 12).ToLower()
+    $Segments = @($SafeBase)
+
+    if ($PSBoundParameters.ContainsKey('Seed') -and $Seed -ne $null) {
+        $SeedValue = [int]$Seed
+        $Segments += "seed"
+        $Segments += $SeedValue
+    }
+
+    $Segments += $GuidSegment
+    $Candidate = Get-SafeTaskName -Name ($Segments -join '-') -Fallback $GuidSegment
 
     if ([string]::IsNullOrWhiteSpace($Candidate)) {
         return $GuidSegment
@@ -314,8 +326,7 @@ function Start-TrainingProcess {
     )
 
     $LogFileName = "special_{0}_seed_{1}.log" -f ($Run.ConfigSafeName.ToLower()), $Run.Seed
-    $TaskBase = "{0}-seed-{1}" -f $Run.ConfigSafeName, $Run.Seed
-    $TaskName = New-UniqueTaskName -BaseName $TaskBase
+    $TaskName = New-UniqueTaskName -BaseName $Run.ConfigSafeName -Seed $Run.Seed
 
     $ArgumentList = @(
         "-ExecutionPolicy", "Bypass",
@@ -354,12 +365,48 @@ function Start-TrainingProcess {
     }
 }
 
+function Get-FirstNonEmptyString {
+    param(
+        [object]$Value
+    )
+
+    if ($null -eq $Value) {
+        return $null
+    }
+
+    if ($Value -is [string]) {
+        if ([string]::IsNullOrWhiteSpace($Value)) {
+            return $null
+        }
+
+        return $Value
+    }
+
+    if ($Value -is [System.Collections.IEnumerable]) {
+        foreach ($Item in $Value) {
+            $Candidate = Get-FirstNonEmptyString -Value $Item
+            if ($null -ne $Candidate) {
+                return $Candidate
+            }
+        }
+
+        return $null
+    }
+
+    $Text = $Value.ToString()
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return $null
+    }
+
+    return $Text
+}
+
 function Copy-TrainingArtifacts {
     param(
         [string]$ProjectDir,
         [pscustomobject]$Run,
         [string]$TaskName,
-        [string]$LogFileName,
+    [object]$LogFileName,
         [hashtable]$Destinations,
         [string]$Status,
         [switch]$CleanupIntermediate
@@ -371,26 +418,34 @@ function Copy-TrainingArtifacts {
         }
     }
 
-    $PossibleLogPaths = @(
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs") $LogFileName,
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep") $LogFileName,
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows") $LogFileName,
-        Join-Path $ProjectDir $LogFileName
-    )
+    $LogFileName = Get-FirstNonEmptyString -Value $LogFileName
 
+    $LogFileResolved = -not [string]::IsNullOrWhiteSpace($LogFileName)
     $LogCopied = $false
-    foreach ($Source in $PossibleLogPaths) {
-        if (Test-Path $Source) {
-            $DestinationLog = Join-Path $Destinations.Logs $LogFileName
-            Copy-Item $Source $DestinationLog -Force
-            Write-Host "Copied log file: $Source -> $DestinationLog" -ForegroundColor Green
-            $LogCopied = $true
-            break
-        }
-    }
 
-    if (-not $LogCopied) {
-        Write-Warning "Log file not found for [$($Run.ConfigName)] seed $($Run.Seed): $LogFileName"
+    if ($LogFileResolved) {
+        $PossibleLogPaths = @(
+            Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs") $LogFileName,
+            Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep") $LogFileName,
+            Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows") $LogFileName,
+            Join-Path $ProjectDir $LogFileName
+        )
+
+        foreach ($Source in $PossibleLogPaths) {
+            if (Test-Path $Source) {
+                $DestinationLog = Join-Path $Destinations.Logs $LogFileName
+                Copy-Item $Source $DestinationLog -Force
+                Write-Host "Copied log file: $Source -> $DestinationLog" -ForegroundColor Green
+                $LogCopied = $true
+                break
+            }
+        }
+
+        if (-not $LogCopied) {
+            Write-Warning "Log file not found for [$($Run.ConfigName)] seed $($Run.Seed): $LogFileName"
+        }
+    } else {
+        Write-Warning "Log file name missing for [$($Run.ConfigName)] seed $($Run.Seed); skipping log copy."
     }
 
     $LearningAgentsRoot = Join-Path $ProjectDir "Intermediate\LearningAgents"
