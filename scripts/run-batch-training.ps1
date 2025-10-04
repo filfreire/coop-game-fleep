@@ -66,34 +66,88 @@ Write-Host "  - TensorBoard: $TensorBoardDir" -ForegroundColor White
 Write-Host "  - Neural Networks: $NeuralNetworksDir" -ForegroundColor White
 Write-Host "  - Summary: $SummaryDir" -ForegroundColor White
 
+function Get-SafeTaskName {
+    param([string]$Name)
+
+    if ([string]::IsNullOrWhiteSpace($Name)) {
+        return ""
+    }
+
+    $Safe = $Name.Trim()
+    $Safe = $Safe -replace '[^A-Za-z0-9_\-]', '_'
+    $Safe = $Safe.Trim('_')
+
+    if ([string]::IsNullOrWhiteSpace($Safe)) {
+        return ""
+    }
+
+    if ($Safe.Length -gt 60) {
+        $Safe = $Safe.Substring(0, 60)
+    }
+
+    return $Safe
+}
+
+function New-UniqueTaskName {
+    param([string]$BaseName = "")
+
+    $SafeBase = Get-SafeTaskName -Name $BaseName
+    if ([string]::IsNullOrWhiteSpace($SafeBase)) {
+        $SafeBase = "run"
+    }
+
+    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 8).ToLower()
+    $Candidate = Get-SafeTaskName -Name "$SafeBase-$GuidSegment"
+
+    if ([string]::IsNullOrWhiteSpace($Candidate)) {
+        return $GuidSegment
+    }
+
+    return $Candidate
+}
+
 # Initialize tracking variables
 $CompletedRuns = @()
 $FailedRuns = @()
 $SkippedRuns = @()
 $StartTime = Get-Date
+$RunTaskNames = @()
 
 # Function to run a single training session
 function Start-TrainingSession {
     param(
         [int]$Seed,
-        [string]$SessionId
+        [string]$SessionId,
+        [string]$TrainingTaskName,
+        [ref]$ResolvedTaskName
     )
     
     $LogFile = "training_seed_$Seed.log"
     $LogPath = Join-Path $LogsDir $LogFile
+    $SafeTaskName = Get-SafeTaskName -Name $TrainingTaskName
+    $FinalTaskName = New-UniqueTaskName -BaseName $SafeTaskName
+    $ResolvedTaskName.Value = $FinalTaskName
     
     # Check if we should skip this run
     if ($SkipExisting -and (Test-Path $LogPath)) {
         Write-Host "Skipping seed $Seed - log file already exists" -ForegroundColor Yellow
+        $ResolvedTaskName.Value = ""
         return "SKIPPED"
     }
     
-    Write-Host "`nStarting training session $SessionId (Seed: $Seed)..." -ForegroundColor Green
+    Write-Host "`nStarting training session $SessionId (Seed: $Seed, Task: $FinalTaskName)..." -ForegroundColor Green
+    if (-not [string]::IsNullOrWhiteSpace($TrainingTaskName)) {
+        Write-Host "Requested task name: $TrainingTaskName" -ForegroundColor Gray
+        if ($SafeTaskName -and $SafeTaskName -ne $TrainingTaskName) {
+            Write-Host "Sanitized task name: $SafeTaskName" -ForegroundColor Gray
+        }
+    }
+    Write-Host "Resolved task name: $FinalTaskName" -ForegroundColor Gray
     Write-Host "Log file: $LogFile" -ForegroundColor Cyan
     
     try {
         # Run the training session
-        $Process = Start-Process -FilePath "powershell" -ArgumentList @(
+        $ArgumentList = @(
             "-ExecutionPolicy", "Bypass",
             "-File", "scripts/run-training-headless.ps1",
             "-RandomSeed", $Seed,
@@ -104,7 +158,13 @@ function Start-TrainingSession {
             "-MinObstacleSize", $MinObstacleSize,
             "-MaxObstacleSize", $MaxObstacleSize,
             "-ObstacleMode", $ObstacleMode
-        ) -WindowStyle Hidden -PassThru -WorkingDirectory $ProjectPath
+        )
+
+        if ($FinalTaskName) {
+            $ArgumentList += @("-TrainingTaskName", $FinalTaskName)
+        }
+
+        $Process = Start-Process -FilePath "powershell" -ArgumentList $ArgumentList -WindowStyle Hidden -PassThru -WorkingDirectory $ProjectPath
         
         Write-Host "Training process started with PID: $($Process.Id)" -ForegroundColor Green
         
@@ -255,7 +315,8 @@ function Start-TrainingSession {
 function Copy-TrainingResults {
     param(
         [int]$Seed,
-        [string]$Status
+        [string]$Status,
+        [string]$TrainingTaskName
     )
     
     if ($Status -eq "SUCCESS" -or $Status -eq "TIMEOUT") {
@@ -289,30 +350,72 @@ function Copy-TrainingResults {
         }
         
         # Copy TensorBoard runs
-        $TensorBoardSource = Join-Path $ProjectPath "Intermediate\LearningAgents\TensorBoard\runs"
-        if (Test-Path $TensorBoardSource) {
-            $LatestRun = Get-ChildItem $TensorBoardSource | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-            if ($LatestRun) {
-                $TensorBoardDest = Join-Path $TensorBoardDir "seed_$Seed"
-                Copy-Item $LatestRun.FullName $TensorBoardDest -Recurse -Force
+        $SafeTaskName = Get-SafeTaskName -Name $TrainingTaskName
+        $LearningAgentsRoot = Join-Path $ProjectPath "Intermediate\LearningAgents"
+        $TaskFolder = $null
+
+        if (Test-Path $LearningAgentsRoot) {
+            $AllCandidates = Get-ChildItem -Path $LearningAgentsRoot -Directory -ErrorAction SilentlyContinue
+            if ($AllCandidates) {
+                if ($SafeTaskName) {
+                    $pattern = "$SafeTaskName*"
+                    $Matched = $AllCandidates | Where-Object { $_.Name -like $pattern }
+                    if (-not $Matched) {
+                        Write-Warning "No Learning Agents directories matched pattern '$pattern'. Falling back to latest entry."
+                        $Matched = $AllCandidates
+                    }
+                } else {
+                    $Matched = $AllCandidates | Where-Object { $_.Name -like "Training*" }
+                    if (-not $Matched) {
+                        $Matched = $AllCandidates
+                    }
+                }
+
+                $TaskFolder = $Matched | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             }
         }
-        
-        # Copy neural network files
-        $NeuralNetSource = Join-Path $ProjectPath "Intermediate\LearningAgents\Training0"
-        if (Test-Path $NeuralNetSource) {
-            $NeuralNetDest = Join-Path $NeuralNetworksDir "seed_$Seed"
-            Copy-Item $NeuralNetSource $NeuralNetDest -Recurse -Force
-        }
-        
-        # Cleanup intermediate files if requested
-        if ($CleanupIntermediate) {
+
+        if ($TaskFolder) {
+            Write-Host "Using Learning Agents folder: $($TaskFolder.FullName)" -ForegroundColor Gray
+
+            $TensorBoardSource = Join-Path $TaskFolder.FullName "TensorBoard\runs"
             if (Test-Path $TensorBoardSource) {
-                Remove-Item $TensorBoardSource -Recurse -Force -ErrorAction SilentlyContinue
+                $LatestRun = Get-ChildItem $TensorBoardSource -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+                if ($LatestRun) {
+                    $TensorBoardDest = Join-Path $TensorBoardDir "seed_$Seed"
+                    Copy-Item $LatestRun.FullName $TensorBoardDest -Recurse -Force
+                }
+            } else {
+                Write-Warning "TensorBoard runs directory not found for seed $Seed"
             }
+
+            $NeuralNetSource = Join-Path $TaskFolder.FullName "NeuralNetworks"
             if (Test-Path $NeuralNetSource) {
-                Remove-Item $NeuralNetSource -Recurse -Force -ErrorAction SilentlyContinue
+                $NeuralNetDest = Join-Path $NeuralNetworksDir "seed_$Seed"
+                Copy-Item $NeuralNetSource $NeuralNetDest -Recurse -Force
+            } else {
+                Write-Warning "Neural network directory not found for seed $Seed"
             }
+
+            if ($CleanupIntermediate) {
+                if (Test-Path $TensorBoardSource) {
+                    Remove-Item $TensorBoardSource -Recurse -Force -ErrorAction SilentlyContinue
+                }
+                if (Test-Path $NeuralNetSource) {
+                    Remove-Item $NeuralNetSource -Recurse -Force -ErrorAction SilentlyContinue
+                }
+
+                try {
+                    $remainingItems = Get-ChildItem -Path $TaskFolder.FullName -Force -ErrorAction SilentlyContinue
+                    if (-not $remainingItems) {
+                        Remove-Item $TaskFolder.FullName -Force -ErrorAction SilentlyContinue
+                    }
+                } catch {
+                    Write-Warning "Failed to clean up task folder '$($TaskFolder.FullName)': $($_.Exception.Message)"
+                }
+            }
+        } else {
+            Write-Warning "No Learning Agents output directory found for seed $Seed"
         }
     }
 }
@@ -329,7 +432,10 @@ for ($Seed = $StartSeed; $Seed -le $EndSeed; $Seed++) {
     $SessionId = "Run $CurrentRun/$TotalRuns"
     Write-Host "`n[$SessionId] Processing seed $Seed..." -ForegroundColor Cyan
     
-    $Status = Start-TrainingSession -Seed $Seed -SessionId $SessionId
+    $RequestedTaskName = "seed_$Seed"
+    $ResolvedTaskName = ""
+
+    $Status = Start-TrainingSession -Seed $Seed -SessionId $SessionId -TrainingTaskName $RequestedTaskName -ResolvedTaskName ([ref]$ResolvedTaskName)
     
     # Track results
     switch ($Status) {
@@ -341,7 +447,14 @@ for ($Seed = $StartSeed; $Seed -le $EndSeed; $Seed++) {
     }
     
     # Copy results
-    Copy-TrainingResults -Seed $Seed -Status $Status
+    Copy-TrainingResults -Seed $Seed -Status $Status -TrainingTaskName $ResolvedTaskName
+
+    if (-not [string]::IsNullOrWhiteSpace($ResolvedTaskName)) {
+        $RunTaskNames += [PSCustomObject]@{
+            Seed = $Seed
+            TaskName = $ResolvedTaskName
+        }
+    }
     
     $CurrentRun++
     
@@ -355,6 +468,12 @@ for ($Seed = $StartSeed; $Seed -le $EndSeed; $Seed++) {
 # Generate summary report
 $EndTime = Get-Date
 $TotalDuration = $EndTime - $StartTime
+
+$TaskNameSummary = if ($RunTaskNames.Count -gt 0) {
+    ($RunTaskNames | ForEach-Object { "  Seed $($_.Seed): $($_.TaskName)" }) -join "`n"
+} else {
+    "  (none recorded)"
+}
 
 $SummaryReport = @"
 BATCH TRAINING SUMMARY REPORT
@@ -373,6 +492,9 @@ RESULTS:
 - Successful runs: $($CompletedRuns.Count) - Seeds: $($CompletedRuns -join ', ')
 - Failed runs: $($FailedRuns.Count) - Seeds: $($FailedRuns -join ', ')
 - Skipped runs: $($SkippedRuns.Count) - Seeds: $($SkippedRuns -join ', ')
+
+TASK NAMES:
+$TaskNameSummary
 
 FILES GENERATED:
 - Log files: $LogsDir
