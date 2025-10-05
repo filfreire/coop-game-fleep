@@ -421,14 +421,21 @@ function Copy-TrainingArtifacts {
     }
 
     # Ensure LogFileName is converted to a string to avoid array issues with Join-Path
+    Write-Host "DEBUG: LogFileName type before processing: $($LogFileName.GetType())" -ForegroundColor Yellow
+    Write-Host "DEBUG: LogFileName value before processing: $LogFileName" -ForegroundColor Yellow
+    
     $LogFileName = Get-FirstNonEmptyString -Value $LogFileName
     if ($LogFileName -and $LogFileName -is [System.Array]) {
+        Write-Host "DEBUG: LogFileName is array, taking first element" -ForegroundColor Yellow
         $LogFileName = $LogFileName[0]
     }
     # Convert to string to ensure it's not an object that could cause Join-Path issues
     if ($LogFileName) {
         $LogFileName = [string]$LogFileName
     }
+    
+    Write-Host "DEBUG: LogFileName type after processing: $($LogFileName.GetType())" -ForegroundColor Yellow
+    Write-Host "DEBUG: LogFileName value after processing: $LogFileName" -ForegroundColor Yellow
 
     $LogFileResolved = -not [string]::IsNullOrWhiteSpace($LogFileName)
     $LogCopied = $false
