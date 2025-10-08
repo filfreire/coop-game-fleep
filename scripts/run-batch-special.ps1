@@ -210,9 +210,8 @@ function Get-SafeTaskName {
         return $Fallback
     }
 
-    # Allow longer names so unique GUID suffixes aren't truncated
-    if ($Safe.Length -gt 128) {
-        $Safe = $Safe.Substring(0, 128)
+    if ($Safe.Length -gt 60) {
+        $Safe = $Safe.Substring(0, 60)
     }
 
     return $Safe
@@ -229,8 +228,8 @@ function New-UniqueTaskName {
         $SafeBase = "run"
     }
 
-    # Use a full GUID (32 hex chars) to guarantee uniqueness across concurrent runs
-    $GuidSegment = ([Guid]::NewGuid().ToString("N")).ToLower()
+    # Use a shorter GUID segment for better readability while maintaining uniqueness
+    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 12).ToLower()
     $Segments = @($SafeBase)
 
     if ($PSBoundParameters.ContainsKey('Seed') -and $Seed -ne $null) {
@@ -421,21 +420,14 @@ function Copy-TrainingArtifacts {
     }
 
     # Ensure LogFileName is converted to a string to avoid array issues with Join-Path
-    Write-Host "DEBUG: LogFileName type before processing: $($LogFileName.GetType())" -ForegroundColor Yellow
-    Write-Host "DEBUG: LogFileName value before processing: $LogFileName" -ForegroundColor Yellow
-    
     $LogFileName = Get-FirstNonEmptyString -Value $LogFileName
     if ($LogFileName -and $LogFileName -is [System.Array]) {
-        Write-Host "DEBUG: LogFileName is array, taking first element" -ForegroundColor Yellow
         $LogFileName = $LogFileName[0]
     }
     # Convert to string to ensure it's not an object that could cause Join-Path issues
     if ($LogFileName) {
         $LogFileName = [string]$LogFileName
     }
-    
-    Write-Host "DEBUG: LogFileName type after processing: $($LogFileName.GetType())" -ForegroundColor Yellow
-    Write-Host "DEBUG: LogFileName value after processing: $LogFileName" -ForegroundColor Yellow
 
     $LogFileResolved = -not [string]::IsNullOrWhiteSpace($LogFileName)
     $LogCopied = $false
@@ -658,8 +650,6 @@ Write-Host "Total random seeds generated: $TotalSeedsRequested" -ForegroundColor
 Write-Host ""
 
 $BatchStartTime = Get-Date
-
-Stop-OrphanedTrainingProcesses
 
 $ConfigStats = @{}
 foreach ($Config in $ConfigTemplates) {
