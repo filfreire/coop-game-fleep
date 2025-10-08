@@ -8,7 +8,7 @@ param(
     [switch]$SkipBalanced = $false,
     [switch]$StopOnError = $false,
     [string]$ResultsDir = "SpecialBatchResults",
-    [int]$SeedsPerConfig = 30,
+    [int]$SeedsPerConfig = 8,
     [int]$ConcurrentRuns = 8,
     [int]$TimeoutMinutes = 5,
     [int]$SeedMinimum = 1,
