@@ -8,9 +8,9 @@ param(
     [switch]$SkipBalanced = $false,
     [switch]$StopOnError = $false,
     [string]$ResultsDir = "SpecialBatchResults",
-    [int]$SeedsPerConfig = 30,
+    [int]$SeedsPerConfig = 2,
     [int]$ConcurrentRuns = 8,
-    [int]$TimeoutMinutes = 30,
+    [int]$TimeoutMinutes = 10,
     [int]$SeedMinimum = 1,
     [int]$SeedMaximum = 2000000000,
     [string]$TrainingBuildDir = "TrainingBuild",
@@ -424,9 +424,15 @@ function Copy-TrainingArtifacts {
         $LogFileName = $LogFileName[0]
     }
     $LogFileName = Get-FirstNonEmptyString -Value $LogFileName
-    # Convert to string to ensure it's not an object that could cause Join-Path issues
-    if ($LogFileName) {
-        $LogFileName = [string]$LogFileName
+    
+    # Force conversion to string and handle any remaining object issues
+    if ($null -ne $LogFileName) {
+        # If it's still an array after Get-FirstNonEmptyString, take the first element
+        if ($LogFileName -is [System.Array]) {
+            $LogFileName = $LogFileName[0]
+        }
+        # Convert to string explicitly, using ToString() method to ensure proper conversion
+        $LogFileName = "$LogFileName"
     }
 
     $LogFileResolved = -not [string]::IsNullOrWhiteSpace($LogFileName)
