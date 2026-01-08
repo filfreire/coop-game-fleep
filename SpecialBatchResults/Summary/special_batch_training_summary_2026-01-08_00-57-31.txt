@@ -1,0 +1,66 @@
+﻿COOPGAMEFLEEP SPECIAL BATCH TRAINING SUMMARY REPORT
+==================================================
+Start Time: 2026-01-08 00:47:20
+End Time:   2026-01-08 00:57:31
+Duration:   00:10:11
+
+Configured Concurrent Runs: 8
+Seeds per Configuration: 2
+Timeout per Run: 10 minute(s)
+Runs Scheduled: 6
+Runs Launched:  6
+Successful:     6
+Timeouts:       0
+Failures:       0
+StopOnError:    False
+
+RESULT DIRECTORY STRUCTURE:
+  Logs:           D:\unrealprojects\coop-game-fleep\SpecialBatchResults\Logs
+  TensorBoard:    D:\unrealprojects\coop-game-fleep\SpecialBatchResults\TensorBoard
+  NeuralNetworks: D:\unrealprojects\coop-game-fleep\SpecialBatchResults\NeuralNetworks
+
+CONFIG: Conservative - CONSERVATIVE / LOW LEARNING RATE
+  Seeds Scheduled: 2
+  Launched:        2
+  Success:         2
+  Timeouts:        0
+  Failures:        0
+  Errors:          0
+  Generated Seeds: 997518379, 1940896901
+    - Iteration 1 | Seed 997518379 | Status SUCCESS | Task Conservative-seed-997518379-a9e9520bbeda | ExitCode 0
+    - Iteration 2 | Seed 1940896901 | Status SUCCESS | Task Conservative-seed-1940896901-203744fa845f | ExitCode 0
+
+CONFIG: Aggressive - AGGRESSIVE / HIGH LEARNING RATE
+  Seeds Scheduled: 2
+  Launched:        2
+  Success:         2
+  Timeouts:        0
+  Failures:        0
+  Errors:          0
+  Generated Seeds: 997518379, 1940896901
+    - Iteration 1 | Seed 997518379 | Status SUCCESS | Task Aggressive-seed-997518379-2f02ae8a457b | ExitCode 0
+    - Iteration 2 | Seed 1940896901 | Status SUCCESS | Task Aggressive-seed-1940896901-709cfb2b0a85 | ExitCode 0
+
+CONFIG: Balanced - BALANCED / MEDIUM LEARNING RATE
+  Seeds Scheduled: 2
+  Launched:        2
+  Success:         2
+  Timeouts:        0
+  Failures:        0
+  Errors:          0
+  Generated Seeds: 997518379, 1940896901
+    - Iteration 1 | Seed 997518379 | Status SUCCESS | Task Balanced-seed-997518379-329c070d5f56 | ExitCode 0
+    - Iteration 2 | Seed 1940896901 | Status SUCCESS | Task Balanced-seed-1940896901-791b5d895968 | ExitCode 0
+
+FILES GENERATED:
+  Logs: D:\unrealprojects\coop-game-fleep\SpecialBatchResults\Logs
+  TensorBoard: D:\unrealprojects\coop-game-fleep\SpecialBatchResults\TensorBoard
+  Neural Networks: D:\unrealprojects\coop-game-fleep\SpecialBatchResults\NeuralNetworks
+  Summary: D:\unrealprojects\coop-game-fleep\SpecialBatchResults\Summary
+
+NEXT STEPS:
+1. Inspect log files for anomalies or crashes.
+2. Launch TensorBoard via ./scripts/run-tensorboard.ps1 --log-dir "D:\unrealprojects\coop-game-fleep\SpecialBatchResults\TensorBoard"
+3. Compare neural network snapshots across seeds and configurations.
+4. Aggregate metrics for downstream analysis.
+
