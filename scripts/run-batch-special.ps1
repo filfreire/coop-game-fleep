@@ -7,7 +7,21 @@ param(
     [switch]$SkipAggressive = $false,
     [switch]$SkipBalanced = $false,
     [switch]$StopOnError = $false,
-    [string]$ResultsDir = "SpecialBatchResults"
+    [string]$ResultsDir = "3types_batch_30seeds_35min_results",
+    [int]$SeedsPerConfig = 30,
+    [int]$ConcurrentRuns = 8,
+    [int]$TimeoutMinutes = 35,
+    [int]$SeedMinimum = 1,
+    [int]$SeedMaximum = 2000000000,
+    [string]$TrainingBuildDir = "TrainingBuild",
+    [string]$MapName = "P_LearningAgentsTrial1",
+    [string]$ExeName = "CoopGameFleep.exe",
+    [bool]$UseObstacles = $false,
+    [int]$MaxObstacles = 8,
+    [float]$MinObstacleSize = 100.0,
+    [float]$MaxObstacleSize = 300.0,
+    [string]$ObstacleMode = "Static",
+    [switch]$CleanupIntermediate = $false
 )
 
 Write-Host "======================================" -ForegroundColor Cyan
@@ -15,12 +29,40 @@ Write-Host "COOPGAMEFLEEP BATCH TRAINING RUNNER" -ForegroundColor Green
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host ""
 
+if ($SeedsPerConfig -le 0) {
+    Write-Error "SeedsPerConfig must be greater than zero."
+    exit 1
+}
+
+if ($ConcurrentRuns -le 0) {
+    Write-Error "ConcurrentRuns must be at least 1."
+    exit 1
+}
+
+if ($TimeoutMinutes -le 0) {
+    Write-Error "TimeoutMinutes must be greater than zero for batch coordination."
+    exit 1
+}
+
+if ($SeedMinimum -ge $SeedMaximum) {
+    Write-Error "SeedMinimum must be less than SeedMaximum."
+    exit 1
+}
+
+$ConcurrentRuns = [Math]::Max(1, $ConcurrentRuns)
+
 # Set the project directory
 $ProjectDir = Split-Path -Parent $PSScriptRoot
 Set-Location $ProjectDir
 
 Write-Host "Project Directory: $ProjectDir" -ForegroundColor Yellow
 Write-Host "Results Directory: $ResultsDir" -ForegroundColor Yellow
+Write-Host "Seeds per configuration: $SeedsPerConfig" -ForegroundColor Yellow
+Write-Host "Seed range: $SeedMinimum .. $SeedMaximum" -ForegroundColor Yellow
+Write-Host "Concurrent runs: $ConcurrentRuns" -ForegroundColor Yellow
+Write-Host "Timeout per run: $TimeoutMinutes minute(s)" -ForegroundColor Yellow
+Write-Host "Use Obstacles: $UseObstacles" -ForegroundColor Yellow
+Write-Host "Obstacle settings -> Max: $MaxObstacles, Min Size: $MinObstacleSize, Max Size: $MaxObstacleSize, Mode: $ObstacleMode" -ForegroundColor Yellow
 Write-Host ""
 
 # Create results directory
@@ -54,6 +96,40 @@ function Stop-OrphanedTrainingProcesses {
     Write-Host "======================================" -ForegroundColor Cyan
     Write-Host "CHECKING FOR ORPHANED TRAINING PROCESSES" -ForegroundColor Yellow
     Write-Host "======================================" -ForegroundColor Cyan
+    
+    # CRITICAL: Kill Python subprocesses spawned by Learning Agents FIRST
+    # These are orphaned when the main process is killed and cause NetworkId conflicts
+    Write-Host "Searching for orphaned Python Learning Agents subprocesses..." -ForegroundColor Cyan
+    $PythonProcesses = Get-Process -Name "python" -ErrorAction SilentlyContinue
+    if ($PythonProcesses) {
+        Write-Host "Found $($PythonProcesses.Count) Python process(es), checking for Learning Agents subprocesses..." -ForegroundColor Yellow
+        $killedPythonCount = 0
+        foreach ($PyProc in $PythonProcesses) {
+            try {
+                # Check if this Python process is related to Learning Agents
+                $cmdLine = (Get-WmiObject Win32_Process -Filter "ProcessId = $($PyProc.Id)").CommandLine
+                if ($cmdLine -and ($cmdLine -like "*LearningAgents*" -or $cmdLine -like "*learning*" -or $cmdLine -like "*training*")) {
+                    Write-Host "Terminating Learning Agents Python subprocess (PID: $($PyProc.Id))..." -ForegroundColor Yellow
+                    & taskkill /PID $PyProc.Id /F /T 2>$null
+                    if ($LASTEXITCODE -eq 0) {
+                        $killedPythonCount++
+                    }
+                }
+            } catch {
+                # Silently continue if we can't check the command line
+            }
+        }
+        
+        if ($killedPythonCount -gt 0) {
+            Write-Host "Terminated $killedPythonCount Learning Agents Python subprocess(es)" -ForegroundColor Green
+        } else {
+            Write-Host "No Learning Agents Python subprocesses found" -ForegroundColor Green
+        }
+    } else {
+        Write-Host "No Python processes found" -ForegroundColor Green
+    }
+    
+    Write-Host ""
     
     # Find and kill any running CoopGameFleep processes
     $GameProcesses = Get-Process -Name "CoopGameFleep" -ErrorAction SilentlyContinue
@@ -149,334 +225,720 @@ function Stop-OrphanedTrainingProcesses {
 # Clean up any orphaned processes before starting
 Stop-OrphanedTrainingProcesses
 
-# Function to run a training configuration
-function Invoke-TrainingRun {
+# Helpers for task naming, parameter handling, and artifact collection
+function Get-SafeTaskName {
     param(
-        [string]$RunName,
-        [string]$Description,
-        [hashtable]$Parameters
+        [string]$Name,
+        [string]$Fallback = ""
     )
-    
-    Write-Host "======================================" -ForegroundColor Cyan
-    Write-Host "RUN $RunName`: $Description" -ForegroundColor Yellow
-    Write-Host "======================================" -ForegroundColor Cyan
-    
-    # Display parameters
-    Write-Host "Parameters:" -ForegroundColor White
-    foreach ($key in $Parameters.Keys) {
-        Write-Host "  $key`: $($Parameters[$key])" -ForegroundColor Gray
+
+    if ([string]::IsNullOrWhiteSpace($Name)) {
+        return $Fallback
     }
-    Write-Host ""
-    
-    # Create unique log file name
-    $LogFile = "special_${RunName}_seed_$($Parameters.RandomSeed).log"
-    
-    # Build the command arguments as a string
-    $cmdArgs = @()
-    foreach ($key in $Parameters.Keys) {
-        # Ensure RandomSeed is passed as integer to avoid type conversion issues
-        if ($key -eq "RandomSeed") {
-            $cmdArgs += "-$key $([int]$Parameters[$key])"
-        } else {
-            # Convert decimal separator from comma to dot for proper PowerShell parsing
-            $value = $Parameters[$key].ToString()
-            if ($value -match '^\d+,\d+$') {
-                $value = $value -replace ',', '.'
-            }
-            $cmdArgs += "-$key $value"
-        }
+
+    $Safe = $Name.Trim()
+    $Safe = $Safe -replace '[^A-Za-z0-9_\-]', '_'
+    $Safe = $Safe.Trim('_')
+
+    if ([string]::IsNullOrWhiteSpace($Safe)) {
+        return $Fallback
     }
-    
-    # Add log file parameter
-    $cmdArgs += "-LogFile $LogFile"
-    
-    $commandString = ".\scripts\run-training-headless.ps1 " + ($cmdArgs -join ' ')
-    
-    Write-Host "Executing training run..." -ForegroundColor Green
-    Write-Host "Log file: $LogFile" -ForegroundColor Cyan
-    Write-Host "Command: $commandString" -ForegroundColor Gray
-    Write-Host ""
-    
-    try {
-        # Execute the training script using Invoke-Expression to properly parse the command
-        Invoke-Expression $commandString
-        
-        # Check exit code - treat timeout (-1) as successful
-        if ($LASTEXITCODE -eq 0 -or $LASTEXITCODE -eq -1) {
-            if ($LASTEXITCODE -eq -1) {
-                Write-Host "Run $RunName completed with timeout (this is expected for testing)" -ForegroundColor Yellow
-            } else {
-                Write-Host "Run $RunName completed successfully!" -ForegroundColor Green
-            }
-            
-            # Copy results
-            Copy-TrainingResults -RunName $RunName -LogFile $LogFile -Seed $Parameters.RandomSeed
-            return $true
-        } else {
-            Write-Host "Run $RunName failed with exit code: $LASTEXITCODE" -ForegroundColor Red
-            return $false
-        }
-    } catch {
-        Write-Host "Run $RunName failed with error: $($_.Exception.Message)" -ForegroundColor Red
-        return $false
+
+    if ($Safe.Length -gt 60) {
+        $Safe = $Safe.Substring(0, 60)
     }
-    
-    Write-Host ""
+
+    return $Safe
 }
 
-# Function to copy training results
-function Copy-TrainingResults {
+function New-UniqueTaskName {
     param(
-        [string]$RunName,
-        [string]$LogFile,
-        [int]$Seed
+        [string]$BaseName = "",
+        [object]$Seed = $null
     )
-    
-    Write-Host "Copying results for $RunName run..." -ForegroundColor Cyan
-    
-    # Copy log file - check multiple possible locations
-    $PossibleLogPaths = @(
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs") $LogFile,
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep") $LogFile,
-        Join-Path (Join-Path $ProjectDir "TrainingBuild\Windows") $LogFile,
-        Join-Path $ProjectDir $LogFile
+
+    $SafeBase = Get-SafeTaskName -Name $BaseName -Fallback "run"
+    if ([string]::IsNullOrWhiteSpace($SafeBase)) {
+        $SafeBase = "run"
+    }
+
+    # Use a shorter GUID segment for better readability while maintaining uniqueness
+    $GuidSegment = ([Guid]::NewGuid().ToString("N")).Substring(0, 12).ToLower()
+    $Segments = @($SafeBase)
+
+    if ($PSBoundParameters.ContainsKey('Seed') -and $Seed -ne $null) {
+        $SeedValue = [int]$Seed
+        $Segments += "seed"
+        $Segments += $SeedValue
+    }
+
+    $Segments += $GuidSegment
+    $Candidate = Get-SafeTaskName -Name ($Segments -join '-') -Fallback $GuidSegment
+
+    if ([string]::IsNullOrWhiteSpace($Candidate)) {
+        return $GuidSegment
+    }
+
+    return $Candidate
+}
+
+function Convert-ToInvariantString {
+    param($Value)
+
+    if ($Value -is [bool]) {
+        return $Value.ToString().ToLower()
+    }
+
+    if ($Value -is [double] -or $Value -is [float] -or $Value -is [decimal]) {
+        return [string]::Format([System.Globalization.CultureInfo]::InvariantCulture, "{0}", $Value)
+    }
+
+    return $Value.ToString()
+}
+
+function New-RandomSeeds {
+    param(
+        [int]$Count,
+        [int]$Minimum = 1,
+        [int]$Maximum = 2000000000
     )
-    
+
+    if ($Count -le 0) {
+        return @()
+    }
+
+    if ($Minimum -ge $Maximum) {
+        throw "Seed minimum must be less than maximum."
+    }
+
+    $Random = [System.Random]::new()
+    $Set = New-Object System.Collections.Generic.HashSet[int]
+    $Ordered = New-Object System.Collections.Generic.List[int]
+
+    while ($Ordered.Count -lt $Count) {
+        $Candidate = $Random.Next($Minimum, $Maximum)
+        if ($Set.Add($Candidate)) {
+            $Ordered.Add($Candidate)
+        }
+    }
+
+    return $Ordered.ToArray()
+}
+
+function Ensure-ConfigDirectories {
+    param(
+        [string]$ConfigName,
+        [string]$LogsRoot,
+        [string]$TensorBoardRoot,
+        [string]$NeuralNetworksRoot
+    )
+
+    $SafeName = Get-SafeTaskName -Name $ConfigName -Fallback $ConfigName
+    $Paths = @{
+        SafeName       = $SafeName
+        Logs           = Join-Path $LogsRoot $SafeName
+        TensorBoard    = Join-Path $TensorBoardRoot $SafeName
+        NeuralNetworks = Join-Path $NeuralNetworksRoot $SafeName
+    }
+
+    foreach ($Path in $Paths.Values) {
+        if ($Path -and -not (Test-Path $Path)) {
+            New-Item -ItemType Directory -Path $Path -Force | Out-Null
+        }
+    }
+
+    return $Paths
+}
+
+function Start-TrainingProcess {
+    param(
+        [pscustomobject]$Run,
+        [string]$ProjectDir,
+        [string]$TrainingBuildDir,
+        [string]$MapName,
+        [string]$ExeName,
+        [int]$TimeoutMinutes
+    )
+
+    $LogFileName = "special_{0}_seed_{1}.log" -f ($Run.ConfigSafeName.ToLower()), $Run.Seed
+    $TaskName = New-UniqueTaskName -BaseName $Run.ConfigSafeName -Seed $Run.Seed
+
+    $ArgumentList = @(
+        "-ExecutionPolicy", "Bypass",
+        "-File", (Join-Path $ProjectDir "scripts/run-training-headless.ps1"),
+        "-ProjectPath", $ProjectDir,
+        "-TrainingBuildDir", $TrainingBuildDir,
+        "-MapName", $MapName,
+        "-ExeName", $ExeName,
+        "-RandomSeed", $Run.Seed,
+        "-LogFile", $LogFileName,
+        "-TimeoutMinutes", $TimeoutMinutes
+    )
+
+    if ($TaskName) {
+        $ArgumentList += "-TrainingTaskName"
+        $ArgumentList += $TaskName
+    }
+
+    foreach ($Key in $Run.Parameters.Keys) {
+        $ArgumentList += "-$Key"
+        $ArgumentList += (Convert-ToInvariantString -Value $Run.Parameters[$Key])
+    }
+
+    Write-Host "Launching [$($Run.ConfigName)] seed $($Run.Seed) (Run $($Run.Index))" -ForegroundColor Green
+    Write-Host "  Task Name: $TaskName" -ForegroundColor Gray
+    Write-Host "  Log File: $LogFileName" -ForegroundColor Gray
+
+    $Process = Start-Process -FilePath "powershell" -ArgumentList $ArgumentList -WindowStyle Hidden -WorkingDirectory $ProjectDir -PassThru
+
+    return [PSCustomObject]@{
+        Process   = $Process
+        Run       = $Run
+        TaskName  = $TaskName
+        LogFile   = $LogFileName
+        StartTime = Get-Date
+    }
+}
+
+function Get-FirstNonEmptyString {
+    param(
+        [object]$Value
+    )
+
+    if ($null -eq $Value) {
+        return $null
+    }
+
+    # Check for string FIRST before IEnumerable (since strings are also IEnumerable)
+    if ($Value -is [string]) {
+        if ([string]::IsNullOrWhiteSpace($Value)) {
+            return $null
+        }
+        return $Value
+    }
+
+    # Check for arrays/collections but exclude strings
+    if ($Value -is [System.Array] -or ($Value -is [System.Collections.IEnumerable] -and $Value -isnot [string])) {
+        foreach ($Item in $Value) {
+            $Candidate = Get-FirstNonEmptyString -Value $Item
+            if ($null -ne $Candidate) {
+                return $Candidate
+            }
+        }
+        return $null
+    }
+
+    # For other objects, convert to string
+    $Text = $Value.ToString()
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return $null
+    }
+    return $Text
+}
+
+function Copy-TrainingArtifacts {
+    param(
+        [string]$ProjectDir,
+        [pscustomobject]$Run,
+        [string]$TaskName,
+        [string]$LogFileName,
+        [hashtable]$Destinations,
+        [string]$Status,
+        [switch]$CleanupIntermediate
+    )
+
+    # DEFENSIVE: Unwrap LogFileName if it somehow ended up as an array despite [string] type
+    while ($LogFileName -is [array] -and $LogFileName.Count -gt 0) {
+        $LogFileName = $LogFileName[0]
+    }
+    $LogFileName = "$LogFileName"  # Force string conversion
+
+    foreach ($Path in $Destinations.Values) {
+        if ($Path -and -not (Test-Path $Path)) {
+            New-Item -ItemType Directory -Path $Path -Force | Out-Null
+        }
+    }
+
+    $LogFileResolved = -not [string]::IsNullOrWhiteSpace($LogFileName)
     $LogCopied = $false
-    foreach ($SourceLog in $PossibleLogPaths) {
-        Write-Host "Checking for log file: $SourceLog" -ForegroundColor Gray
-        if (Test-Path $SourceLog) {
-            $DestLog = Join-Path $LogsDir $LogFile
-            Copy-Item $SourceLog $DestLog -Force
-            Write-Host "Copied log file: $SourceLog -> $DestLog" -ForegroundColor Green
-            $LogCopied = $true
+
+    if ($LogFileResolved) {
+        # Build paths individually to avoid array evaluation issues
+        $BasePath1 = Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs"
+        $BasePath2 = Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep"
+        $BasePath3 = Join-Path $ProjectDir "TrainingBuild\Windows"
+        
+        $PossibleLogPaths = @(
+            (Join-Path $BasePath1 $LogFileName),
+            (Join-Path $BasePath2 $LogFileName),
+            (Join-Path $BasePath3 $LogFileName),
+            (Join-Path $ProjectDir $LogFileName)
+        )
+
+        foreach ($Source in $PossibleLogPaths) {
+            if (Test-Path $Source) {
+                $DestinationLog = Join-Path $Destinations.Logs $LogFileName
+                Copy-Item $Source $DestinationLog -Force
+                Write-Host "Copied log file: $Source -> $DestinationLog" -ForegroundColor Green
+                $LogCopied = $true
+                break
+            }
+        }
+
+        if (-not $LogCopied) {
+            Write-Warning "Log file not found for [$($Run.ConfigName)] seed $($Run.Seed): $LogFileName"
+        }
+    } else {
+        Write-Warning "Log file name missing for [$($Run.ConfigName)] seed $($Run.Seed); skipping log copy."
+    }
+
+    $LearningAgentsRoot = Join-Path $ProjectDir "Intermediate\LearningAgents"
+    $SelectedFolderPath = $null
+
+    if ($TaskName) {
+        # Try exact match first
+        $Candidate = Join-Path $LearningAgentsRoot $TaskName
+        if (Test-Path $Candidate) {
+            $SelectedFolderPath = $Candidate
+        }
+        
+        # Try with wildcard (Unreal may append characters like "0" to task names)
+        if (-not $SelectedFolderPath) {
+            $Candidate = Join-Path $LearningAgentsRoot "${TaskName}*"
+            $Matches = Get-ChildItem -Path $LearningAgentsRoot -Directory -ErrorAction SilentlyContinue | 
+                       Where-Object { $_.Name -like "${TaskName}*" } | 
+                       Sort-Object LastWriteTime -Descending | 
+                       Select-Object -First 1
+            if ($Matches) {
+                $SelectedFolderPath = $Matches.FullName
+            }
+        }
+    }
+
+    if (-not $SelectedFolderPath -and (Test-Path $LearningAgentsRoot)) {
+        $Candidates = Get-ChildItem -Path $LearningAgentsRoot -Directory -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending
+        if ($TaskName) {
+            $Match = $Candidates | Where-Object { $_.Name -like "$TaskName*" } | Select-Object -First 1
+            if ($Match) {
+                $SelectedFolderPath = $Match.FullName
+            }
+        }
+
+        if (-not $SelectedFolderPath -and $Candidates) {
+            $SelectedFolderPath = $Candidates[0].FullName
+        }
+    }
+
+    if ($SelectedFolderPath) {
+        # TensorBoard is in a shared location: Intermediate\LearningAgents\TensorBoard\runs
+        $SharedTensorBoardRoot = Join-Path $LearningAgentsRoot "TensorBoard\runs"
+        if (Test-Path $SharedTensorBoardRoot) {
+            # Find the matching TensorBoard run folder
+            $TensorBoardRunFolder = Get-ChildItem -Path $SharedTensorBoardRoot -Directory -ErrorAction SilentlyContinue |
+                                    Where-Object { $_.Name -like "${TaskName}*" } |
+                                    Select-Object -First 1
+            if ($TensorBoardRunFolder) {
+                $TensorDest = Join-Path $Destinations.TensorBoard $TaskName
+                Copy-Item $TensorBoardRunFolder.FullName $TensorDest -Recurse -Force
+                Write-Host "Copied TensorBoard runs to $TensorDest" -ForegroundColor Green
+            } else {
+                Write-Warning "TensorBoard runs not found for task $TaskName"
+            }
+        } else {
+            Write-Warning "TensorBoard runs directory not found at $SharedTensorBoardRoot"
+        }
+
+        # Neural network snapshots are in the task-specific folder
+        $SnapshotsSource = Join-Path $SelectedFolderPath "Snapshots"
+        if (Test-Path $SnapshotsSource) {
+            $SnapshotsDest = Join-Path $Destinations.NeuralNetworks $TaskName
+            Copy-Item $SnapshotsSource $SnapshotsDest -Recurse -Force
+            Write-Host "Copied neural network snapshots to $SnapshotsDest" -ForegroundColor Green
+        } else {
+            Write-Warning "Neural network snapshots not found for task $TaskName"
+        }
+
+        if ($CleanupIntermediate) {
+            try {
+                Remove-Item $SelectedFolderPath -Recurse -Force -ErrorAction Stop
+                Write-Host "Cleaned up intermediate directory $SelectedFolderPath" -ForegroundColor Gray
+            } catch {
+                Write-Warning "Failed to clean up intermediate directory ${SelectedFolderPath}: $($_.Exception.Message)"
+            }
+        }
+    } else {
+        Write-Warning "Learning Agents output folder not found for task $TaskName"
+    }
+}
+
+# Define hyperparameter configurations
+$ConfigTemplates = @()
+
+if (-not $SkipConservative) {
+    $ConfigTemplates += [pscustomobject]@{
+        Name        = "Conservative"
+        Description = "CONSERVATIVE / LOW LEARNING RATE"
+        Seeds       = @()
+        Parameters  = [ordered]@{
+            LearningRatePolicy = 0.00005
+            LearningRateCritic = 0.0005
+            EpsilonClip        = 0.1
+            PolicyBatchSize    = 512
+            CriticBatchSize    = 2048
+            IterationsPerGather = 16
+            DiscountFactor     = 0.95
+            GaeLambda          = 0.9
+            ActionEntropyWeight = 0.01
+        }
+    }
+} else {
+    Write-Host "Skipping Conservative configuration (SkipConservative flag set)." -ForegroundColor Yellow
+}
+
+if (-not $SkipAggressive) {
+    $ConfigTemplates += [pscustomobject]@{
+        Name        = "Aggressive"
+        Description = "AGGRESSIVE / HIGH LEARNING RATE"
+        Seeds       = @()
+        Parameters  = [ordered]@{
+            LearningRatePolicy = 0.0003
+            LearningRateCritic = 0.003
+            EpsilonClip        = 0.3
+            PolicyBatchSize    = 2048
+            CriticBatchSize    = 8192
+            IterationsPerGather = 64
+            DiscountFactor     = 0.995
+            GaeLambda          = 0.95
+            ActionEntropyWeight = 0.0
+        }
+    }
+} else {
+    Write-Host "Skipping Aggressive configuration (SkipAggressive flag set)." -ForegroundColor Yellow
+}
+
+if (-not $SkipBalanced) {
+    $ConfigTemplates += [pscustomobject]@{
+        Name        = "Balanced"
+        Description = "BALANCED / MEDIUM LEARNING RATE"
+        Seeds       = @()
+        Parameters  = [ordered]@{
+            LearningRatePolicy = 0.0001
+            LearningRateCritic = 0.001
+            EpsilonClip        = 0.2
+            PolicyBatchSize    = 1024
+            CriticBatchSize    = 4096
+            IterationsPerGather = 32
+            DiscountFactor     = 0.99
+            GaeLambda          = 0.95
+            ActionEntropyWeight = 0.005
+        }
+    }
+} else {
+    Write-Host "Skipping Balanced configuration (SkipBalanced flag set)." -ForegroundColor Yellow
+}
+
+if ($ConfigTemplates.Count -eq 0) {
+    Write-Warning "No training configurations selected. Nothing to run."
+    exit 0
+}
+
+$CommonParameters = [ordered]@{
+    UseObstacles    = $UseObstacles
+    MaxObstacles    = $MaxObstacles
+    MinObstacleSize = $MinObstacleSize
+    MaxObstacleSize = $MaxObstacleSize
+    ObstacleMode    = $ObstacleMode
+}
+
+$ConfigDestinations = @{}
+$TotalSeedsRequested = 0
+foreach ($Config in $ConfigTemplates) {
+    $ConfigDestinations[$Config.Name] = Ensure-ConfigDirectories -ConfigName $Config.Name -LogsRoot $LogsDir -TensorBoardRoot $TensorBoardDir -NeuralNetworksRoot $NeuralNetworksDir
+    $Config.Seeds = New-RandomSeeds -Count $SeedsPerConfig -Minimum $SeedMinimum -Maximum $SeedMaximum
+    $TotalSeedsRequested += $Config.Seeds.Count
+    Write-Host "$($Config.Name) -> Generated $($Config.Seeds.Count) random seeds." -ForegroundColor Cyan
+}
+
+$Runs = New-Object System.Collections.Generic.List[pscustomobject]
+
+for ($i = 0; $i -lt $SeedsPerConfig; $i++) {
+    foreach ($Config in $ConfigTemplates) {
+        if ($i -lt $Config.Seeds.Count) {
+            $Seed = $Config.Seeds[$i]
+            $ParameterSet = [ordered]@{}
+            foreach ($Entry in $Config.Parameters.GetEnumerator()) {
+                $ParameterSet[$Entry.Key] = $Entry.Value
+            }
+            foreach ($Entry in $CommonParameters.GetEnumerator()) {
+                $ParameterSet[$Entry.Key] = $Entry.Value
+            }
+
+            $RunDefinition = [pscustomobject]@{
+                ConfigName        = $Config.Name
+                ConfigDescription = $Config.Description
+                ConfigSafeName    = $ConfigDestinations[$Config.Name].SafeName
+                ConfigIndex       = $i + 1
+                Seed              = $Seed
+                Parameters        = $ParameterSet
+            }
+            $Runs.Add($RunDefinition)
+        }
+    }
+}
+
+for ($i = 0; $i -lt $Runs.Count; $i++) {
+    $Runs[$i] | Add-Member -NotePropertyName Index -NotePropertyValue ($i + 1)
+}
+
+$TotalRunsScheduled = $Runs.Count
+
+if ($TotalRunsScheduled -eq 0) {
+    Write-Warning "No runs were scheduled after seed generation. Exiting."
+    exit 0
+}
+
+Write-Host ""
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "SPECIAL BATCH PARAMETERS" -ForegroundColor Yellow
+Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "Total configurations: $($ConfigTemplates.Count)" -ForegroundColor White
+Write-Host "Runs per configuration: $SeedsPerConfig" -ForegroundColor White
+Write-Host "Total runs scheduled: $TotalRunsScheduled" -ForegroundColor White
+Write-Host "Total random seeds generated: $TotalSeedsRequested" -ForegroundColor White
+Write-Host ""
+
+$BatchStartTime = Get-Date
+
+$ConfigStats = @{}
+foreach ($Config in $ConfigTemplates) {
+    $ConfigStats[$Config.Name] = [ordered]@{
+        Scheduled = $Config.Seeds.Count
+        Launched  = 0
+        Success   = 0
+        Timeout   = 0
+        Failed    = 0
+        Error     = 0
+    }
+}
+
+$ActiveRuns = [System.Collections.ArrayList]::new()
+$RunRecords = [System.Collections.ArrayList]::new()
+$NextRunIndex = 0
+$StopRequested = $false
+
+Write-Host "Starting batch with up to $ConcurrentRuns concurrent run(s)..." -ForegroundColor Green
+
+while (($NextRunIndex -lt $TotalRunsScheduled -and -not $StopRequested) -or $ActiveRuns.Count -gt 0) {
+    while (-not $StopRequested -and $ActiveRuns.Count -lt $ConcurrentRuns -and $NextRunIndex -lt $TotalRunsScheduled) {
+        $Run = $Runs[$NextRunIndex]
+        $NextRunIndex++
+
+        $ConfigStats[$Run.ConfigName].Launched++
+
+        try {
+            $Active = Start-TrainingProcess -Run $Run -ProjectDir $ProjectDir -TrainingBuildDir $TrainingBuildDir -MapName $MapName -ExeName $ExeName -TimeoutMinutes $TimeoutMinutes
+            $null = $ActiveRuns.Add($Active)
+        } catch {
+            Write-Error "Failed to start [$($Run.ConfigName)] seed $($Run.Seed): $($_.Exception.Message)"
+            $ConfigStats[$Run.ConfigName].Error++
+            $Record = [pscustomobject]@{
+                Index          = $Run.Index
+                Config         = $Run.ConfigName
+                Seed           = $Run.Seed
+                TaskName       = $null
+                LogFile        = $null
+                Status         = "ERROR"
+                ExitCode       = $null
+                StartTime      = Get-Date
+                EndTime        = Get-Date
+                Duration       = [TimeSpan]::Zero
+                ConfigRunIndex = $Run.ConfigIndex
+            }
+            $null = $RunRecords.Add($Record)
+
+            if ($StopOnError) {
+                Write-Warning "StopOnError enabled. Halting new launches."
+                $StopRequested = $true
+            }
+        }
+    }
+
+    if ($ActiveRuns.Count -eq 0) {
+        if ($StopRequested -or $NextRunIndex -ge $TotalRunsScheduled) {
             break
         }
+        Start-Sleep -Seconds 1
+        continue
     }
-    
-    if (-not $LogCopied) {
-        Write-Warning "Log file not found in any expected location: $LogFile"
-        # Check what log files are actually available
-        $LogDirs = @(
-            Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep\Saved\Logs",
-            Join-Path $ProjectDir "TrainingBuild\Windows\CoopGameFleep",
-            Join-Path $ProjectDir "TrainingBuild\Windows",
-            $ProjectDir
-        )
-        
-        foreach ($LogDir in $LogDirs) {
-            if (Test-Path $LogDir) {
-                $AvailableLogs = Get-ChildItem $LogDir -Filter "*.log" -ErrorAction SilentlyContinue
-                if ($AvailableLogs) {
-                    Write-Host "Available log files in ${LogDir}:" -ForegroundColor Yellow
-                    $AvailableLogs | ForEach-Object { Write-Host "  - $($_.Name)" -ForegroundColor Gray }
+
+    Start-Sleep -Seconds 5
+
+    for ($idx = $ActiveRuns.Count - 1; $idx -ge 0; $idx--) {
+        $Active = $ActiveRuns[$idx]
+
+        try { $Active.Process.Refresh() } catch {}
+
+        if ($Active.Process.HasExited) {
+            $EndTimeRun = Get-Date
+            $ExitCode = $null
+            try { $ExitCode = $Active.Process.ExitCode } catch { $ExitCode = $null }
+
+            if ($ExitCode -eq 0) {
+                $Status = "SUCCESS"
+                $ConfigStats[$Active.Run.ConfigName].Success++
+            } elseif ($ExitCode -eq -1) {
+                $Status = "TIMEOUT"
+                $ConfigStats[$Active.Run.ConfigName].Timeout++
+            } else {
+                $Status = "FAILED"
+                $ConfigStats[$Active.Run.ConfigName].Failed++
+            }
+
+            $Duration = $EndTimeRun - $Active.StartTime
+            Write-Host "Completed [$($Active.Run.ConfigName)] seed $($Active.Run.Seed) -> $Status (ExitCode: $ExitCode)" -ForegroundColor Cyan
+
+            # Ensure LogFile is a string before passing to Copy-TrainingArtifacts
+            # Aggressively unwrap any arrays
+            $LogFileString = $Active.LogFile
+            while ($LogFileString -is [array] -or $LogFileString -is [System.Collections.IEnumerable]) {
+                if ($LogFileString -is [string]) { break }
+                if ($LogFileString -is [array] -and $LogFileString.Count -gt 0) {
+                    $LogFileString = $LogFileString[0]
+                } else {
+                    break
                 }
+            }
+            # Force to string and ensure it's not null
+            if ($null -eq $LogFileString) {
+                $LogFileString = ""
+            } else {
+                $LogFileString = "$LogFileString"
+            }
+
+            Copy-TrainingArtifacts -ProjectDir $ProjectDir -Run $Active.Run -TaskName $Active.TaskName -LogFileName $LogFileString -Destinations $ConfigDestinations[$Active.Run.ConfigName] -Status $Status -CleanupIntermediate:$CleanupIntermediate
+
+            $Record = [pscustomobject]@{
+                Index          = $Active.Run.Index
+                Config         = $Active.Run.ConfigName
+                Seed           = $Active.Run.Seed
+                TaskName       = $Active.TaskName
+                LogFile        = $Active.LogFile
+                Status         = $Status
+                ExitCode       = $ExitCode
+                StartTime      = $Active.StartTime
+                EndTime        = $EndTimeRun
+                Duration       = $Duration
+                ConfigRunIndex = $Active.Run.ConfigIndex
+            }
+            $null = $RunRecords.Add($Record)
+
+            $ActiveRuns.RemoveAt($idx)
+
+            if ($Status -eq "FAILED" -and $StopOnError -and -not $StopRequested) {
+                Write-Warning "StopOnError enabled. No further runs will be launched."
+                $StopRequested = $true
             }
         }
     }
-    
-    # Copy TensorBoard runs
-    $TensorBoardSource = Join-Path $ProjectDir "Intermediate\LearningAgents\TensorBoard\runs"
-    if (Test-Path $TensorBoardSource) {
-        $LatestRun = Get-ChildItem $TensorBoardSource | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($LatestRun) {
-            $TensorBoardDest = Join-Path $TensorBoardDir "${RunName}_seed_$Seed"
-            Copy-Item $LatestRun.FullName $TensorBoardDest -Recurse -Force
-            Write-Host "Copied TensorBoard run: $($LatestRun.Name) -> ${RunName}_seed_$Seed" -ForegroundColor Green
-        } else {
-            Write-Warning "No TensorBoard runs found in: $TensorBoardSource"
-        }
-    } else {
-        Write-Warning "TensorBoard source directory not found: $TensorBoardSource"
-    }
-    
-    # Copy neural network files
-    $NeuralNetSource = Join-Path $ProjectDir "Intermediate\LearningAgents\Training0"
-    if (Test-Path $NeuralNetSource) {
-        $NeuralNetDest = Join-Path $NeuralNetworksDir "${RunName}_seed_$Seed"
-        Copy-Item $NeuralNetSource $NeuralNetDest -Recurse -Force
-        Write-Host "Copied neural network files: Training0 -> ${RunName}_seed_$Seed" -ForegroundColor Green
-    } else {
-        Write-Warning "Neural network source directory not found: $NeuralNetSource"
-    }
-    
-    Write-Host ""
 }
 
-# Define the three training configurations
-$ConservativeParams = @{
-    TimeoutMinutes = 35
-    RandomSeed = 1001
-    LearningRatePolicy = 0.00005
-    LearningRateCritic = 0.0005
-    EpsilonClip = 0.1
-    PolicyBatchSize = 512
-    CriticBatchSize = 2048
-    IterationsPerGather = 16
-    DiscountFactor = 0.95
-    GaeLambda = 0.9
-    ActionEntropyWeight = 0.01
+if ($ActiveRuns.Count -gt 0) {
+    Write-Warning "Batch finished with $($ActiveRuns.Count) run(s) still marked active."
 }
 
-$AggressiveParams = @{
-    TimeoutMinutes = 35
-    RandomSeed = 2002
-    LearningRatePolicy = 0.0003
-    LearningRateCritic = 0.003
-    EpsilonClip = 0.3
-    PolicyBatchSize = 2048
-    CriticBatchSize = 8192
-    IterationsPerGather = 64
-    DiscountFactor = 0.995
-    GaeLambda = 0.95
-    ActionEntropyWeight = 0.0
-}
+$BatchEndTime = Get-Date
+$BatchDuration = $BatchEndTime - $BatchStartTime
 
-$BalancedParams = @{
-    TimeoutMinutes = 35
-    RandomSeed = 3003
-    LearningRatePolicy = 0.0001
-    LearningRateCritic = 0.001
-    EpsilonClip = 0.2
-    PolicyBatchSize = 1024
-    CriticBatchSize = 4096
-    IterationsPerGather = 32
-    DiscountFactor = 0.99
-    GaeLambda = 0.95
-    ActionEntropyWeight = 0.005
-}
+$SuccessfulRecords = $RunRecords | Where-Object { $_.Status -eq "SUCCESS" }
+$TimeoutRecords = $RunRecords | Where-Object { $_.Status -eq "TIMEOUT" }
+$FailureRecords = $RunRecords | Where-Object { $_.Status -in @("FAILED", "ERROR") }
 
-# Track results
-$Results = @{}
-$StartTime = Get-Date
+$TotalCompleted = $RunRecords.Count
+$TotalSuccessLike = $SuccessfulRecords.Count + $TimeoutRecords.Count
+$TotalFailures = $FailureRecords.Count
 
-# Conservative: Low learning rate, small batches
-if (-not $SkipConservative) {
-    $Results["Conservative"] = Invoke-TrainingRun -RunName "Conservative" -Description "CONSERVATIVE / LOW LEARNING RATE" -Parameters $ConservativeParams
-    
-    if ($StopOnError -and -not $Results["Conservative"]) {
-        Write-Host "Stopping execution due to error in Conservative run (StopOnError flag set)" -ForegroundColor Red
-        exit 1
-    }
-} else {
-    Write-Host "Skipping Conservative run (SkipConservative flag set)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Aggressive: High learning rate, large batches
-if (-not $SkipAggressive) {
-    $Results["Aggressive"] = Invoke-TrainingRun -RunName "Aggressive" -Description "AGGRESSIVE / HIGH LEARNING RATE" -Parameters $AggressiveParams
-    
-    if ($StopOnError -and -not $Results["Aggressive"]) {
-        Write-Host "Stopping execution due to error in Aggressive run (StopOnError flag set)" -ForegroundColor Red
-        exit 1
-    }
-} else {
-    Write-Host "Skipping Aggressive run (SkipAggressive flag set)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Balanced: Medium learning rate, moderate batches
-if (-not $SkipBalanced) {
-    $Results["Balanced"] = Invoke-TrainingRun -RunName "Balanced" -Description "BALANCED / MEDIUM LEARNING RATE" -Parameters $BalancedParams
-    
-    if ($StopOnError -and -not $Results["Balanced"]) {
-        Write-Host "Stopping execution due to error in Balanced run (StopOnError flag set)" -ForegroundColor Red
-        exit 1
-    }
-} else {
-    Write-Host "Skipping Balanced run (SkipBalanced flag set)" -ForegroundColor Yellow
-    Write-Host ""
-}
-
-# Generate summary report
-$EndTime = Get-Date
-$TotalDuration = $EndTime - $StartTime
-
-$SummaryReport = @"
-COOPGAMEFLEEP SPECIAL BATCH TRAINING SUMMARY REPORT
-==================================================
-Start Time: $($StartTime.ToString("yyyy-MM-dd HH:mm:ss"))
-End Time: $($EndTime.ToString("yyyy-MM-dd HH:mm:ss"))
-Total Duration: $($TotalDuration.ToString("hh\:mm\:ss"))
-
-CONFIGURATION:
-- Conservative: Low learning rate, small batches (5 min timeout)
-- Aggressive: High learning rate, large batches (5 min timeout)  
-- Balanced: Medium learning rate, moderate batches (5 min timeout)
-
-RESULTS:
-- Successful runs: $($Results.Values | Where-Object { $_ -eq $true }).Count
-- Failed runs: $($Results.Values | Where-Object { $_ -eq $false }).Count
-
-DETAILED RESULTS:
-"@
-
-foreach ($run in $Results.Keys) {
-    $status = if ($Results[$run]) { "SUCCESS" } else { "FAILED" }
-    $SummaryReport += "`n- $run`: $status"
-}
-
-$SummaryReport += @"
-
-FILES GENERATED:
-- Log files: $LogsDir
-- TensorBoard runs: $TensorBoardDir
-- Neural network files: $NeuralNetworksDir
-- This summary: $SummaryDir
-
-NEXT STEPS:
-1. Review individual log files for detailed training progress
-2. Use TensorBoard to visualize training metrics: .\scripts\run-tensorboard.ps1 --log-dir "$TensorBoardDir"
-3. Compare neural network performance across different configurations
-4. Analyze results to determine optimal hyperparameters
-"@
-
-$SummaryFile = Join-Path $SummaryDir "special_batch_training_summary_$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').txt"
-$SummaryReport | Out-File -FilePath $SummaryFile -Encoding UTF8
-
-# Summary
+Write-Host ""
 Write-Host "======================================" -ForegroundColor Cyan
 Write-Host "BATCH TRAINING SUMMARY" -ForegroundColor Yellow
 Write-Host "======================================" -ForegroundColor Cyan
+Write-Host "Runs scheduled: $TotalRunsScheduled" -ForegroundColor White
+Write-Host "Runs launched: $($RunRecords.Count)" -ForegroundColor White
+Write-Host "Successful: $($SuccessfulRecords.Count)" -ForegroundColor Green
+Write-Host "Timeouts: $($TimeoutRecords.Count)" -ForegroundColor Yellow
+Write-Host "Failures: $($FailureRecords.Count)" -ForegroundColor Red
+Write-Host "Total Duration: $($BatchDuration.ToString("hh\:mm\:ss"))" -ForegroundColor White
+Write-Host ""
 
-$SuccessCount = 0
-$TotalCount = 0
+$SummaryBuilder = New-Object System.Text.StringBuilder
+$null = $SummaryBuilder.AppendLine("COOPGAMEFLEEP SPECIAL BATCH TRAINING SUMMARY REPORT")
+$null = $SummaryBuilder.AppendLine("==================================================")
+$null = $SummaryBuilder.AppendLine("Start Time: $($BatchStartTime.ToString('yyyy-MM-dd HH:mm:ss'))")
+$null = $SummaryBuilder.AppendLine("End Time:   $($BatchEndTime.ToString('yyyy-MM-dd HH:mm:ss'))")
+$null = $SummaryBuilder.AppendLine("Duration:   $($BatchDuration.ToString('hh\:mm\:ss'))")
+$null = $SummaryBuilder.AppendLine("")
+$null = $SummaryBuilder.AppendLine("Configured Concurrent Runs: $ConcurrentRuns")
+$null = $SummaryBuilder.AppendLine("Seeds per Configuration: $SeedsPerConfig")
+$null = $SummaryBuilder.AppendLine("Timeout per Run: $TimeoutMinutes minute(s)")
+$null = $SummaryBuilder.AppendLine("Runs Scheduled: $TotalRunsScheduled")
+$null = $SummaryBuilder.AppendLine("Runs Launched:  $TotalCompleted")
+$null = $SummaryBuilder.AppendLine("Successful:     $($SuccessfulRecords.Count)")
+$null = $SummaryBuilder.AppendLine("Timeouts:       $($TimeoutRecords.Count)")
+$null = $SummaryBuilder.AppendLine("Failures:       $($FailureRecords.Count)")
+$null = $SummaryBuilder.AppendLine("StopOnError:    $StopOnError")
+$null = $SummaryBuilder.AppendLine("")
+$null = $SummaryBuilder.AppendLine("RESULT DIRECTORY STRUCTURE:")
+$null = $SummaryBuilder.AppendLine("  Logs:           $LogsDir")
+$null = $SummaryBuilder.AppendLine("  TensorBoard:    $TensorBoardDir")
+$null = $SummaryBuilder.AppendLine("  NeuralNetworks: $NeuralNetworksDir")
+$null = $SummaryBuilder.AppendLine("")
 
-foreach ($run in $Results.Keys) {
-    $TotalCount++
-    if ($Results[$run]) {
-        $SuccessCount++
-        Write-Host "$run`: SUCCESS" -ForegroundColor Green
+foreach ($Config in $ConfigTemplates) {
+    $Stats = $ConfigStats[$Config.Name]
+    $null = $SummaryBuilder.AppendLine("CONFIG: $($Config.Name) - $($Config.Description)")
+    $null = $SummaryBuilder.AppendLine("  Seeds Scheduled: $($Stats.Scheduled)")
+    $null = $SummaryBuilder.AppendLine("  Launched:        $($Stats.Launched)")
+    $null = $SummaryBuilder.AppendLine("  Success:         $($Stats.Success)")
+    $null = $SummaryBuilder.AppendLine("  Timeouts:        $($Stats.Timeout)")
+    $null = $SummaryBuilder.AppendLine("  Failures:        $($Stats.Failed)")
+    $null = $SummaryBuilder.AppendLine("  Errors:          $($Stats.Error)")
+    $null = $SummaryBuilder.AppendLine("  Generated Seeds: $([string]::Join(', ', $Config.Seeds))")
+    $ConfigRunRecords = $RunRecords | Where-Object { $_.Config -eq $Config.Name } | Sort-Object ConfigRunIndex
+
+    if ($ConfigRunRecords.Count -gt 0) {
+        foreach ($Record in $ConfigRunRecords) {
+            $null = $SummaryBuilder.AppendLine("    - Iteration $($Record.ConfigRunIndex) | Seed $($Record.Seed) | Status $($Record.Status) | Task $($Record.TaskName) | ExitCode $($Record.ExitCode)")
+        }
     } else {
-        Write-Host "$run`: FAILED" -ForegroundColor Red
+        $null = $SummaryBuilder.AppendLine("    - No runs launched for this configuration.")
     }
+    $null = $SummaryBuilder.AppendLine("")
 }
 
-Write-Host ""
-Write-Host "Completed: $SuccessCount/$TotalCount runs successful" -ForegroundColor $(if ($SuccessCount -eq $TotalCount) { "Green" } else { "Yellow" })
-Write-Host "Total Duration: $($TotalDuration.ToString("hh\:mm\:ss"))" -ForegroundColor Yellow
+$SummaryBuilder.AppendLine("FILES GENERATED:") | Out-Null
+$SummaryBuilder.AppendLine("  Logs: $LogsDir") | Out-Null
+$SummaryBuilder.AppendLine("  TensorBoard: $TensorBoardDir") | Out-Null
+$SummaryBuilder.AppendLine("  Neural Networks: $NeuralNetworksDir") | Out-Null
+$SummaryBuilder.AppendLine("  Summary: $SummaryDir") | Out-Null
+$SummaryBuilder.AppendLine("") | Out-Null
+$SummaryBuilder.AppendLine("NEXT STEPS:") | Out-Null
+$SummaryBuilder.AppendLine("1. Inspect log files for anomalies or crashes.") | Out-Null
+$SummaryBuilder.AppendLine("2. Launch TensorBoard via ./scripts/run-tensorboard.ps1 --log-dir `"$TensorBoardDir`"") | Out-Null
+$SummaryBuilder.AppendLine("3. Compare neural network snapshots across seeds and configurations.") | Out-Null
+$SummaryBuilder.AppendLine("4. Aggregate metrics for downstream analysis.") | Out-Null
 
-Write-Host ""
-Write-Host "Results saved to: $ResultsPath" -ForegroundColor Cyan
-Write-Host "Summary report: $SummaryFile" -ForegroundColor Cyan
+$SummaryFile = Join-Path $SummaryDir "special_batch_training_summary_$(Get-Date -Format 'yyyy-MM-dd_HH-mm-ss').txt"
+$SummaryBuilder.ToString() | Out-File -FilePath $SummaryFile -Encoding UTF8
 
+Write-Host "Summary report written to: $SummaryFile" -ForegroundColor Cyan
+Write-Host "Logs available under:      $LogsDir" -ForegroundColor Cyan
+Write-Host "TensorBoard runs:          $TensorBoardDir" -ForegroundColor Cyan
+Write-Host "Neural network archives:   $NeuralNetworksDir" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Check the following for results:" -ForegroundColor White
-Write-Host "  - Log files: $LogsDir" -ForegroundColor Cyan
-Write-Host "  - TensorBoard logs: $TensorBoardDir" -ForegroundColor Cyan
-Write-Host "  - Neural network files: $NeuralNetworksDir" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "To view TensorBoard for all runs:" -ForegroundColor Green
-Write-Host ".\scripts\run-tensorboard.ps1 --log-dir `"$TensorBoardDir`"" -ForegroundColor White
 
-# Exit with appropriate code
-if ($SuccessCount -eq $TotalCount) {
-    Write-Host ""
-    Write-Host "All training runs completed successfully!" -ForegroundColor Green
-    exit 0
-} else {
-    Write-Host ""
-    Write-Host "Some training runs failed. Check logs for details." -ForegroundColor Yellow
+if ($TotalFailures -gt 0) {
+    Write-Host "Batch completed with failures. Review logs for details." -ForegroundColor Yellow
     exit 1
+} else {
+    Write-Host "All runs completed without failures (timeouts included)." -ForegroundColor Green
+    exit 0
 }

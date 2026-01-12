@@ -1,0 +1,1527 @@
+﻿Log file open, 01/08/26 01:27:52
+LogWindows: Failed to load 'aqProf.dll' (GetLastError=126)
+LogWindows: File 'aqProf.dll' does not exist
+LogProfilingDebugging: Loading WinPixEventRuntime.dll for PIX profiling (from ../../../Engine/Binaries/ThirdParty/Windows/WinPixEventRuntime/x64).
+LogWindows: Failed to load 'VtuneApi.dll' (GetLastError=126)
+LogWindows: File 'VtuneApi.dll' does not exist
+LogWindows: Failed to load 'VtuneApi32e.dll' (GetLastError=126)
+LogWindows: File 'VtuneApi32e.dll' does not exist
+LogWindows: Custom abort handler registered for crash reporting.
+LogCore: Display: UTS: The Unreal Trace Server binary is not available ('../../../Engine/Binaries/Win64/UnrealTraceServer.exe')
+LogTrace: Initializing trace...
+LogTrace: Finished trace initialization.
+LogCsvProfiler: Display: Metadata set : platform="Windows"
+LogCsvProfiler: Display: Metadata set : config="Development"
+LogCsvProfiler: Display: Metadata set : buildversion="++UE5+Release-5.6-CL-44394996"
+LogCsvProfiler: Display: Metadata set : engineversion="5.6.1-44394996+++UE5+Release-5.6"
+LogCsvProfiler: Display: Metadata set : os="Windows 10 (22H2) [10.0.19045.6456] "
+LogCsvProfiler: Display: Metadata set : cpu="AuthenticAMD|AMD Ryzen 9 5900X 12-Core Processor"
+LogCsvProfiler: Display: Metadata set : pgoenabled="0"
+LogCsvProfiler: Display: Metadata set : pgoprofilingenabled="0"
+LogCsvProfiler: Display: Metadata set : ltoenabled="0"
+LogCsvProfiler: Display: Metadata set : asan="0"
+LogCsvProfiler: Display: Metadata set : commandline="" CoopGameFleep P_LearningAgentsTrial1 -headless-training -nullrhi -nosound -log -log=special_aggressive_seed_352901862.log -unattended -nothreading -NoVerifyGC -NoLoadStartupPackages -FORCELOGFLUSH -ini:Engine:[Core.Log]:LogPython=Verbose -RandomSeed=352901862 -LearningRatePolicy=0.0003 -LearningRateCritic=0.003 -EpsilonClip=0.3 -PolicyBatchSize=2048 -CriticBatchSize=8192 -IterationsPerGather=64 -NumberOfIterations=1000000 -DiscountFactor=0.995 -GaeLambda=0.95 -ActionEntropyWeight=0 -UseObstacles=False -MaxObstacles=8 -MinObstacleSize=100 -MaxObstacleSize=300 -ObstacleMode=Static -TrainingTaskName=Aggressive-seed-352901862-cb3af8bf3e59""
+LogCsvProfiler: Display: Metadata set : loginid="a22046ef4d92c3e541815b8ee0aac772"
+LogCsvProfiler: Display: Metadata set : llm="0"
+LogPakFile: Initializing PakPlatformFile
+LogIoDispatcher: Display: Reading toc: ../../../CoopGameFleep/Content/Paks/global.utoc
+LogIoDispatcher: Display: Toc loaded : ../../../CoopGameFleep/Content/Paks/global.utoc, Id=ffffffffffffffff, Order=0, EntryCount=1, SignatureHash=0000000000000000000000000000000000000000
+LogIoDispatcher: Display: Mounting container '../../../CoopGameFleep/Content/Paks/global.utoc' in location slot 0
+LogPakFile: Display: Initialized I/O dispatcher file backend. Mounted the global container: ../../../CoopGameFleep/Content/Paks/global.utoc
+LogPakFile: Display: Found Pak file ../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.pak attempting to mount.
+LogPakFile: Display: Mounting pak file ../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.pak.
+LogIoDispatcher: Display: Reading toc: ../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.utoc
+LogIoDispatcher: Display: Toc loaded : ../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.utoc, Id=aa73602243d5c2d2, Order=4, EntryCount=1167, SignatureHash=0000000000000000000000000000000000000000
+LogIoDispatcher: Display: Mounting container '../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.utoc' in location slot 0
+LogPakFile: Display: Mounted IoStore container "../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.utoc"
+LogFilePackageStore: Mounting container: Id=aa73602243d5c2d2, Order=4, NumPackages=529
+LogPakFile: Display: Mounted Pak file '../../../CoopGameFleep/Content/Paks/CoopGameFleep-Windows.pak', mount point: '../../../'
+LogStats: Stats thread started at 0.120190
+LogCsvProfiler: Display: Metadata set : systemresolution.resx="1280"
+LogCsvProfiler: Display: Metadata set : systemresolution.resy="720"
+LogICUInternationalization: OS requested locale 'pt-PT' is not supported. Using the OS requested language of 'en-US' as the locale.
+LogICUInternationalization: ICU TimeZone Detection - Raw Offset: +0:00, Platform Override: ''
+LogInit: Session CrashGUID >====================================================
+         Session CrashGUID >   UECC-Windows-4ABB0DF24EDD436901840AB25A3B91DC
+         Session CrashGUID >====================================================
+LogConfig: No local boot hotfix file found at: [../../../CoopGameFleep/Saved/PersistentDownloadDir/HotfixForNextBoot.txt]
+LogAudio: Display: Audio Device Manager not initializing due to all audio being disabled. If this is not intentional, please check command line arguments for "-nosound".
+LogPluginManager: Mounting Engine plugin Paper2D
+LogPluginManager: Mounting Engine plugin AISupport
+LogPluginManager: Mounting Engine plugin EnvironmentQueryEditor
+LogPluginManager: Mounting Engine plugin ACLPlugin
+LogPluginManager: Mounting Engine plugin AnimationData
+LogPluginManager: Mounting Engine plugin ControlRigModules
+LogPluginManager: Mounting Engine plugin ControlRigSpline
+LogPluginManager: Mounting Engine plugin ControlRig
+LogPluginManager: Mounting Engine plugin DeformerGraph
+LogPluginManager: Mounting Engine plugin IKRig
+LogPluginManager: Mounting Engine plugin RigLogic
+LogPluginManager: Mounting Engine plugin SkeletalMeshModelingTools
+LogPluginManager: Mounting Engine plugin TweeningUtils
+LogPluginManager: Mounting Engine plugin CameraShakePreviewer
+LogPluginManager: Mounting Engine plugin EngineCameras
+LogPluginManager: Mounting Engine plugin GameplayCameras
+LogPluginManager: Mounting Engine plugin ChaosVD
+LogPluginManager: Mounting Engine plugin OodleNetwork
+LogPluginManager: Mounting Engine plugin AnimationSharing
+LogPluginManager: Mounting Engine plugin DumpGPUServices
+LogPluginManager: Mounting Engine plugin NamingTokens
+LogPluginManager: Mounting Engine plugin PixWinPlugin
+LogPluginManager: Mounting Engine plugin PluginUtils
+LogPluginManager: Mounting Engine plugin RenderDocPlugin
+LogPluginManager: Mounting Engine plugin UObjectPlugin
+LogPluginManager: Mounting Engine plugin AssetManagerEditor
+LogPluginManager: Mounting Engine plugin BlueprintHeaderView
+LogPluginManager: Mounting Engine plugin ColorGrading
+LogPluginManager: Mounting Engine plugin ContentBrowserAssetDataSource
+LogPluginManager: Mounting Engine plugin CurveEditorTools
+LogPluginManager: Mounting Engine plugin DataValidation
+LogPluginManager: Mounting Engine plugin EditorScriptingUtilities
+LogPluginManager: Mounting Engine plugin EngineAssetDefinitions
+LogPluginManager: Mounting Engine plugin FacialAnimation
+LogPluginManager: Mounting Engine plugin GeometryMode
+LogPluginManager: Mounting Engine plugin LightMixer
+LogPluginManager: Mounting Engine plugin ObjectMixer
+LogPluginManager: Mounting Engine plugin SequencerAnimTools
+LogPluginManager: Mounting Engine plugin UMGWidgetPreview
+LogPluginManager: Mounting Engine plugin UVEditor
+LogPluginManager: Mounting Engine plugin EnhancedInput
+LogPluginManager: Mounting Engine plugin DatasmithContent
+LogPluginManager: Mounting Engine plugin GLTFExporter
+LogPluginManager: Mounting Engine plugin VariantManagerContent
+LogPluginManager: Mounting Engine plugin VariantManager
+LogPluginManager: Mounting Engine plugin AutomationUtils
+LogPluginManager: Mounting Engine plugin BackChannel
+LogPluginManager: Mounting Engine plugin ChaosCaching
+LogPluginManager: Mounting Engine plugin ChaosUserDataPT
+LogPluginManager: Mounting Engine plugin CharacterAI
+LogPluginManager: Mounting Engine plugin CompositeCore
+LogPluginManager: Mounting Engine plugin Dataflow
+LogPluginManager: Mounting Engine plugin EditorDataStorageFeatures
+LogPluginManager: Mounting Engine plugin EditorDataStorage
+LogPluginManager: Mounting Engine plugin FullBodyIK
+LogPluginManager: Mounting Engine plugin LearningAgents
+LogPluginManager: Mounting Engine plugin LevelSequenceNavigatorBridge
+LogPluginManager: Mounting Engine plugin LocalizableMessage
+LogPluginManager: Mounting Engine plugin NFORDenoise
+LogPluginManager: Mounting Engine plugin NNERuntimeBasicCpu
+LogPluginManager: Mounting Engine plugin PlatformCrypto
+LogPluginManager: Mounting Engine plugin PythonFoundationPackages
+LogPluginManager: Mounting Engine plugin PythonScriptPlugin
+LogPluginManager: Mounting Engine plugin RuntimeTelemetry
+LogPluginManager: Mounting Engine plugin Tensorboard
+LogPluginManager: Mounting Engine plugin ToolPresets
+LogPluginManager: Mounting Engine plugin Cascade
+LogPluginManager: Mounting Engine plugin NiagaraSimCaching
+LogPluginManager: Mounting Engine plugin Niagara
+LogPluginManager: Mounting Engine plugin Fab
+LogPluginManager: Mounting Engine plugin InterchangeAssets
+LogPluginManager: Mounting Engine plugin Interchange
+LogPluginManager: Mounting Engine plugin AvfMedia
+LogPluginManager: Mounting Engine plugin ImgMedia
+LogPluginManager: Mounting Engine plugin MediaCompositing
+LogPluginManager: Mounting Engine plugin MediaPlate
+LogPluginManager: Mounting Engine plugin TcpMessaging
+LogPluginManager: Mounting Engine plugin UdpMessaging
+LogPluginManager: Mounting Engine plugin MetaHumanSDK
+LogPluginManager: Mounting Engine plugin ActorSequence
+LogPluginManager: Mounting Engine plugin LevelSequenceEditor
+LogPluginManager: Mounting Engine plugin SequencerScripting
+LogPluginManager: Mounting Engine plugin TemplateSequence
+LogPluginManager: Mounting Engine plugin NNEDenoiser
+LogPluginManager: Mounting Engine plugin NNERuntimeORT
+LogPluginManager: Mounting Engine plugin LauncherChunkInstaller
+LogPluginManager: Mounting Engine plugin ActorLayerUtilities
+LogPluginManager: Mounting Engine plugin ArchVisCharacter
+LogPluginManager: Mounting Engine plugin AssetTags
+LogPluginManager: Mounting Engine plugin AudioCapture
+LogPluginManager: Mounting Engine plugin AudioSynesthesia
+LogPluginManager: Mounting Engine plugin CableComponent
+LogPluginManager: Mounting Engine plugin ChunkDownloader
+LogPluginManager: Mounting Engine plugin ComputeFramework
+LogPluginManager: Mounting Engine plugin CustomMeshComponent
+LogPluginManager: Mounting Engine plugin ExampleDeviceProfileSelector
+LogPluginManager: Mounting Engine plugin GeometryCache
+LogPluginManager: Mounting Engine plugin GeometryProcessing
+LogPluginManager: Mounting Engine plugin HairStrands
+LogPluginManager: Mounting Engine plugin InputDebugging
+LogPluginManager: Mounting Engine plugin MsQuic
+LogPluginManager: Mounting Engine plugin ProceduralMeshComponent
+LogPluginManager: Mounting Engine plugin PropertyAccessEditor
+LogPluginManager: Mounting Engine plugin PropertyBindingUtils
+LogPluginManager: Mounting Engine plugin RigVM
+LogPluginManager: Mounting Engine plugin SignificanceManager
+LogPluginManager: Mounting Engine plugin SoundFields
+LogPluginManager: Mounting Engine plugin StateTree
+LogPluginManager: Mounting Engine plugin Synthesis
+LogPluginManager: Mounting Engine plugin WindowsDeviceProfileSelector
+LogPluginManager: Mounting Engine plugin XInputDevice
+LogPluginManager: Mounting Engine plugin FunctionalTestingEditor
+LogPluginManager: Mounting Engine plugin TraceUtilities
+LogPluginManager: Mounting Engine plugin CameraCalibrationCore
+LogPluginManager: Mounting Engine plugin Takes
+LogPluginManager: Mounting Engine plugin WorldMetrics
+LogHAL: Log category LogPython verbosity has been raised to Verbose.
+LogWindows: Failed to load 'WinPixGpuCapturer.dll' (GetLastError=126)
+LogWindows: File 'WinPixGpuCapturer.dll' does not exist
+PixWinPlugin: PIX capture plugin failed to initialize! Check that the process is launched from PIX.
+LogConfig: Applying CVar settings from Section [/Script/RenderDocPlugin.RenderDocPluginSettings] File [Engine]
+RenderDocPlugin: Display: RenderDoc plugin will not be loaded. Use '-AttachRenderDoc' on the cmd line or enable 'renderdoc.AutoAttach' in the plugin settings.
+LogConfig: Applying CVar settings from Section [/Script/CompositeCore.CompositeCorePluginSettings] File [Engine]
+LogNFORDenoise: NFORDenoise function starting up
+LogStudioTelemetry: Started StudioTelemetry Session
+LogInit: ExecutableName: CoopGameFleep.exe
+LogInit: Build: ++UE5+Release-5.6-CL-44394996
+LogInit: Platform=Windows
+LogInit: MachineId=a22046ef4d92c3e541815b8ee0aac772
+LogInit: DeviceId=
+LogInit: Engine Version: 5.6.1-44394996+++UE5+Release-5.6
+LogInit: Compatible Engine Version: 5.6.0-43139311+++UE5+Release-5.6
+LogInit: Net CL: 43139311
+LogInit: OS: Windows 10 (22H2) [10.0.19045.6456] (), CPU: AMD Ryzen 9 5900X 12-Core Processor            , GPU: AMD Radeon RX 6650 XT
+LogInit: Compiled (64-bit): Jul 28 2025 21:02:46
+LogInit: Architecture: x64
+LogInit: Compiled with Visual C++: 19.38.33130.00
+LogInit: Build Configuration: Development
+LogInit: Branch Name: ++UE5+Release-5.6
+LogInit: Command Line: P_LearningAgentsTrial1 -headless-training -nullrhi -nosound -log -log=special_aggressive_seed_352901862.log -unattended -nothreading -NoVerifyGC -NoLoadStartupPackages -FORCELOGFLUSH -ini:Engine:[Core.Log]:LogPython=Verbose -RandomSeed=352901862 -LearningRatePolicy=0.0003 -LearningRateCritic=0.003 -EpsilonClip=0.3 -PolicyBatchSize=2048 -CriticBatchSize=8192 -IterationsPerGather=64 -NumberOfIterations=1000000 -DiscountFactor=0.995 -GaeLambda=0.95 -ActionEntropyWeight=0 -UseObstacles=False -MaxObstacles=8 -MinObstacleSize=100 -MaxObstacleSize=300 -ObstacleMode=Static -TrainingTaskName=Aggressive-seed-352901862-cb3af8bf3e59
+LogInit: Base Directory: D:/unrealprojects/coop-game-fleep/TrainingBuild/Windows/CoopGameFleep/Binaries/Win64/
+LogInit: Allocator: Binned2
+LogInit: Installed Engine Build: 0
+LogInit: This binary is optimized with LTO: no, PGO: no, instrumented for PGO data collection: no
+LogDevObjectVersion: Number of dev versions registered: 42
+LogDevObjectVersion:   Dev-Blueprints (B0D832E4-1F89-4F0D-ACCF-7EB736FD4AA2): 10
+LogDevObjectVersion:   Dev-Build (E1C64328-A22C-4D53-A36C-8E866417BD8C): 0
+LogDevObjectVersion:   Dev-Core (375EC13C-06E4-48FB-B500-84F0262A717E): 4
+LogDevObjectVersion:   Dev-Editor (E4B068ED-F494-42E9-A231-DA0B2E46BB41): 40
+LogDevObjectVersion:   Dev-Framework (CFFC743F-43B0-4480-9391-14DF171D2073): 37
+LogDevObjectVersion:   Dev-Mobile (B02B49B5-BB20-44E9-A304-32B752E40360): 3
+LogDevObjectVersion:   Dev-Networking (A4E4105C-59A1-49B5-A7C5-40C4547EDFEE): 0
+LogDevObjectVersion:   Dev-Online (39C831C9-5AE6-47DC-9A44-9C173E1C8E7C): 0
+LogDevObjectVersion:   Dev-Physics (78F01B33-EBEA-4F98-B9B4-84EACCB95AA2): 20
+LogDevObjectVersion:   Dev-Platform (6631380F-2D4D-43E0-8009-CF276956A95A): 0
+LogDevObjectVersion:   Dev-Rendering (12F88B9F-8875-4AFC-A67C-D90C383ABD29): 49
+LogDevObjectVersion:   Dev-Sequencer (7B5AE74C-D270-4C10-A958-57980B212A5A): 13
+LogDevObjectVersion:   Dev-VR (D7296918-1DD6-4BDD-9DE2-64A83CC13884): 3
+LogDevObjectVersion:   Dev-LoadTimes (C2A15278-BFE7-4AFE-6C17-90FF531DF755): 1
+LogDevObjectVersion:   Private-Geometry (6EACA3D4-40EC-4CC1-B786-8BED09428FC5): 3
+LogDevObjectVersion:   Dev-AnimPhys (29E575DD-E0A3-4627-9D10-D276232CDCEA): 17
+LogDevObjectVersion:   Dev-Anim (AF43A65D-7FD3-4947-9873-3E8ED9C1BB05): 15
+LogDevObjectVersion:   Dev-ReflectionCapture (6B266CEC-1EC7-4B8F-A30B-E4D90942FC07): 1
+LogDevObjectVersion:   Dev-Automation (0DF73D61-A23F-47EA-B727-89E90C41499A): 1
+LogDevObjectVersion:   FortniteMain (601D1886-AC64-4F84-AA16-D3DE0DEAC7D6): 207
+LogDevObjectVersion:   FortniteValkyrie (8DBC2C5B-54A7-43E0-A768-FCBB7DA29060): 8
+LogDevObjectVersion:   FortniteSeason (5B4C06B7-2463-4AF8-805B-BF70CDF5D0DD): 13
+LogDevObjectVersion:   FortniteRelease (E7086368-6B23-4C58-8439-1B7016265E91): 17
+LogDevObjectVersion:   Dev-Enterprise (9DFFBCD6-494F-0158-E221-12823C92A888): 11
+LogDevObjectVersion:   Dev-Niagara (F2AED0AC-9AFE-416F-8664-AA7FFA26D6FC): 1
+LogDevObjectVersion:   Dev-Destruction (174F1F0B-B4C6-45A5-B13F-2EE8D0FB917D): 10
+LogDevObjectVersion:   Dev-Physics-Ext (35F94A83-E258-406C-A318-09F59610247C): 41
+LogDevObjectVersion:   Dev-PhysicsMaterial-Chaos (B68FC16E-8B1B-42E2-B453-215C058844FE): 1
+LogDevObjectVersion:   Dev-CineCamera (B2E18506-4273-CFC2-A54E-F4BB758BBA07): 1
+LogDevObjectVersion:   Dev-VirtualProduction (64F58936-FD1B-42BA-BA96-7289D5D0FA4E): 1
+LogDevObjectVersion:   UE5-Main (697DD581-E64F-41AB-AA4A-51ECBEB7B628): 121
+LogDevObjectVersion:   UE5-Release (D89B5E42-24BD-4D46-8412-ACA8DF641779): 56
+LogDevObjectVersion:   UE5-SpecialProject (59DA5D52-1232-4948-B878-597870B8E98B): 9
+LogDevObjectVersion:   Dev-MediaFramework (6F0ED827-A609-4895-9C91-998D90180EA4): 2
+LogDevObjectVersion:   Dev-NaniteResearch (30D58BE3-95EA-4282-A6E3-B159D8EBB06A): 1
+LogDevObjectVersion:   Dev-RigVM (DC49959B-53C0-4DE7-9156-EA885E7C5D39): 18
+LogDevObjectVersion:   Dev-ControlRig (A7820CFB-20A7-4359-8C54-2C149623CF50): 38
+LogDevObjectVersion:   Dev-IKRig (F6DFBB78-BB50-A0E4-4018-B84D60CBAF23): 6
+LogDevObjectVersion:   LensFileVersion (8652A554-966A-466C-9FD7-1C6DD61B1ADB): 1
+LogDevObjectVersion:   FN-Main-InterchangePipeline (B69D2E47-E2A8-4003-BF77-18A492C4D899): 1
+LogDevObjectVersion:   Dev-ComputeFramework (6304A3E7-0059-4F59-8CFC-21BD7721FD4E): 0
+LogDevObjectVersion:   Dev-Optimus (93EDE1AA-10CA-7375-4DF9-8A2849B157A0): 14
+LogInit: Presizing for max 2097152 objects, including 1 objects not considered by GC.
+LogInit: Object subsystem initialized
+LogConfig: Set CVar [[con.DebugEarlyDefault:1]]
+LogConfig: CVar [[con.DebugLateDefault:1]] deferred - dummy variable created
+LogConfig: CVar [[con.DebugLateCheat:1]] deferred - dummy variable created
+LogConfig: CVar [[LogNamedEventFilters:Frame *]] deferred - dummy variable created
+LogConfig: Set CVar [[r.setres:1280x720]]
+LogConfig: CVar [[framepro.ScopeMinTimeMicroseconds:10]] deferred - dummy variable created
+LogConfig: Set CVar [[fx.NiagaraAllowRuntimeScalabilityChanges:1]]
+LogConfig: CVar [[QualityLevelMapping:high]] deferred - dummy variable created
+LogConfig: CVar [[r.Occlusion.SingleRHIThreadStall:1]] deferred - dummy variable created
+LogConfig: Set CVar [[r.Nanite.Streaming.ReservedResources:1]]
+LogConfig: Set CVar [[D3D12.Bindless.ResourceDescriptorHeapSize:32768]]
+LogConfig: Set CVar [[D3D12.Bindless.SamplerDescriptorHeapSize:2048]]
+LogConfig: Set CVar [[r.PSOPrecache.GlobalShaders:1]]
+LogConfig: Set CVar [[r.VRS.EnableSoftware:1]]
+LogConfig: Set CVar [[r.VRS.ContrastAdaptiveShading:1]]
+[2026.01.08-01.27.53:715][  0]LogConfig: CVar [[con.DebugLateDefault:1]] deferred - dummy variable created
+[2026.01.08-01.27.53:719][  0]LogConfig: CVar [[con.DebugLateCheat:1]] deferred - dummy variable created
+[2026.01.08-01.27.53:723][  0]LogConfig: CVar [[LogNamedEventFilters:Frame *]] deferred - dummy variable created
+[2026.01.08-01.27.53:728][  0]LogConfig: CVar [[framepro.ScopeMinTimeMicroseconds:10]] deferred - dummy variable created
+[2026.01.08-01.27.53:731][  0]LogConfig: CVar [[QualityLevelMapping:high]] deferred - dummy variable created
+[2026.01.08-01.27.53:736][  0]LogConfig: CVar [[r.Occlusion.SingleRHIThreadStall:1]] deferred - dummy variable created
+[2026.01.08-01.27.53:740][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.RendererSettings] File [Engine]
+[2026.01.08-01.27.53:745][  0]LogConfig: CVar [[VisualizeCalibrationColorMaterialPath:/Engine/EngineMaterials/PPM_DefaultCalibrationColor.PPM_DefaultCalibrationColor]] deferred - dummy variable created
+[2026.01.08-01.27.53:753][  0]LogConfig: CVar [[VisualizeCalibrationGrayscaleMaterialPath:/Engine/EngineMaterials/PPM_DefaultCalibrationGrayscale.PPM_DefaultCalibrationGrayscale]] deferred - dummy variable created
+[2026.01.08-01.27.53:759][  0]LogConfig: Set CVar [[r.GPUCrashDebugging:0]]
+[2026.01.08-01.27.53:779][  0]LogConfig: CVar [[MaxSkinBones:(Default=65536,PerPlatform=(("Mobile", 256)))]] deferred - dummy variable created
+[2026.01.08-01.27.53:784][  0]LogConfig: Set CVar [[r.Shaders.RemoveUnusedInterpolators:1]]
+[2026.01.08-01.27.53:789][  0]LogConfig: Set CVar [[r.Shadow.DetectVertexShaderLayerAtRuntime:1]]
+[2026.01.08-01.27.53:795][  0]LogConfig: Set CVar [[r.ReflectionMethod:0]]
+[2026.01.08-01.27.53:799][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.RendererOverrideSettings] File [Engine]
+[2026.01.08-01.27.53:804][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.StreamingSettings] File [Engine]
+[2026.01.08-01.27.53:809][  0]LogConfig: Set CVar [[s.MinBulkDataSizeForAsyncLoading:131072]]
+[2026.01.08-01.27.53:811][  0]LogConfig: Set CVar [[s.AsyncLoadingThreadEnabled:1]]
+[2026.01.08-01.27.53:816][  0]LogConfig: Set CVar [[s.EventDrivenLoaderEnabled:1]]
+[2026.01.08-01.27.53:821][  0]LogConfig: Set CVar [[s.WarnIfTimeLimitExceeded:0]]
+[2026.01.08-01.27.53:828][  0]LogConfig: Set CVar [[s.TimeLimitExceededMultiplier:1.5]]
+[2026.01.08-01.27.53:833][  0]LogConfig: Set CVar [[s.TimeLimitExceededMinTime:0.005]]
+[2026.01.08-01.27.53:838][  0]LogConfig: Set CVar [[s.UseBackgroundLevelStreaming:1]]
+[2026.01.08-01.27.53:845][  0]LogConfig: Set CVar [[s.PriorityAsyncLoadingExtraTime:15.0]]
+[2026.01.08-01.27.53:849][  0]LogConfig: Set CVar [[s.LevelStreamingActorsUpdateTimeLimit:5.0]]
+[2026.01.08-01.27.53:854][  0]LogConfig: Set CVar [[s.PriorityLevelStreamingActorsUpdateExtraTime:5.0]]
+[2026.01.08-01.27.53:858][  0]LogConfig: Set CVar [[s.LevelStreamingComponentsRegistrationGranularity:10]]
+[2026.01.08-01.27.53:863][  0]LogConfig: Set CVar [[s.UnregisterComponentsTimeLimit:1.0]]
+[2026.01.08-01.27.53:867][  0]LogConfig: Set CVar [[s.LevelStreamingComponentsUnregistrationGranularity:5]]
+[2026.01.08-01.27.53:872][  0]LogConfig: CVar [[s.MaxPackageSummarySize:16384]] deferred - dummy variable created
+[2026.01.08-01.27.53:876][  0]LogConfig: Set CVar [[s.FlushStreamingOnExit:1]]
+[2026.01.08-01.27.53:881][  0]LogConfig: CVar [[FixedBootOrder:/Script/Engine/Default__SoundBase]] deferred - dummy variable created
+[2026.01.08-01.27.53:885][  0]LogConfig: CVar [[FixedBootOrder:/Script/Engine/Default__MaterialInterface]] deferred - dummy variable created
+[2026.01.08-01.27.53:891][  0]LogConfig: CVar [[FixedBootOrder:/Script/Engine/Default__DeviceProfileManager]] deferred - dummy variable created
+[2026.01.08-01.27.53:896][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.GarbageCollectionSettings] File [Engine]
+[2026.01.08-01.27.53:904][  0]LogConfig: Set CVar [[gc.MaxObjectsNotConsideredByGC:1]]
+[2026.01.08-01.27.53:908][  0]LogConfig: Set CVar [[gc.FlushStreamingOnGC:0]]
+[2026.01.08-01.27.53:912][  0]LogConfig: Set CVar [[gc.NumRetriesBeforeForcingGC:10]]
+[2026.01.08-01.27.53:917][  0]LogConfig: Set CVar [[gc.AllowParallelGC:1]]
+[2026.01.08-01.27.53:923][  0]LogConfig: Set CVar [[gc.TimeBetweenPurgingPendingKillObjects:61.1]]
+[2026.01.08-01.27.53:928][  0]LogConfig: Set CVar [[gc.MaxObjectsInEditor:25165824]]
+[2026.01.08-01.27.53:933][  0]LogConfig: Set CVar [[gc.IncrementalBeginDestroyEnabled:1]]
+[2026.01.08-01.27.53:939][  0]LogConfig: Set CVar [[gc.CreateGCClusters:1]]
+[2026.01.08-01.27.53:945][  0]LogConfig: Set CVar [[gc.MinGCClusterSize:5]]
+[2026.01.08-01.27.53:950][  0]LogConfig: Set CVar [[gc.AssetClustreringEnabled:0]]
+[2026.01.08-01.27.53:955][  0]LogConfig: Set CVar [[gc.ActorClusteringEnabled:0]]
+[2026.01.08-01.27.53:957][  0]LogConfig: Set CVar [[gc.VerifyUObjectsAreNotFGCObjects:0]]
+[2026.01.08-01.27.53:962][  0]LogConfig: Set CVar [[gc.GarbageEliminationEnabled:1]]
+[2026.01.08-01.27.53:966][  0]LogConfig: Applying CVar settings from Section [/Script/Engine.NetworkSettings] File [Engine]
+[2026.01.08-01.27.53:971][  0]LogConfig: CVar [[NetworkEmulationProfiles:(ProfileName="Average",ToolTip="Simulates average internet conditions")]] deferred - dummy variable created
+[2026.01.08-01.27.53:975][  0]LogConfig: CVar [[NetworkEmulationProfiles:(ProfileName="Bad",ToolTip="Simulates laggy internet conditions")]] deferred - dummy variable created
+[2026.01.08-01.27.54:030][  0]LogCsvProfiler: Display: Metadata set : systemresolution.resx="2560"
+[2026.01.08-01.27.54:031][  0]LogCsvProfiler: Display: Metadata set : systemresolution.resy="1440"
+[2026.01.08-01.27.54:038][  0]LogConfig: Applying CVar settings from Section [ViewDistanceQuality@3] File [Scalability]
+[2026.01.08-01.27.54:040][  0]LogConfig: Set CVar [[r.SkeletalMeshLODBias:0]]
+[2026.01.08-01.27.54:045][  0]LogConfig: Set CVar [[r.ViewDistanceScale:1.0]]
+[2026.01.08-01.27.54:050][  0]LogConfig: Applying CVar settings from Section [AntiAliasingQuality@3] File [Scalability]
+[2026.01.08-01.27.54:054][  0]LogConfig: Set CVar [[r.FXAA.Quality:4]]
+[2026.01.08-01.27.54:059][  0]LogConfig: Set CVar [[r.TemporalAA.Quality:2]]
+[2026.01.08-01.27.54:063][  0]LogConfig: Set CVar [[r.TSR.History.R11G11B10:1]]
+[2026.01.08-01.27.54:068][  0]LogConfig: Set CVar [[r.TSR.History.ScreenPercentage:200]]
+[2026.01.08-01.27.54:072][  0]LogConfig: Set CVar [[r.TSR.History.UpdateQuality:3]]
+[2026.01.08-01.27.54:077][  0]LogConfig: Set CVar [[r.TSR.ShadingRejection.Flickering:1]]
+[2026.01.08-01.27.54:081][  0]LogConfig: Set CVar [[r.TSR.RejectionAntiAliasingQuality:2]]
+[2026.01.08-01.27.54:086][  0]LogConfig: Set CVar [[r.TSR.ReprojectionField:1]]
+[2026.01.08-01.27.54:091][  0]LogConfig: Set CVar [[r.TSR.Resurrection:1]]
+[2026.01.08-01.27.54:097][  0]LogConfig: Applying CVar settings from Section [ShadowQuality@3] File [Scalability]
+[2026.01.08-01.27.54:102][  0]LogConfig: Set CVar [[r.LightFunctionQuality:1]]
+[2026.01.08-01.27.54:107][  0]LogConfig: Set CVar [[r.ShadowQuality:5]]
+[2026.01.08-01.27.54:112][  0]LogConfig: Set CVar [[r.Shadow.CSM.MaxCascades:10]]
+[2026.01.08-01.27.54:117][  0]LogConfig: Set CVar [[r.Shadow.MaxResolution:2048]]
+[2026.01.08-01.27.54:121][  0]LogConfig: Set CVar [[r.Shadow.MaxCSMResolution:2048]]
+[2026.01.08-01.27.54:127][  0]LogConfig: Set CVar [[r.Shadow.RadiusThreshold:0.01]]
+[2026.01.08-01.27.54:130][  0]LogConfig: Set CVar [[r.Shadow.DistanceScale:1.0]]
+[2026.01.08-01.27.54:135][  0]LogConfig: Set CVar [[r.Shadow.CSM.TransitionScale:1.0]]
+[2026.01.08-01.27.54:138][  0]LogConfig: Set CVar [[r.Shadow.PreShadowResolutionFactor:1.0]]
+[2026.01.08-01.27.54:144][  0]LogConfig: Set CVar [[r.DistanceFieldShadowing:1]]
+[2026.01.08-01.27.54:147][  0]LogConfig: Set CVar [[r.VolumetricFog:1]]
+[2026.01.08-01.27.54:151][  0]LogConfig: Set CVar [[r.VolumetricFog.GridPixelSize:8]]
+[2026.01.08-01.27.54:156][  0]LogConfig: Set CVar [[r.VolumetricFog.GridSizeZ:128]]
+[2026.01.08-01.27.54:159][  0]LogConfig: Set CVar [[r.VolumetricFog.HistoryMissSupersampleCount:4]]
+[2026.01.08-01.27.54:164][  0]LogConfig: Set CVar [[r.LightMaxDrawDistanceScale:1]]
+[2026.01.08-01.27.54:169][  0]LogConfig: Set CVar [[r.CapsuleShadows:1]]
+[2026.01.08-01.27.54:176][  0]LogConfig: Set CVar [[r.Shadow.Virtual.MaxPhysicalPages:4096]]
+[2026.01.08-01.27.54:179][  0]LogConfig: Set CVar [[r.Shadow.Virtual.ResolutionLodBiasDirectional:-1.5]]
+[2026.01.08-01.27.54:183][  0]LogConfig: Set CVar [[r.Shadow.Virtual.ResolutionLodBiasDirectionalMoving:-1.5]]
+[2026.01.08-01.27.54:188][  0]LogConfig: Set CVar [[r.Shadow.Virtual.ResolutionLodBiasLocal:0.0]]
+[2026.01.08-01.27.54:192][  0]LogConfig: Set CVar [[r.Shadow.Virtual.ResolutionLodBiasLocalMoving:1.0]]
+[2026.01.08-01.27.54:197][  0]LogConfig: Set CVar [[r.Shadow.Virtual.SMRT.RayCountDirectional:8]]
+[2026.01.08-01.27.54:201][  0]LogConfig: Set CVar [[r.Shadow.Virtual.SMRT.SamplesPerRayDirectional:4]]
+[2026.01.08-01.27.54:208][  0]LogConfig: Set CVar [[r.Shadow.Virtual.SMRT.RayCountLocal:8]]
+[2026.01.08-01.27.54:211][  0]LogConfig: Set CVar [[r.Shadow.Virtual.SMRT.SamplesPerRayLocal:4]]
+[2026.01.08-01.27.54:216][  0]LogConfig: Applying CVar settings from Section [GlobalIlluminationQuality@3] File [Scalability]
+[2026.01.08-01.27.54:220][  0]LogConfig: Set CVar [[r.DistanceFieldAO:1]]
+[2026.01.08-01.27.54:225][  0]LogConfig: Set CVar [[r.SkylightIntensityMultiplier:1.0]]
+[2026.01.08-01.27.54:229][  0]LogConfig: Set CVar [[r.AOQuality:2]]
+[2026.01.08-01.27.54:234][  0]LogConfig: Set CVar [[r.Lumen.DiffuseIndirect.Allow:1]]
+[2026.01.08-01.27.54:239][  0]LogConfig: Set CVar [[r.LumenScene.DirectLighting.MaxLightsPerTile:8]]
+[2026.01.08-01.27.54:244][  0]LogConfig: Set CVar [[r.LumenScene.DirectLighting.UpdateFactor:32]]
+[2026.01.08-01.27.54:248][  0]LogConfig: Set CVar [[r.LumenScene.Radiosity.UpdateFactor:64]]
+[2026.01.08-01.27.54:255][  0]LogConfig: Set CVar [[r.LumenScene.Radiosity.ProbeSpacing:4]]
+[2026.01.08-01.27.54:261][  0]LogConfig: Set CVar [[r.LumenScene.Radiosity.HemisphereProbeResolution:4]]
+[2026.01.08-01.27.54:268][  0]LogConfig: Set CVar [[r.Lumen.TraceMeshSDFs.Allow:1]]
+[2026.01.08-01.27.54:272][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.RadianceCache.ProbeResolution:32]]
+[2026.01.08-01.27.54:277][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.RadianceCache.NumProbesToTraceBudget:100]]
+[2026.01.08-01.27.54:281][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.DownsampleFactor:16]]
+[2026.01.08-01.27.54:288][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.NumAdaptiveProbes:8]]
+[2026.01.08-01.27.54:291][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.TracingOctahedronResolution:8]]
+[2026.01.08-01.27.54:296][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.IrradianceFormat:0]]
+[2026.01.08-01.27.54:300][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.StochasticInterpolation:0]]
+[2026.01.08-01.27.54:305][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.FullResolutionJitterWidth:1]]
+[2026.01.08-01.27.54:310][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.TwoSidedFoliageBackfaceDiffuse:1]]
+[2026.01.08-01.27.54:314][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.ScreenTraces.HZBTraversal.FullResDepth:1]]
+[2026.01.08-01.27.54:319][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.ShortRangeAO.HardwareRayTracing:0]]
+[2026.01.08-01.27.54:323][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.ShortRangeAO.BentNormal:1]]
+[2026.01.08-01.27.54:327][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyVolume.GridPixelSize:32]]
+[2026.01.08-01.27.54:332][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyVolume.TraceFromVolume:1]]
+[2026.01.08-01.27.54:336][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyVolume.TracingOctahedronResolution:3]]
+[2026.01.08-01.27.54:341][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyVolume.RadianceCache.ProbeResolution:8]]
+[2026.01.08-01.27.54:345][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyVolume.RadianceCache.NumProbesToTraceBudget:70]]
+[2026.01.08-01.27.54:350][  0]LogConfig: Set CVar [[r.RayTracing.Scene.BuildMode:1]]
+[2026.01.08-01.27.54:354][  0]LogConfig: Applying CVar settings from Section [ReflectionQuality@3] File [Scalability]
+[2026.01.08-01.27.54:359][  0]LogConfig: Set CVar [[r.SSR.Quality:3]]
+[2026.01.08-01.27.54:363][  0]LogConfig: Set CVar [[r.SSR.HalfResSceneColor:0]]
+[2026.01.08-01.27.54:368][  0]LogConfig: Set CVar [[r.Lumen.Reflections.Allow:1]]
+[2026.01.08-01.27.54:371][  0]LogConfig: Set CVar [[r.Lumen.Reflections.DownsampleFactor:1]]
+[2026.01.08-01.27.54:377][  0]LogConfig: Set CVar [[r.Lumen.Reflections.MaxRoughnessToTraceForFoliage:0.4]]
+[2026.01.08-01.27.54:382][  0]LogConfig: Set CVar [[r.Lumen.ScreenProbeGather.MaxRoughnessToEvaluateRoughSpecularForFoliage:0.8]]
+[2026.01.08-01.27.54:386][  0]LogConfig: Set CVar [[r.Lumen.Reflections.ScreenSpaceReconstruction.NumSamples:5]]
+[2026.01.08-01.27.54:390][  0]LogConfig: Set CVar [[r.Lumen.Reflections.ScreenSpaceReconstruction.MinWeight:0]]
+[2026.01.08-01.27.54:395][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyReflections.FrontLayer.Allow:1]]
+[2026.01.08-01.27.54:399][  0]LogConfig: Set CVar [[r.Lumen.TranslucencyReflections.FrontLayer.Enable:0]]
+[2026.01.08-01.27.54:403][  0]LogConfig: Applying CVar settings from Section [PostProcessQuality@3] File [Scalability]
+[2026.01.08-01.27.54:408][  0]LogConfig: Set CVar [[r.MotionBlurQuality:4]]
+[2026.01.08-01.27.54:413][  0]LogConfig: Set CVar [[r.MotionBlur.HalfResGather:0]]
+[2026.01.08-01.27.54:417][  0]LogConfig: Set CVar [[r.AmbientOcclusionMipLevelFactor:0.4]]
+[2026.01.08-01.27.54:423][  0]LogConfig: Set CVar [[r.AmbientOcclusionMaxQuality:100]]
+[2026.01.08-01.27.54:428][  0]LogConfig: Set CVar [[r.AmbientOcclusionLevels:-1]]
+[2026.01.08-01.27.54:435][  0]LogConfig: Set CVar [[r.AmbientOcclusionRadiusScale:1.0]]
+[2026.01.08-01.27.54:439][  0]LogConfig: Set CVar [[r.DepthOfFieldQuality:2]]
+[2026.01.08-01.27.54:445][  0]LogConfig: Set CVar [[r.RenderTargetPoolMin:400]]
+[2026.01.08-01.27.54:450][  0]LogConfig: Set CVar [[r.LensFlareQuality:2]]
+[2026.01.08-01.27.54:455][  0]LogConfig: Set CVar [[r.SceneColorFringeQuality:1]]
+[2026.01.08-01.27.54:459][  0]LogConfig: Set CVar [[r.EyeAdaptationQuality:2]]
+[2026.01.08-01.27.54:464][  0]LogConfig: Set CVar [[r.BloomQuality:5]]
+[2026.01.08-01.27.54:468][  0]LogConfig: Set CVar [[r.Bloom.ScreenPercentage:50.000]]
+[2026.01.08-01.27.54:473][  0]LogConfig: Set CVar [[r.FastBlurThreshold:100]]
+[2026.01.08-01.27.54:477][  0]LogConfig: Set CVar [[r.Upscale.Quality:3]]
+[2026.01.08-01.27.54:481][  0]LogConfig: Set CVar [[r.LightShaftQuality:1]]
+[2026.01.08-01.27.54:485][  0]LogConfig: Set CVar [[r.Filter.SizeScale:1]]
+[2026.01.08-01.27.54:490][  0]LogConfig: Set CVar [[r.Tonemapper.Quality:5]]
+[2026.01.08-01.27.54:494][  0]LogConfig: Set CVar [[r.DOF.Gather.ResolutionDivisor:2         ; lower gathering resolution]]
+[2026.01.08-01.27.54:499][  0]LogConfig: Set CVar [[r.DOF.Gather.AccumulatorQuality:1        ; higher gathering accumulator quality]]
+[2026.01.08-01.27.54:503][  0]LogConfig: Set CVar [[r.DOF.Gather.PostfilterMethod:1          ; Median3x3 postfilering method]]
+[2026.01.08-01.27.54:509][  0]LogConfig: Set CVar [[r.DOF.Gather.EnableBokehSettings:0       ; no bokeh simulation when gathering]]
+[2026.01.08-01.27.54:513][  0]LogConfig: Set CVar [[r.DOF.Gather.RingCount:4                 ; medium number of samples when gathering]]
+[2026.01.08-01.27.54:518][  0]LogConfig: Set CVar [[r.DOF.Scatter.ForegroundCompositing:1    ; additive foreground scattering]]
+[2026.01.08-01.27.54:522][  0]LogConfig: Set CVar [[r.DOF.Scatter.BackgroundCompositing:2    ; additive background scattering]]
+[2026.01.08-01.27.54:527][  0]LogConfig: Set CVar [[r.DOF.Scatter.EnableBokehSettings:1      ; bokeh simulation when scattering]]
+[2026.01.08-01.27.54:531][  0]LogConfig: Set CVar [[r.DOF.Scatter.MaxSpriteRatio:0.1         ; only a maximum of 10% of scattered bokeh]]
+[2026.01.08-01.27.54:536][  0]LogConfig: Set CVar [[r.DOF.Recombine.Quality:1                ; cheap slight out of focus]]
+[2026.01.08-01.27.54:541][  0]LogConfig: Set CVar [[r.DOF.Recombine.EnableBokehSettings:0    ; no bokeh simulation on slight out of focus]]
+[2026.01.08-01.27.54:545][  0]LogConfig: Set CVar [[r.DOF.TemporalAAQuality:1                ; more stable temporal accumulation]]
+[2026.01.08-01.27.54:549][  0]LogConfig: Set CVar [[r.DOF.Kernel.MaxForegroundRadius:0.025]]
+[2026.01.08-01.27.54:554][  0]LogConfig: Set CVar [[r.DOF.Kernel.MaxBackgroundRadius:0.025]]
+[2026.01.08-01.27.54:557][  0]LogConfig: Applying CVar settings from Section [TextureQuality@3] File [Scalability]
+[2026.01.08-01.27.54:562][  0]LogConfig: Set CVar [[r.Streaming.MipBias:0]]
+[2026.01.08-01.27.54:566][  0]LogConfig: Set CVar [[r.Streaming.AmortizeCPUToGPUCopy:0]]
+[2026.01.08-01.27.54:571][  0]LogConfig: Set CVar [[r.Streaming.MaxNumTexturesToStreamPerFrame:0]]
+[2026.01.08-01.27.54:576][  0]LogConfig: Set CVar [[r.Streaming.Boost:1]]
+[2026.01.08-01.27.54:581][  0]LogConfig: Set CVar [[r.MaxAnisotropy:8]]
+[2026.01.08-01.27.54:589][  0]LogConfig: Set CVar [[r.VT.MaxAnisotropy:8]]
+[2026.01.08-01.27.54:593][  0]LogConfig: Set CVar [[r.Streaming.LimitPoolSizeToVRAM:0]]
+[2026.01.08-01.27.54:599][  0]LogConfig: Set CVar [[r.Streaming.PoolSize:1000]]
+[2026.01.08-01.27.54:604][  0]LogConfig: Set CVar [[r.Streaming.MaxEffectiveScreenSize:0]]
+[2026.01.08-01.27.54:609][  0]LogConfig: Applying CVar settings from Section [EffectsQuality@3] File [Scalability]
+[2026.01.08-01.27.54:613][  0]LogConfig: Set CVar [[r.TranslucencyLightingVolumeDim:64]]
+[2026.01.08-01.27.54:618][  0]LogConfig: Set CVar [[r.RefractionQuality:2]]
+[2026.01.08-01.27.54:623][  0]LogConfig: Set CVar [[r.SceneColorFormat:4]]
+[2026.01.08-01.27.54:627][  0]LogConfig: Set CVar [[r.DetailMode:3]]
+[2026.01.08-01.27.54:632][  0]LogConfig: Set CVar [[r.TranslucencyVolumeBlur:1]]
+[2026.01.08-01.27.54:636][  0]LogConfig: Set CVar [[r.MaterialQualityLevel:1 ; High quality]]
+[2026.01.08-01.27.54:640][  0]LogConfig: Set CVar [[r.SSS.Scale:1]]
+[2026.01.08-01.27.54:645][  0]LogConfig: Set CVar [[r.SSS.SampleSet:2]]
+[2026.01.08-01.27.54:649][  0]LogConfig: Set CVar [[r.SSS.Quality:1]]
+[2026.01.08-01.27.54:654][  0]LogConfig: Set CVar [[r.SSS.HalfRes:0]]
+[2026.01.08-01.27.54:658][  0]LogConfig: Set CVar [[r.SSGI.Quality:3]]
+[2026.01.08-01.27.54:663][  0]LogConfig: Set CVar [[r.EmitterSpawnRateScale:1.0]]
+[2026.01.08-01.27.54:667][  0]LogConfig: Set CVar [[r.ParticleLightQuality:2]]
+[2026.01.08-01.27.54:672][  0]LogConfig: Set CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.FastApplyOnOpaque:1 ; Always have FastSkyLUT 1 in this case to avoid wrong sky]]
+[2026.01.08-01.27.54:676][  0]LogConfig: Set CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.SampleCountMaxPerSlice:4]]
+[2026.01.08-01.27.54:681][  0]LogConfig: Set CVar [[r.SkyAtmosphere.AerialPerspectiveLUT.DepthResolution:16.0]]
+[2026.01.08-01.27.54:685][  0]LogConfig: Set CVar [[r.SkyAtmosphere.FastSkyLUT:1]]
+[2026.01.08-01.27.54:690][  0]LogConfig: Set CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMin:4.0]]
+[2026.01.08-01.27.54:694][  0]LogConfig: Set CVar [[r.SkyAtmosphere.FastSkyLUT.SampleCountMax:128.0]]
+[2026.01.08-01.27.54:699][  0]LogConfig: Set CVar [[r.SkyAtmosphere.SampleCountMin:4.0]]
+[2026.01.08-01.27.54:702][  0]LogConfig: Set CVar [[r.SkyAtmosphere.SampleCountMax:128.0]]
+[2026.01.08-01.27.54:707][  0]LogConfig: Set CVar [[r.SkyAtmosphere.TransmittanceLUT.UseSmallFormat:0]]
+[2026.01.08-01.27.54:711][  0]LogConfig: Set CVar [[r.SkyAtmosphere.TransmittanceLUT.SampleCount:10.0]]
+[2026.01.08-01.27.54:717][  0]LogConfig: Set CVar [[r.SkyAtmosphere.MultiScatteringLUT.SampleCount:15.0]]
+[2026.01.08-01.27.54:721][  0]LogConfig: Set CVar [[fx.Niagara.QualityLevel:3]]
+[2026.01.08-01.27.54:726][  0]LogConfig: Set CVar [[r.Refraction.OffsetQuality:1]]
+[2026.01.08-01.27.54:730][  0]LogConfig: Set CVar [[r.HeterogeneousVolumes.DownsampleFactor:2]]
+[2026.01.08-01.27.54:734][  0]LogConfig: Set CVar [[r.HeterogeneousVolumes.MaxStepCount:256]]
+[2026.01.08-01.27.54:738][  0]LogConfig: Set CVar [[r.HeterogeneousVolumes.Shadows.Resolution:256]]
+[2026.01.08-01.27.54:743][  0]LogConfig: Set CVar [[r.HeterogeneousVolumes.Shadows.MaxSampleCount:8]]
+[2026.01.08-01.27.54:748][  0]LogConfig: Set CVar [[r.HeterogeneousVolumes.UseExistenceMask:0]]
+[2026.01.08-01.27.54:751][  0]LogConfig: Applying CVar settings from Section [FoliageQuality@3] File [Scalability]
+[2026.01.08-01.27.54:755][  0]LogConfig: Set CVar [[foliage.DensityScale:1.0]]
+[2026.01.08-01.27.54:764][  0]LogConfig: Set CVar [[grass.DensityScale:1.0]]
+[2026.01.08-01.27.54:769][  0]LogConfig: Applying CVar settings from Section [ShadingQuality@3] File [Scalability]
+[2026.01.08-01.27.54:773][  0]LogConfig: Set CVar [[r.HairStrands.SkyLighting.IntegrationType:2]]
+[2026.01.08-01.27.54:780][  0]LogConfig: Set CVar [[r.HairStrands.SkyAO.SampleCount:4]]
+[2026.01.08-01.27.54:783][  0]LogConfig: Set CVar [[r.HairStrands.Visibility.MSAA.SamplePerPixel:4]]
+[2026.01.08-01.27.54:787][  0]LogConfig: Set CVar [[r.AnisotropicMaterials:1]]
+[2026.01.08-01.27.54:791][  0]LogConfig: Applying CVar settings from Section [LandscapeQuality@3] File [Scalability]
+[2026.01.08-01.27.54:796][  0]LogInit: Selected Device Profile: [Windows]
+[2026.01.08-01.27.54:798][  0]LogHAL: Display: Platform has ~ 64 GB [68642168832 / 68719476736 / 64], which maps to Largest [LargestMinGB=32, LargerMinGB=12, DefaultMinGB=8, SmallerMinGB=6, SmallestMinGB=0)
+[2026.01.08-01.27.54:803][  0]LogDeviceProfileManager: Going up to parent DeviceProfile []
+[2026.01.08-01.27.54:807][  0]LogDeviceProfileManager: Pushing Device Profile CVar: [[UI.SlateSDFText.RasterizationMode:Bitmap -> Msdf]]
+[2026.01.08-01.27.54:814][  0]LogDeviceProfileManager: Pushing Device Profile CVar: [[UI.SlateSDFText.ResolutionLevel:2 -> 2]]
+[2026.01.08-01.27.54:819][  0]LogConfig: Applying CVar settings from Section [Startup] File [../../../Engine/Config/ConsoleVariables.ini]
+[2026.01.08-01.27.54:824][  0]LogConfig: Set CVar [[r.DumpShaderDebugInfo:2]]
+[2026.01.08-01.27.54:830][  0]LogConfig: Set CVar [[p.chaos.AllowCreatePhysxBodies:1]]
+[2026.01.08-01.27.54:835][  0]LogConfig: Set CVar [[fx.SkipVectorVMBackendOptimizations:1]]
+[2026.01.08-01.27.54:840][  0]LogConfig: CVar [[ds.CADTranslator.Meshing.ActivateThinZoneMeshing:0]] deferred - dummy variable created
+[2026.01.08-01.27.54:845][  0]LogConfig: CVar [[ds.CADTranslator.Stitching.RemoveThinFaces:0]] deferred - dummy variable created
+[2026.01.08-01.27.54:849][  0]LogConfig: Applying CVar settings from Section [Startup_Windows] File [../../../Engine/Config/ConsoleVariables.ini]
+[2026.01.08-01.27.54:854][  0]LogConfig: Applying CVar settings from Section [ConsoleVariables] File [Engine]
+[2026.01.08-01.27.54:863][  0]LogInit: Computer: FILFREIRE02
+[2026.01.08-01.27.54:871][  0]LogInit: User: filipe
+[2026.01.08-01.27.54:878][  0]LogInit: CPU Page size=4096, Cores=12
+[2026.01.08-01.27.54:885][  0]LogInit: High frequency timer resolution =10.000000 MHz
+[2026.01.08-01.27.54:893][  0]LogMemory: Process is running as part of a Windows Job with separate resource limits
+[2026.01.08-01.27.54:896][  0]LogMemory: Memory total: Physical=63.9GB (64GB approx) Virtual=67.9GB
+[2026.01.08-01.27.54:899][  0]LogMemory: Platform Memory Stats for Windows
+[2026.01.08-01.27.54:902][  0]LogMemory: Process Physical Memory: 148.29 MB used, 148.29 MB peak
+[2026.01.08-01.27.54:906][  0]LogMemory: Process Virtual Memory: 101.68 MB used, 101.68 MB peak
+[2026.01.08-01.27.54:909][  0]LogMemory: Physical Memory: 12130.20 MB used,  53332.07 MB free, 65462.27 MB total
+[2026.01.08-01.27.54:912][  0]LogMemory: Virtual Memory: 16908.05 MB used,  52650.23 MB free, 69558.27 MB total
+[2026.01.08-01.27.54:917][  0]LogCsvProfiler: Display: Metadata set : extradevelopmentmemorymb="0"
+[2026.01.08-01.27.54:928][  0]LogWindows: WindowsPlatformFeatures enabled
+[2026.01.08-01.27.54:929][  0]LogChaosDD: Chaos Debug Draw Startup
+[2026.01.08-01.27.54:934][  0]LogInit: Physics initialised using underlying interface: Chaos
+[2026.01.08-01.27.54:938][  0]LogInit: Using OS detected language (en-US).
+[2026.01.08-01.27.54:941][  0]LogInit: Using OS detected locale (en-US).
+[2026.01.08-01.27.54:943][  0]LogTextLocalizationManager: No specific localization for 'en-US' exists, so 'en' will be used for the language.
+[2026.01.08-01.27.54:995][  0]LogWindowsTextInputMethodSystem: Available input methods:
+[2026.01.08-01.27.54:996][  0]LogWindowsTextInputMethodSystem:   - English (United States) - (Keyboard).
+[2026.01.08-01.27.55:002][  0]LogWindowsTextInputMethodSystem:   - Portuguese (Portugal) - (Keyboard).
+[2026.01.08-01.27.55:008][  0]LogWindowsTextInputMethodSystem: Activated input method: English (United States) - (Keyboard).
+[2026.01.08-01.27.55:056][  0]LogWindowsTouchpad: Display: CacheForceMaxTouchpadSensitivityMode SetTouchpadParameters
+[2026.01.08-01.27.55:060][  0]LogObj: Display: Attempting to load config data for Default__SlateThemeManager before the Class has been constructed/registered/linked (likely during module loading or early startup). This will result in the load silently failing and should be fixed.
+[2026.01.08-01.27.55:064][  0]LogSlate: New Slate User Created. Platform User Id 0, User Index 0, Is Virtual User: 0
+[2026.01.08-01.27.55:068][  0]LogSlate: Slate User Registered.  User Index 0, Is Virtual User: 0
+[2026.01.08-01.27.55:123][  0]LogVRS: Current RHI does not support Variable Rate Shading
+[2026.01.08-01.27.55:126][  0]LogCsvProfiler: Display: Metadata set : verbatimrhiname="Null"
+[2026.01.08-01.27.55:127][  0]LogCsvProfiler: Display: Metadata set : rhiname="Null"
+[2026.01.08-01.27.55:130][  0]LogCsvProfiler: Display: Metadata set : rhifeaturelevel="SM6"
+[2026.01.08-01.27.55:133][  0]LogCsvProfiler: Display: Metadata set : shaderplatform="PCD3D_SM6"
+[2026.01.08-01.27.55:135][  0]LogInit: Initializing FReadOnlyCVARCache
+[2026.01.08-01.27.55:146][  0]LogRendererCore: Ray tracing is disabled. Reason: disabled through project setting (r.RayTracing=0).
+[2026.01.08-01.27.55:148][  0]LogSlate: Using FreeType 2.10.0
+[2026.01.08-01.27.55:153][  0]LogSlate: SlateFontServices - WITH_FREETYPE: 1, WITH_HARFBUZZ: 1
+[2026.01.08-01.27.55:162][  0]LogInit: Using OS detected language (en-US).
+[2026.01.08-01.27.55:163][  0]LogInit: Using OS detected locale (en-US).
+[2026.01.08-01.27.55:165][  0]LogTextLocalizationManager: No localization for 'en-US' exists, so 'en' will be used for the language.
+[2026.01.08-01.27.55:167][  0]LogTextLocalizationManager: No localization for 'en-US' exists, so 'en' will be used for the locale.
+[2026.01.08-01.27.55:170][  0]LogSlate: FontCache flush requested. Reason: Culture for localization was changed
+[2026.01.08-01.27.55:175][  0]LogAssetRegistry: Premade AssetRegistry loaded from '../../../CoopGameFleep/AssetRegistry.bin'
+[2026.01.08-01.27.55:178][  0]LogAssetRegistry: FAssetRegistry took 0.0038 seconds to start up
+[2026.01.08-01.27.55:297][  0]LogStreaming: Display: FlushAsyncLoading(1): 1 QueuedPackages, 0 AsyncPackages
+[2026.01.08-01.27.55:300][  0]LogFilePackageStore: Updated: NewPackages=529, OldPackages=0, TotalPackages=530
+[2026.01.08-01.27.55:305][  0]LogDeviceProfileManager: Display: Deviceprofile LinuxArm64Editor not found.
+[2026.01.08-01.27.55:306][  0]LogDeviceProfileManager: Display: Deviceprofile LinuxArm64 not found.
+[2026.01.08-01.27.55:310][  0]LogDeviceProfileManager: Active device profile: [00007FF4A58EA558][000002AF1C0CB6E0 66] Windows
+[2026.01.08-01.27.55:311][  0]LogCsvProfiler: Display: Metadata set : deviceprofile="Windows"
+[2026.01.08-01.27.55:385][  0]LogTemp: SCharacterManager: RandomSeed set from command line: 352901862
+[2026.01.08-01.27.55:387][  0]LogTemp: SCharacterManager: LearningRatePolicy set from command line: 0.000300
+[2026.01.08-01.27.55:388][  0]LogTemp: SCharacterManager: LearningRateCritic set from command line: 0.003000
+[2026.01.08-01.27.55:391][  0]LogTemp: SCharacterManager: EpsilonClip set from command line: 0.300000
+[2026.01.08-01.27.55:393][  0]LogTemp: SCharacterManager: PolicyBatchSize set from command line: 2048
+[2026.01.08-01.27.55:396][  0]LogTemp: SCharacterManager: CriticBatchSize set from command line: 8192
+[2026.01.08-01.27.55:400][  0]LogTemp: SCharacterManager: IterationsPerGather set from command line: 64
+[2026.01.08-01.27.55:403][  0]LogTemp: SCharacterManager: NumberOfIterations set from command line: 1000000
+[2026.01.08-01.27.55:407][  0]LogTemp: SCharacterManager: DiscountFactor set from command line: 0.995000
+[2026.01.08-01.27.55:410][  0]LogTemp: SCharacterManager: GaeLambda set from command line: 0.950000
+[2026.01.08-01.27.55:412][  0]LogTemp: SCharacterManager: ActionEntropyWeight set from command line: 0.000000
+[2026.01.08-01.27.55:418][  0]LogTemp: SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: 2
+[2026.01.08-01.27.55:421][  0]LogTemp: SCharacterManager: 1Trainer TaskName set to 'Aggressive-seed-352901862-cb3af8bf3e59'
+[2026.01.08-01.27.55:426][  0]LogTemp: SCharacterManager: Configured trainer paths for hostname 'FILFREIRE02':
+[2026.01.08-01.27.55:430][  0]LogTemp:   Engine Path: D:/unreal/UE_5.6/Engine
+[2026.01.08-01.27.55:434][  0]LogTemp:   Intermediate Path: ../../../../../Intermediate
+[2026.01.08-01.27.55:439][  0]LogTemp:   Task Name: Aggressive-seed-352901862-cb3af8bf3e59
+[2026.01.08-01.27.55:450][  0]LogAudioCaptureCore: Display: No Audio Capture implementations found. Audio input will be silent.
+[2026.01.08-01.27.55:456][  0]LogPackageLocalizationCache: Processed 56 localized package path(s) for 1 prioritized culture(s) in 0.000090 seconds
+[2026.01.08-01.27.55:460][  0]LogStats: UGameplayTagsManager::InitializeManager -  0.000 s
+[2026.01.08-01.27.55:464][  0]LogConfig: Applying CVar settings from Section [/Script/NNEDenoiser.NNEDenoiserSettings] File [Engine]
+[2026.01.08-01.27.55:469][  0]LogAudioCaptureCore: Display: No Audio Capture implementations found. Audio input will be silent.
+[2026.01.08-01.27.55:474][  0]LogIris: FNetObjectFactoryRegistry::UnregisterFactory is unregistering factory: NetActorFactory name: NetActorFactory id: 0
+[2026.01.08-01.27.55:475][  0]LogIris: FNetObjectFactoryRegistry::UnregisterFactory is unregistering factory: NetSubObjectFactory name: NetSubObjectFactory id: 1
+[2026.01.08-01.27.55:477][  0]LogInit: WinSock: version 1.1 (2.2), MaxSocks=32767, MaxUdp=65467
+[2026.01.08-01.27.55:482][  0]LogNiagaraDebuggerClient: Niagara Debugger Client Initialized | Session: 18A2700989F346A98000000000007600 | Instance: 4B8E8B894E408D4B398E25AFA45F3FDD (FILFREIRE02-20536).
+[2026.01.08-01.27.55:620][  0]LogNNERuntimeORT: Available graphics and compute adapters:
+[2026.01.08-01.27.55:623][  0]LogNNERuntimeORT: No NPU adapter found with attribute DXCORE_ADAPTER_ATTRIBUTE_D3D12_GENERIC_ML (Windows 11 Version 24H2 or newer)!
+[2026.01.08-01.27.55:625][  0]LogNNERuntimeORT: Available graphics and compute adapters:
+[2026.01.08-01.27.55:628][  0]LogNNERuntimeORT: 0: AMD Radeon RX 6650 XT (Compute, Graphics)
+[2026.01.08-01.27.55:630][  0]LogNNERuntimeORT: 1: Microsoft Basic Render Driver (Compute, Graphics)
+[2026.01.08-01.27.55:633][  0]LogNNERuntimeORT: No NPU adapter found!
+[2026.01.08-01.27.55:637][  0]LogNNERuntimeORT: MakeRuntimeORTDml:
+[2026.01.08-01.27.55:640][  0]LogNNERuntimeORT:   DirectML:  yes
+[2026.01.08-01.27.55:643][  0]LogNNERuntimeORT:   RHI D3D12: no
+[2026.01.08-01.27.55:648][  0]LogNNERuntimeORT:   D3D12:     yes
+[2026.01.08-01.27.55:653][  0]LogNNERuntimeORT:   NPU:       no
+[2026.01.08-01.27.55:655][  0]LogNNERuntimeORT: Interface availability:
+[2026.01.08-01.27.55:660][  0]LogNNERuntimeORT:   GPU: yes
+[2026.01.08-01.27.55:664][  0]LogNNERuntimeORT:   RDG: no
+[2026.01.08-01.27.55:668][  0]LogNNERuntimeORT:   NPU: no
+[2026.01.08-01.27.55:801][  0]LogNNERuntimeORT: Available graphics and compute adapters:
+[2026.01.08-01.27.55:804][  0]LogNNERuntimeORT: No NPU adapter found with attribute DXCORE_ADAPTER_ATTRIBUTE_D3D12_GENERIC_ML (Windows 11 Version 24H2 or newer)!
+[2026.01.08-01.27.55:808][  0]LogNNERuntimeORT: Available graphics and compute adapters:
+[2026.01.08-01.27.55:810][  0]LogNNERuntimeORT: 0: AMD Radeon RX 6650 XT (Compute, Graphics)
+[2026.01.08-01.27.55:813][  0]LogNNERuntimeORT: 1: Microsoft Basic Render Driver (Compute, Graphics)
+[2026.01.08-01.27.55:815][  0]LogNNERuntimeORT: No NPU adapter found!
+[2026.01.08-01.27.55:827][  0]LogUObjectArray: 26912 objects as part of root set at end of initial load.
+[2026.01.08-01.27.55:831][  0]LogUObjectArray: 4 objects are not in the root set, but can never be destroyed because they are in the DisregardForGC set.
+[2026.01.08-01.27.55:835][  0]LogUObjectArray: CloseDisregardForGC: 26912/26912 objects in disregard for GC pool
+[2026.01.08-01.27.55:849][  0]LogEngine: Initializing Engine...
+[2026.01.08-01.27.55:858][  0]LogNetVersion: Set ProjectVersion to 1.0.0.0. Version Checksum will be recalculated on next use.
+[2026.01.08-01.27.55:862][  0]LogInit: Texture streaming: Disabled
+[2026.01.08-01.27.55:867][  0]LogCsvProfiler: Display: Metadata set : largeworldcoordinates="1"
+[2026.01.08-01.27.55:873][  0]LogChaosDD: Creating Chaos Debug Draw Scene for world Untitled
+[2026.01.08-01.27.55:877][  0]LogNiagara: UAV Float16 is not supported, compressed GPU emitters will be disabled.
+[2026.01.08-01.27.55:883][  0]LogEngine: GameWindow did not exist.  Was created
+[2026.01.08-01.27.55:887][  0]LogSlate: Updating window title bar state: overlay mode, drag disabled, window buttons hidden, title bar hidden
+[2026.01.08-01.27.55:890][  0]LogInit: Display: Game Engine Initialized.
+[2026.01.08-01.27.55:895][  0]LogNNEDenoiser: Ray Tracing is not enabled, therefore NNEDenoiser is not registered!
+[2026.01.08-01.27.55:907][  0]LogInit: Display: Starting Game.
+[2026.01.08-01.27.55:911][  0]LogGlobalStatus: UEngine::Browse Started Browse: "/Game/Maps/P_LearningAgentsTrial1?Name=Player"
+[2026.01.08-01.27.55:916][  0]LogNet: Browse: /Game/Maps/P_LearningAgentsTrial1?Name=Player
+[2026.01.08-01.27.55:920][  0]LogLoad: LoadMap: /Game/Maps/P_LearningAgentsTrial1?Name=Player
+[2026.01.08-01.27.55:926][  0]LogWorld: BeginTearingDown for /Temp/Untitled_0
+[2026.01.08-01.27.55:930][  0]LogWorld: UWorld::CleanupWorld for Untitled, bSessionEnded=true, bCleanupResources=true
+[2026.01.08-01.27.55:934][  0]LogSlate: InvalidateAllWidgets triggered.  All widgets were invalidated
+[2026.01.08-01.27.55:945][  0]LogUObjectHash: Compacting FUObjectHashTables data took   0.86ms
+[2026.01.08-01.27.55:973][  0]LogTemp: SCharacterManager: RandomSeed set from command line: 352901862
+[2026.01.08-01.27.55:977][  0]LogTemp: SCharacterManager: LearningRatePolicy set from command line: 0.000300
+[2026.01.08-01.27.55:981][  0]LogTemp: SCharacterManager: LearningRateCritic set from command line: 0.003000
+[2026.01.08-01.27.55:984][  0]LogTemp: SCharacterManager: EpsilonClip set from command line: 0.300000
+[2026.01.08-01.27.55:988][  0]LogTemp: SCharacterManager: PolicyBatchSize set from command line: 2048
+[2026.01.08-01.27.55:991][  0]LogTemp: SCharacterManager: CriticBatchSize set from command line: 8192
+[2026.01.08-01.27.55:995][  0]LogTemp: SCharacterManager: IterationsPerGather set from command line: 64
+[2026.01.08-01.27.55:999][  0]LogTemp: SCharacterManager: NumberOfIterations set from command line: 1000000
+[2026.01.08-01.27.56:002][  0]LogTemp: SCharacterManager: DiscountFactor set from command line: 0.995000
+[2026.01.08-01.27.56:006][  0]LogTemp: SCharacterManager: GaeLambda set from command line: 0.950000
+[2026.01.08-01.27.56:011][  0]LogTemp: SCharacterManager: ActionEntropyWeight set from command line: 0.000000
+[2026.01.08-01.27.56:015][  0]LogTemp: SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: 2
+[2026.01.08-01.27.56:021][  0]LogTemp: SCharacterManager: 1Trainer TaskName set to 'Aggressive-seed-352901862-cb3af8bf3e59'
+[2026.01.08-01.27.56:025][  0]LogTemp: SCharacterManager: Configured trainer paths for hostname 'FILFREIRE02':
+[2026.01.08-01.27.56:030][  0]LogTemp:   Engine Path: D:/unreal/UE_5.6/Engine
+[2026.01.08-01.27.56:034][  0]LogTemp:   Intermediate Path: ../../../../../Intermediate
+[2026.01.08-01.27.56:039][  0]LogTemp:   Task Name: Aggressive-seed-352901862-cb3af8bf3e59
+[2026.01.08-01.27.56:043][  0]LogTemp: SCharacterManager: RandomSeed set from command line: 352901862
+[2026.01.08-01.27.56:048][  0]LogTemp: SCharacterManager: LearningRatePolicy set from command line: 0.000300
+[2026.01.08-01.27.56:052][  0]LogTemp: SCharacterManager: LearningRateCritic set from command line: 0.003000
+[2026.01.08-01.27.56:056][  0]LogTemp: SCharacterManager: EpsilonClip set from command line: 0.300000
+[2026.01.08-01.27.56:060][  0]LogTemp: SCharacterManager: PolicyBatchSize set from command line: 2048
+[2026.01.08-01.27.56:064][  0]LogTemp: SCharacterManager: CriticBatchSize set from command line: 8192
+[2026.01.08-01.27.56:068][  0]LogTemp: SCharacterManager: IterationsPerGather set from command line: 64
+[2026.01.08-01.27.56:073][  0]LogTemp: SCharacterManager: NumberOfIterations set from command line: 1000000
+[2026.01.08-01.27.56:079][  0]LogTemp: SCharacterManager: DiscountFactor set from command line: 0.995000
+[2026.01.08-01.27.56:083][  0]LogTemp: SCharacterManager: GaeLambda set from command line: 0.950000
+[2026.01.08-01.27.56:086][  0]LogTemp: SCharacterManager: ActionEntropyWeight set from command line: 0.000000
+[2026.01.08-01.27.56:091][  0]LogTemp: SCharacterManager: Headless training detected, forcing RunMode to ReInitialize: 2
+[2026.01.08-01.27.56:095][  0]LogTemp: SCharacterManager: 1Trainer TaskName set to 'Aggressive-seed-352901862-cb3af8bf3e59'
+[2026.01.08-01.27.56:100][  0]LogTemp: SCharacterManager: Configured trainer paths for hostname 'FILFREIRE02':
+[2026.01.08-01.27.56:102][  0]LogTemp:   Engine Path: D:/unreal/UE_5.6/Engine
+[2026.01.08-01.27.56:107][  0]LogTemp:   Intermediate Path: ../../../../../Intermediate
+[2026.01.08-01.27.56:111][  0]LogTemp:   Task Name: Aggressive-seed-352901862-cb3af8bf3e59
+[2026.01.08-01.27.56:119][  0]LogChaosDD: Creating Chaos Debug Draw Scene for world P_LearningAgentsTrial1
+[2026.01.08-01.27.56:125][  0]LogLoad: Game class is 'GameModeBase'
+[2026.01.08-01.27.56:136][  0]LogWorld: Bringing World /Game/Maps/P_LearningAgentsTrial1.P_LearningAgentsTrial1 up for play (max tick rate 0) at 2026.01.08-01.27.56
+[2026.01.08-01.27.56:140][  0]LogWorld: Bringing up level for play took: 0.008051
+[2026.01.08-01.27.56:143][  0]LogGameMode: FindPlayerStart: PATHS NOT DEFINED or NO PLAYERSTART with positive rating
+[2026.01.08-01.27.56:148][  0]LogTemp: Warning: SCharacterManager: Found 8 total characters in world
+[2026.01.08-01.27.56:150][  0]LogTemp: Warning: SCharacterManager: Found 8 SCharacter agents
+[2026.01.08-01.27.56:153][  0]LogTemp: Warning: Character 0: PlayerPawn_0 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:157][  0]LogTemp: Warning: Character 1: PlayerPawn_1 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:163][  0]LogTemp: Warning: Character 2: PlayerPawn_2 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:166][  0]LogTemp: Warning: Character 3: PlayerPawn_3 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:169][  0]LogTemp: Warning: Character 4: PlayerPawn_4 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:173][  0]LogTemp: Warning: Character 5: PlayerPawn_5 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:178][  0]LogTemp: Warning: Character 6: PlayerPawn_6 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:182][  0]LogTemp: Warning: Character 7: PlayerPawn_7 (Class: PlayerPawn_C) - SCharacter Cast: SUCCESS
+[2026.01.08-01.27.56:186][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_0
+[2026.01.08-01.27.56:189][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_0 with id 0.
+[2026.01.08-01.27.56:192][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_0 to manager with ID 0
+[2026.01.08-01.27.56:195][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:198][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_0 for learning
+[2026.01.08-01.27.56:202][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_1
+[2026.01.08-01.27.56:207][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_1 with id 1.
+[2026.01.08-01.27.56:210][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_1 to manager with ID 1
+[2026.01.08-01.27.56:213][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:216][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_1 for learning
+[2026.01.08-01.27.56:218][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_2
+[2026.01.08-01.27.56:222][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_2 with id 2.
+[2026.01.08-01.27.56:225][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_2 to manager with ID 2
+[2026.01.08-01.27.56:229][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:231][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_2 for learning
+[2026.01.08-01.27.56:235][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_3
+[2026.01.08-01.27.56:238][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_3 with id 3.
+[2026.01.08-01.27.56:241][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_3 to manager with ID 3
+[2026.01.08-01.27.56:243][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:246][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_3 for learning
+[2026.01.08-01.27.56:248][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_4
+[2026.01.08-01.27.56:252][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_4 with id 4.
+[2026.01.08-01.27.56:255][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_4 to manager with ID 4
+[2026.01.08-01.27.56:259][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:261][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_4 for learning
+[2026.01.08-01.27.56:264][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_5
+[2026.01.08-01.27.56:267][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_5 with id 5.
+[2026.01.08-01.27.56:270][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_5 to manager with ID 5
+[2026.01.08-01.27.56:274][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:277][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_5 for learning
+[2026.01.08-01.27.56:281][  0]LogTemp: Warning: SCharacterManager: Created AIController for agent PlayerPawn_6
+[2026.01.08-01.27.56:283][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_6 with id 6.
+[2026.01.08-01.27.56:286][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_6 to manager with ID 6
+[2026.01.08-01.27.56:290][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:291][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_6 for learning
+[2026.01.08-01.27.56:296][  0]LogTemp: SCharacterManager: Agent PlayerPawn_7 already has controller PlayerController
+[2026.01.08-01.27.56:300][  0]LogLearning: Display: Learning Agents Manager: Adding Agent PlayerPawn_7 with id 7.
+[2026.01.08-01.27.56:305][  0]LogTemp: Warning: SCharacterManager: Added agent PlayerPawn_7 to manager with ID 7
+[2026.01.08-01.27.56:309][  0]LogTemp: Health reset to: 100.0
+[2026.01.08-01.27.56:313][  0]LogTemp: SCharacterManager: Initialized PlayerPawn_7 for learning
+[2026.01.08-01.27.56:317][  0]LogTemp: SCharacterManager: Initialized 8 character agents
+[2026.01.08-01.27.56:321][  0]LogTemp: SCharacterManager: InitializeManager called with RunMode: 2
+[2026.01.08-01.27.56:327][  0]LogLearning: Warning: GetCustomTrainerModulePath: NonEditorCustomTrainerModulePath not set
+[2026.01.08-01.27.56:334][  0]LogTemp: SCharacterManager: Initialization complete. Mode: 2
+[2026.01.08-01.27.56:339][  0]LogLoad: Took 0.419683 seconds to LoadMap(/Game/Maps/P_LearningAgentsTrial1)
+[2026.01.08-01.27.56:342][  0]LogGlobalStatus: UEngine::LoadMap Load map complete /Game/Maps/P_LearningAgentsTrial1
+[2026.01.08-01.27.56:344][  0]LogPakFile: AllPaks IndexSizes: DirectoryHashSize=32, PathHashSize=16, EntriesSize=32752, DirTreeIndexSize=163760, TotalSize=196560
+[2026.01.08-01.27.56:371][  0]LogInit: Display: Engine is initialized. Leaving FEngineLoop::Init()
+[2026.01.08-01.27.56:373][  0]LogLoad: (Engine Initialization) Total time: 4.26 seconds
+[2026.01.08-01.27.56:393][  0]LogTrace: Display: Control listening on port 38167
+[2026.01.08-01.27.56:409][  1]LogLearning: Display: SCharacter PPO Trainer_0: Sending configs...
+[2026.01.08-01.27.56:413][  1]LogLearning: Display: Wrote Config Files to ../../../../../Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590/Configs. Sending Config Signal...
+[2026.01.08-01.27.56:416][  1]LogLearning: Display: Sending config signal...
+[2026.01.08-01.27.56:416][  1]LogLearning: Display: SCharacter PPO Trainer_0: Sending initial policy...
+[2026.01.08-01.27.58:661][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {F44AC54E-42C3-3468-31A2-5BAD12E294AF}
+[2026.01.08-01.27.58:665][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {653122D5-4418-F481-6974-728AEE0A7F2B}
+[2026.01.08-01.27.58:682][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {888691F3-4020-0E8B-43CF-328429A4EF44}
+[2026.01.08-01.27.58:685][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {F8051E90-45D4-6E3A-594B-82945A93ADBF}
+[2026.01.08-01.27.58:688][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {74FEFFB6-4C00-4DFD-82CF-B08A2807E45F}
+[2026.01.08-01.27.58:693][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {E20006B4-456E-8FDB-57A3-909AB906E7D0}
+[2026.01.08-01.27.58:698][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {6E73A789-415A-92F8-678A-838EBE5C2C7B}
+[2026.01.08-01.27.58:702][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {59F4D425-4114-C200-9B47-08A75B4B42E7}
+[2026.01.08-01.27.58:716][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {B40A1BC5-4C50-580C-CF45-6DAFBF587405}
+[2026.01.08-01.27.58:722][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {ADAB80F3-4B3B-22E9-EE48-1193006892E9}
+[2026.01.08-01.27.58:726][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {B65D9E3E-437A-01FE-2FEC-1BB2A6885E9F}
+[2026.01.08-01.27.58:731][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {93C24451-4E97-71B3-7975-2982C413B219}
+[2026.01.08-01.27.58:735][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {8744F4FE-4DBF-0184-D322-9EB114FD69BF}
+[2026.01.08-01.27.58:750][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {57E9828B-4B6C-A4CC-97D6-54BE936D91E3}
+[2026.01.08-01.27.58:754][  1]LogLearning: Display: Subprocess: INFO: Mapped existing shared memory with name: {D75B74C3-4711-508D-92C9-BA8952A12BFA}
+[2026.01.08-01.27.58:758][  1]LogLearning: Display: Subprocess: INFO: {
+[2026.01.08-01.27.58:762][  1]LogLearning: Display: Subprocess:     "SharedMemory": {
+[2026.01.08-01.27.58:766][  1]LogLearning: Display: Subprocess:         "NetworkGuids": [
+[2026.01.08-01.27.58:771][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.58:784][  1]LogLearning: Display: Subprocess:                 "NetworkId": 0,
+[2026.01.08-01.27.58:789][  1]LogLearning: Display: Subprocess:                 "Guid": "{653122D5-4418-F481-6974-728AEE0A7F2B}"
+[2026.01.08-01.27.58:794][  1]LogLearning: Display: Subprocess:             },
+[2026.01.08-01.27.58:798][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.58:803][  1]LogLearning: Display: Subprocess:                 "NetworkId": 1,
+[2026.01.08-01.27.58:810][  1]LogLearning: Display: Subprocess:                 "Guid": "{888691F3-4020-0E8B-43CF-328429A4EF44}"
+[2026.01.08-01.27.58:822][  1]LogLearning: Display: Subprocess:             },
+[2026.01.08-01.27.58:826][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.58:831][  1]LogLearning: Display: Subprocess:                 "NetworkId": 2,
+[2026.01.08-01.27.58:836][  1]LogLearning: Display: Subprocess:                 "Guid": "{F8051E90-45D4-6E3A-594B-82945A93ADBF}"
+[2026.01.08-01.27.58:843][  1]LogLearning: Display: Subprocess:             },
+[2026.01.08-01.27.58:848][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.58:863][  1]LogLearning: Display: Subprocess:                 "NetworkId": 3,
+[2026.01.08-01.27.58:866][  1]LogLearning: Display: Subprocess:                 "Guid": "{74FEFFB6-4C00-4DFD-82CF-B08A2807E45F}"
+[2026.01.08-01.27.58:870][  1]LogLearning: Display: Subprocess:             }
+[2026.01.08-01.27.58:875][  1]LogLearning: Display: Subprocess:         ],
+[2026.01.08-01.27.58:878][  1]LogLearning: Display: Subprocess:         "ReplayBuffers": [
+[2026.01.08-01.27.58:883][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.58:889][  1]LogLearning: Display: Subprocess:                 "EpisodeStartsGuid": "{E20006B4-456E-8FDB-57A3-909AB906E7D0}",
+[2026.01.08-01.27.58:903][  1]LogLearning: Display: Subprocess:                 "EpisodeLengthsGuid": "{6E73A789-415A-92F8-678A-838EBE5C2C7B}",
+[2026.01.08-01.27.58:907][  1]LogLearning: Display: Subprocess:                 "EpisodeCompletionModesGuid": "{59F4D425-4114-C200-9B47-08A75B4B42E7}",
+[2026.01.08-01.27.58:911][  1]LogLearning: Display: Subprocess:                 "EpisodeFinalObservationsGuids": [
+[2026.01.08-01.27.58:915][  1]LogLearning: Display: Subprocess:                     "{B40A1BC5-4C50-580C-CF45-6DAFBF587405}"
+[2026.01.08-01.27.58:920][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.58:935][  1]LogLearning: Display: Subprocess:                 "EpisodeFinalMemoryStatesGuids": [
+[2026.01.08-01.27.58:939][  1]LogLearning: Display: Subprocess:                     "{8744F4FE-4DBF-0184-D322-9EB114FD69BF}"
+[2026.01.08-01.27.58:943][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.58:947][  1]LogLearning: Display: Subprocess:                 "ObservationsGuids": [
+[2026.01.08-01.27.58:952][  1]LogLearning: Display: Subprocess:                     "{ADAB80F3-4B3B-22E9-EE48-1193006892E9}"
+[2026.01.08-01.27.58:955][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.58:970][  1]LogLearning: Display: Subprocess:                 "ActionsGuids": [
+[2026.01.08-01.27.58:973][  1]LogLearning: Display: Subprocess:                     "{B65D9E3E-437A-01FE-2FEC-1BB2A6885E9F}"
+[2026.01.08-01.27.58:978][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.58:982][  1]LogLearning: Display: Subprocess:                 "ActionModifiersGuids": [
+[2026.01.08-01.27.58:985][  1]LogLearning: Display: Subprocess:                     "{93C24451-4E97-71B3-7975-2982C413B219}"
+[2026.01.08-01.27.58:989][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.59:003][  1]LogLearning: Display: Subprocess:                 "MemoryStatesGuids": [
+[2026.01.08-01.27.59:007][  1]LogLearning: Display: Subprocess:                     "{57E9828B-4B6C-A4CC-97D6-54BE936D91E3}"
+[2026.01.08-01.27.59:012][  1]LogLearning: Display: Subprocess:                 ],
+[2026.01.08-01.27.59:017][  1]LogLearning: Display: Subprocess:                 "RewardsGuids": [
+[2026.01.08-01.27.59:021][  1]LogLearning: Display: Subprocess:                     "{D75B74C3-4711-508D-92C9-BA8952A12BFA}"
+[2026.01.08-01.27.59:025][  1]LogLearning: Display: Subprocess:                 ]
+[2026.01.08-01.27.59:040][  1]LogLearning: Display: Subprocess:             }
+[2026.01.08-01.27.59:043][  1]LogLearning: Display: Subprocess:         ]
+[2026.01.08-01.27.59:048][  1]LogLearning: Display: Subprocess:     },
+[2026.01.08-01.27.59:051][  1]LogLearning: Display: Subprocess:     "Networks": [
+[2026.01.08-01.27.59:057][  1]LogLearning: Display: Subprocess:         {
+[2026.01.08-01.27.59:062][  1]LogLearning: Display: Subprocess:             "Id": 0,
+[2026.01.08-01.27.59:080][  1]LogLearning: Display: Subprocess:             "Name": "NN_CharacterPolicy",
+[2026.01.08-01.27.59:083][  1]LogLearning: Display: Subprocess:             "MaxByteNum": 475192
+[2026.01.08-01.27.59:088][  1]LogLearning: Display: Subprocess:         },
+[2026.01.08-01.27.59:092][  1]LogLearning: Display: Subprocess:         {
+[2026.01.08-01.27.59:097][  1]LogLearning: Display: Subprocess:             "Id": 1,
+[2026.01.08-01.27.59:101][  1]LogLearning: Display: Subprocess:             "Name": "NN_CharacterCritic",
+[2026.01.08-01.27.59:115][  1]LogLearning: Display: Subprocess:             "MaxByteNum": 108824,
+[2026.01.08-01.27.59:118][  1]LogLearning: Display: Subprocess:             "InputSchemaId": 0
+[2026.01.08-01.27.59:123][  1]LogLearning: Display: Subprocess:         },
+[2026.01.08-01.27.59:127][  1]LogLearning: Display: Subprocess:         {
+[2026.01.08-01.27.59:131][  1]LogLearning: Display: Subprocess:             "Id": 2,
+[2026.01.08-01.27.59:135][  1]LogLearning: Display: Subprocess:             "Name": "NN_CharacterEncoder",
+[2026.01.08-01.27.59:155][  1]LogLearning: Display: Subprocess:             "MaxByteNum": 1060,
+[2026.01.08-01.27.59:158][  1]LogLearning: Display: Subprocess:             "InputSchemaId": 0
+[2026.01.08-01.27.59:163][  1]LogLearning: Display: Subprocess:         },
+[2026.01.08-01.27.59:167][  1]LogLearning: Display: Subprocess:         {
+[2026.01.08-01.27.59:172][  1]LogLearning: Display: Subprocess:             "Id": 3,
+[2026.01.08-01.27.59:177][  1]LogLearning: Display: Subprocess:             "Name": "NN_CharacterDecoder",
+[2026.01.08-01.27.59:194][  1]LogLearning: Display: Subprocess:             "MaxByteNum": 544,
+[2026.01.08-01.27.59:198][  1]LogLearning: Display: Subprocess:             "OutputSchemaId": 0
+[2026.01.08-01.27.59:202][  1]LogLearning: Display: Subprocess:         }
+[2026.01.08-01.27.59:207][  1]LogLearning: Display: Subprocess:     ],
+[2026.01.08-01.27.59:212][  1]LogLearning: Display: Subprocess:     "ReplayBuffers": [
+[2026.01.08-01.27.59:218][  1]LogLearning: Display: Subprocess:         {
+[2026.01.08-01.27.59:234][  1]LogLearning: Display: Subprocess:             "Id": 0,
+[2026.01.08-01.27.59:239][  1]LogLearning: Display: Subprocess:             "MaxEpisodeNum": 1000,
+[2026.01.08-01.27.59:243][  1]LogLearning: Display: Subprocess:             "MaxStepNum": 10000,
+[2026.01.08-01.27.59:246][  1]LogLearning: Display: Subprocess:             "HasCompletions": true,
+[2026.01.08-01.27.59:251][  1]LogLearning: Display: Subprocess:             "HasFinalObservations": true,
+[2026.01.08-01.27.59:270][  1]LogLearning: Display: Subprocess:             "HasFinalMemoryStates": true,
+[2026.01.08-01.27.59:274][  1]LogLearning: Display: Subprocess:             "Observations": [
+[2026.01.08-01.27.59:278][  1]LogLearning: Display: Subprocess:                 {
+[2026.01.08-01.27.59:282][  1]LogLearning: Display: Subprocess:                     "Id": 0,
+[2026.01.08-01.27.59:288][  1]LogLearning: Display: Subprocess:                     "Name": "Observations",
+[2026.01.08-01.27.59:294][  1]LogLearning: Display: Subprocess:                     "SchemaId": 0,
+[2026.01.08-01.27.59:312][  1]LogLearning: Display: Subprocess:                     "VectorDimensionNum": 17
+[2026.01.08-01.27.59:315][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:321][  1]LogLearning: Display: Subprocess:             ],
+[2026.01.08-01.27.59:325][  1]LogLearning: Display: Subprocess:             "Actions": [
+[2026.01.08-01.27.59:329][  1]LogLearning: Display: Subprocess:                 {
+[2026.01.08-01.27.59:334][  1]LogLearning: Display: Subprocess:                     "Id": 0,
+[2026.01.08-01.27.59:337][  1]LogLearning: Display: Subprocess:                     "Name": "Actions",
+[2026.01.08-01.27.59:353][  1]LogLearning: Display: Subprocess:                     "SchemaId": 0,
+[2026.01.08-01.27.59:357][  1]LogLearning: Display: Subprocess:                     "VectorDimensionNum": 3
+[2026.01.08-01.27.59:361][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:366][  1]LogLearning: Display: Subprocess:             ],
+[2026.01.08-01.27.59:370][  1]LogLearning: Display: Subprocess:             "ActionModifiers": [
+[2026.01.08-01.27.59:375][  1]LogLearning: Display: Subprocess:                 {
+[2026.01.08-01.27.59:390][  1]LogLearning: Display: Subprocess:                     "Id": 0,
+[2026.01.08-01.27.59:394][  1]LogLearning: Display: Subprocess:                     "Name": "ActionModifiers",
+[2026.01.08-01.27.59:399][  1]LogLearning: Display: Subprocess:                     "SchemaId": 0,
+[2026.01.08-01.27.59:402][  1]LogLearning: Display: Subprocess:                     "VectorDimensionNum": 10
+[2026.01.08-01.27.59:407][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:410][  1]LogLearning: Display: Subprocess:             ],
+[2026.01.08-01.27.59:428][  1]LogLearning: Display: Subprocess:             "MemoryStates": [
+[2026.01.08-01.27.59:433][  1]LogLearning: Display: Subprocess:                 {
+[2026.01.08-01.27.59:437][  1]LogLearning: Display: Subprocess:                     "Id": 0,
+[2026.01.08-01.27.59:440][  1]LogLearning: Display: Subprocess:                     "Name": "MemoryStates",
+[2026.01.08-01.27.59:445][  1]LogLearning: Display: Subprocess:                     "VectorDimensionNum": 64
+[2026.01.08-01.27.59:450][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:466][  1]LogLearning: Display: Subprocess:             ],
+[2026.01.08-01.27.59:470][  1]LogLearning: Display: Subprocess:             "Rewards": [
+[2026.01.08-01.27.59:474][  1]LogLearning: Display: Subprocess:                 {
+[2026.01.08-01.27.59:479][  1]LogLearning: Display: Subprocess:                     "Id": 0,
+[2026.01.08-01.27.59:483][  1]LogLearning: Display: Subprocess:                     "Name": "Rewards",
+[2026.01.08-01.27.59:487][  1]LogLearning: Display: Subprocess:                     "VectorDimensionNum": 1
+[2026.01.08-01.27.59:504][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:509][  1]LogLearning: Display: Subprocess:             ]
+[2026.01.08-01.27.59:512][  1]LogLearning: Display: Subprocess:         }
+[2026.01.08-01.27.59:516][  1]LogLearning: Display: Subprocess:     ],
+[2026.01.08-01.27.59:522][  1]LogLearning: Display: Subprocess:     "Schemas": {
+[2026.01.08-01.27.59:527][  1]LogLearning: Display: Subprocess:         "Observations": [
+[2026.01.08-01.27.59:533][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.59:550][  1]LogLearning: Display: Subprocess:                 "Id": 0,
+[2026.01.08-01.27.59:558][  1]LogLearning: Display: Subprocess:                 "Name": "Default",
+[2026.01.08-01.27.59:561][  1]LogLearning: Display: Subprocess:                 "Schema": {
+[2026.01.08-01.27.59:564][  1]LogLearning: Display: Subprocess:                     "VectorSize": 17,
+[2026.01.08-01.27.59:568][  1]LogLearning: Display: Subprocess:                     "EncodedSize": 17,
+[2026.01.08-01.27.59:586][  1]LogLearning: Display: Subprocess:                     "Type": "And",
+[2026.01.08-01.27.59:590][  1]LogLearning: Display: Subprocess:                     "Elements": {
+[2026.01.08-01.27.59:593][  1]LogLearning: Display: Subprocess:                         "CharacterDirection": {
+[2026.01.08-01.27.59:597][  1]LogLearning: Display: Subprocess:                             "VectorSize": 3,
+[2026.01.08-01.27.59:601][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 3,
+[2026.01.08-01.27.59:606][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:613][  1]LogLearning: Display: Subprocess:                             "Num": 3,
+[2026.01.08-01.27.59:632][  1]LogLearning: Display: Subprocess:                             "Index": 0
+[2026.01.08-01.27.59:635][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:640][  1]LogLearning: Display: Subprocess:                         "CharacterLocation": {
+[2026.01.08-01.27.59:643][  1]LogLearning: Display: Subprocess:                             "VectorSize": 3,
+[2026.01.08-01.27.59:649][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 3,
+[2026.01.08-01.27.59:666][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:671][  1]LogLearning: Display: Subprocess:                             "Num": 3,
+[2026.01.08-01.27.59:674][  1]LogLearning: Display: Subprocess:                             "Index": 1
+[2026.01.08-01.27.59:679][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:682][  1]LogLearning: Display: Subprocess:                         "CharacterVelocity": {
+[2026.01.08-01.27.59:687][  1]LogLearning: Display: Subprocess:                             "VectorSize": 3,
+[2026.01.08-01.27.59:693][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 3,
+[2026.01.08-01.27.59:709][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:713][  1]LogLearning: Display: Subprocess:                             "Num": 3,
+[2026.01.08-01.27.59:718][  1]LogLearning: Display: Subprocess:                             "Index": 2
+[2026.01.08-01.27.59:722][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:726][  1]LogLearning: Display: Subprocess:                         "DirectionToTarget": {
+[2026.01.08-01.27.59:734][  1]LogLearning: Display: Subprocess:                             "VectorSize": 3,
+[2026.01.08-01.27.59:750][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 3,
+[2026.01.08-01.27.59:753][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:757][  1]LogLearning: Display: Subprocess:                             "Num": 3,
+[2026.01.08-01.27.59:762][  1]LogLearning: Display: Subprocess:                             "Index": 3
+[2026.01.08-01.27.59:768][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:774][  1]LogLearning: Display: Subprocess:                         "DistanceToTarget": {
+[2026.01.08-01.27.59:790][  1]LogLearning: Display: Subprocess:                             "VectorSize": 1,
+[2026.01.08-01.27.59:794][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 1,
+[2026.01.08-01.27.59:799][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:803][  1]LogLearning: Display: Subprocess:                             "Num": 1,
+[2026.01.08-01.27.59:807][  1]LogLearning: Display: Subprocess:                             "Index": 4
+[2026.01.08-01.27.59:811][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:829][  1]LogLearning: Display: Subprocess:                         "FacingAlignment": {
+[2026.01.08-01.27.59:833][  1]LogLearning: Display: Subprocess:                             "VectorSize": 1,
+[2026.01.08-01.27.59:836][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 1,
+[2026.01.08-01.27.59:841][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:846][  1]LogLearning: Display: Subprocess:                             "Num": 1,
+[2026.01.08-01.27.59:851][  1]LogLearning: Display: Subprocess:                             "Index": 5
+[2026.01.08-01.27.59:867][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.27.59:870][  1]LogLearning: Display: Subprocess:                         "TargetLocation": {
+[2026.01.08-01.27.59:873][  1]LogLearning: Display: Subprocess:                             "VectorSize": 3,
+[2026.01.08-01.27.59:878][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 3,
+[2026.01.08-01.27.59:881][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.27.59:885][  1]LogLearning: Display: Subprocess:                             "Num": 3,
+[2026.01.08-01.27.59:903][  1]LogLearning: Display: Subprocess:                             "Index": 6
+[2026.01.08-01.27.59:906][  1]LogLearning: Display: Subprocess:                         }
+[2026.01.08-01.27.59:911][  1]LogLearning: Display: Subprocess:                     }
+[2026.01.08-01.27.59:914][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.27.59:919][  1]LogLearning: Display: Subprocess:             }
+[2026.01.08-01.27.59:923][  1]LogLearning: Display: Subprocess:         ],
+[2026.01.08-01.27.59:927][  1]LogLearning: Display: Subprocess:         "Actions": [
+[2026.01.08-01.27.59:944][  1]LogLearning: Display: Subprocess:             {
+[2026.01.08-01.27.59:948][  1]LogLearning: Display: Subprocess:                 "Id": 0,
+[2026.01.08-01.27.59:951][  1]LogLearning: Display: Subprocess:                 "Name": "Default",
+[2026.01.08-01.27.59:955][  1]LogLearning: Display: Subprocess:                 "Schema": {
+[2026.01.08-01.27.59:960][  1]LogLearning: Display: Subprocess:                     "VectorSize": 3,
+[2026.01.08-01.27.59:966][  1]LogLearning: Display: Subprocess:                     "DistributionSize": 6,
+[2026.01.08-01.27.59:982][  1]LogLearning: Display: Subprocess:                     "EncodedSize": 6,
+[2026.01.08-01.27.59:985][  1]LogLearning: Display: Subprocess:                     "ModifierSize": 10,
+[2026.01.08-01.27.59:991][  1]LogLearning: Display: Subprocess:                     "Type": "And",
+[2026.01.08-01.27.59:996][  1]LogLearning: Display: Subprocess:                     "Elements": {
+[2026.01.08-01.28.00:002][  1]LogLearning: Display: Subprocess:                         "MoveForward": {
+[2026.01.08-01.28.00:006][  1]LogLearning: Display: Subprocess:                             "VectorSize": 1,
+[2026.01.08-01.28.00:025][  1]LogLearning: Display: Subprocess:                             "DistributionSize": 2,
+[2026.01.08-01.28.00:029][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 2,
+[2026.01.08-01.28.00:033][  1]LogLearning: Display: Subprocess:                             "ModifierSize": 3,
+[2026.01.08-01.28.00:038][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.28.00:042][  1]LogLearning: Display: Subprocess:                             "Num": 1,
+[2026.01.08-01.28.00:060][  1]LogLearning: Display: Subprocess:                             "Index": 0
+[2026.01.08-01.28.00:063][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.28.00:070][  1]LogLearning: Display: Subprocess:                         "MoveRight": {
+[2026.01.08-01.28.00:073][  1]LogLearning: Display: Subprocess:                             "VectorSize": 1,
+[2026.01.08-01.28.00:076][  1]LogLearning: Display: Subprocess:                             "DistributionSize": 2,
+[2026.01.08-01.28.00:080][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 2,
+[2026.01.08-01.28.00:085][  1]LogLearning: Display: Subprocess:                             "ModifierSize": 3,
+[2026.01.08-01.28.00:112][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.28.00:117][  1]LogLearning: Display: Subprocess:                             "Num": 1,
+[2026.01.08-01.28.00:121][  1]LogLearning: Display: Subprocess:                             "Index": 1
+[2026.01.08-01.28.00:125][  1]LogLearning: Display: Subprocess:                         },
+[2026.01.08-01.28.00:129][  1]LogLearning: Display: Subprocess:                         "Turn": {
+[2026.01.08-01.28.00:150][  1]LogLearning: Display: Subprocess:                             "VectorSize": 1,
+[2026.01.08-01.28.00:154][  1]LogLearning: Display: Subprocess:                             "DistributionSize": 2,
+[2026.01.08-01.28.00:158][  1]LogLearning: Display: Subprocess:                             "EncodedSize": 2,
+[2026.01.08-01.28.00:162][  1]LogLearning: Display: Subprocess:                             "ModifierSize": 3,
+[2026.01.08-01.28.00:166][  1]LogLearning: Display: Subprocess:                             "Type": "Continuous",
+[2026.01.08-01.28.00:191][  1]LogLearning: Display: Subprocess:                             "Num": 1,
+[2026.01.08-01.28.00:194][  1]LogLearning: Display: Subprocess:                             "Index": 2
+[2026.01.08-01.28.00:199][  1]LogLearning: Display: Subprocess:                         }
+[2026.01.08-01.28.00:204][  1]LogLearning: Display: Subprocess:                     }
+[2026.01.08-01.28.00:207][  1]LogLearning: Display: Subprocess:                 }
+[2026.01.08-01.28.00:214][  1]LogLearning: Display: Subprocess:             }
+[2026.01.08-01.28.00:239][  1]LogLearning: Display: Subprocess:         ]
+[2026.01.08-01.28.00:245][  1]LogLearning: Display: Subprocess:     },
+[2026.01.08-01.28.00:249][  1]LogLearning: Display: Subprocess:     "TrainerMethod": "PPO",
+[2026.01.08-01.28.00:254][  1]LogLearning: Display: Subprocess:     "TimeStamp": "2026-01-08_01-27-56",
+[2026.01.08-01.28.00:259][  1]LogLearning: Display: Subprocess:     "PPOSettings": {
+[2026.01.08-01.28.00:282][  1]LogLearning: Display: Subprocess:         "IterationNum": 1000000,
+[2026.01.08-01.28.00:287][  1]LogLearning: Display: Subprocess:         "LearningRatePolicy": 0.0003000000142492354,
+[2026.01.08-01.28.00:292][  1]LogLearning: Display: Subprocess:         "LearningRateCritic": 0.003000000026077032,
+[2026.01.08-01.28.00:295][  1]LogLearning: Display: Subprocess:         "LearningRateDecay": 1,
+[2026.01.08-01.28.00:299][  1]LogLearning: Display: Subprocess:         "WeightDecay": 9.999999747378752e-05,
+[2026.01.08-01.28.00:303][  1]LogLearning: Display: Subprocess:         "PolicyBatchSize": 2048,
+[2026.01.08-01.28.00:309][  1]LogLearning: Display: Subprocess:         "CriticBatchSize": 8192,
+[2026.01.08-01.28.00:329][  1]LogLearning: Display: Subprocess:         "PolicyWindow": 16,
+[2026.01.08-01.28.00:332][  1]LogLearning: Display: Subprocess:         "IterationsPerGather": 64,
+[2026.01.08-01.28.00:337][  1]LogLearning: Display: Subprocess:         "CriticWarmupIterations": 8,
+[2026.01.08-01.28.00:342][  1]LogLearning: Display: Subprocess:         "EpsilonClip": 0.30000001192092896,
+[2026.01.08-01.28.00:344][  1]LogLearning: Display: Subprocess:         "ActionSurrogateWeight": 1,
+[2026.01.08-01.28.00:369][  1]LogLearning: Display: Subprocess:         "ActionRegularizationWeight": 0.0010000000474974513,
+[2026.01.08-01.28.00:374][  1]LogLearning: Display: Subprocess:         "ActionEntropyWeight": 0,
+[2026.01.08-01.28.00:378][  1]LogLearning: Display: Subprocess:         "ReturnRegularizationWeight": 9.999999747378752e-05,
+[2026.01.08-01.28.00:382][  1]LogLearning: Display: Subprocess:         "GaeLambda": 0.949999988079071,
+[2026.01.08-01.28.00:386][  1]LogLearning: Display: Subprocess:         "AdvantageNormalization": true,
+[2026.01.08-01.28.00:391][  1]LogLearning: Display: Subprocess:         "AdvantageMin": 0,
+[2026.01.08-01.28.00:415][  1]LogLearning: Display: Subprocess:         "AdvantageMax": 10,
+[2026.01.08-01.28.00:420][  1]LogLearning: Display: Subprocess:         "UseGradNormMaxClipping": false,
+[2026.01.08-01.28.00:423][  1]LogLearning: Display: Subprocess:         "GradNormMax": 0.5,
+[2026.01.08-01.28.00:426][  1]LogLearning: Display: Subprocess:         "TrimEpisodeStartStepNum": 0,
+[2026.01.08-01.28.00:430][  1]LogLearning: Display: Subprocess:         "TrimEpisodeEndStepNum": 0,
+[2026.01.08-01.28.00:436][  1]LogLearning: Display: Subprocess:         "Seed": 1234,
+[2026.01.08-01.28.00:451][  1]LogLearning: Display: Subprocess:         "DiscountFactor": 0.9950000047683716,
+[2026.01.08-01.28.00:455][  1]LogLearning: Display: Subprocess:         "Device": "GPU",
+[2026.01.08-01.28.00:458][  1]LogLearning: Display: Subprocess:         "UseTensorBoard": true,
+[2026.01.08-01.28.00:461][  1]LogLearning: Display: Subprocess:         "SaveSnapshots": true,
+[2026.01.08-01.28.00:465][  1]LogLearning: Display: Subprocess:         "UseMLflow": false,
+[2026.01.08-01.28.00:468][  1]LogLearning: Display: Subprocess:         "MLflowTrackingUri": ""
+[2026.01.08-01.28.00:470][  1]LogLearning: Display: Subprocess:     },
+[2026.01.08-01.28.00:493][  1]LogLearning: Display: Subprocess:     "TempDirectory": "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents",
+[2026.01.08-01.28.00:497][  1]LogLearning: Display: Subprocess:     "TaskName": "Aggressive-seed-352901862-cb3af8bf3e59",
+[2026.01.08-01.28.00:499][  1]LogLearning: Display: Subprocess:     "TaskDirectory": "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590",
+[2026.01.08-01.28.00:501][  1]LogLearning: Display: Subprocess:     "CommunicationType": "SharedMemory"
+[2026.01.08-01.28.00:503][  1]LogLearning: Display: Subprocess: }
+[2026.01.08-01.28.00:508][  1]LogLearning: Display: Pushing network...
+[2026.01.08-01.28.00:508][  1]LogLearning: Display: Subprocess: INFO: Receiving Policy...
+[2026.01.08-01.28.00:511][  1]LogLearning: Display: Subprocess: WARNING: GPU does not support CUDA. Defaulting to CPU training.
+[2026.01.08-01.28.00:517][  1]LogLearning: Display: Pushing network...
+[2026.01.08-01.28.00:539][  1]LogLearning: Display: Subprocess: INFO: Receiving Critic...
+[2026.01.08-01.28.00:541][  1]LogLearning: Display: Subprocess: WARNING: GPU does not support CUDA. Defaulting to CPU training.
+[2026.01.08-01.28.00:547][  1]LogLearning: Display: Pushing network...
+[2026.01.08-01.28.00:548][  1]LogLearning: Display: Subprocess: INFO: Receiving Encoder...
+[2026.01.08-01.28.00:552][  1]LogLearning: Display: Subprocess: WARNING: GPU does not support CUDA. Defaulting to CPU training.
+[2026.01.08-01.28.00:558][  1]LogLearning: Display: Pushing network...
+[2026.01.08-01.28.00:560][  1]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.28.00:561][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:563][  1]LogTemp: Reset Target for Agent 0 - Target: X=1075.045 Y=-1005.219 Z=100.000
+[2026.01.08-01.28.00:566][  1]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-1102.512 Y=-1470.443 Z=100.000, Distance to Target: 2226.698659
+[2026.01.08-01.28.00:570][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:587][  1]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=924.406 Y=996.674 Z=100.000, Distance to Target: 2007.551973
+[2026.01.08-01.28.00:591][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:593][  1]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1586.169 Y=1609.851 Z=100.000, Distance to Target: 3731.038984
+[2026.01.08-01.28.00:595][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:598][  1]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-1370.464 Y=-1105.808 Z=100.000, Distance to Target: 2447.577159
+[2026.01.08-01.28.00:600][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:603][  1]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=689.535 Y=-146.306 Z=100.000, Distance to Target: 941.461356
+[2026.01.08-01.28.00:606][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:607][  1]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=1756.218 Y=729.087 Z=100.000, Distance to Target: 1863.280274
+[2026.01.08-01.28.00:630][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:631][  1]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-826.869 Y=-460.524 Z=100.000, Distance to Target: 1978.374953
+[2026.01.08-01.28.00:635][  1]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.00:637][  1]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-16.419 Y=-1893.796 Z=100.000, Distance to Target: 1407.431230
+[2026.01.08-01.28.01:960][  2]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:970][  2]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:972][  2]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:973][  2]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:974][  2]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:975][  2]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:976][  2]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:977][  2]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.01:978][  2]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.28.01:980][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.01:981][  2]LogTemp: Reset Target for Agent 0 - Target: X=-72.817 Y=-772.424 Z=100.000
+[2026.01.08-01.28.01:983][  2]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-878.018 Y=-1321.024 Z=100.000, Distance to Target: 974.325553
+[2026.01.08-01.28.01:985][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.01:988][  2]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=1783.685 Y=1968.871 Z=100.000, Distance to Target: 3310.784748
+[2026.01.08-01.28.01:990][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.01:993][  2]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=178.900 Y=273.385 Z=100.000, Distance to Target: 1075.674833
+[2026.01.08-01.28.01:995][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.01:998][  2]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=752.037 Y=222.968 Z=100.000, Distance to Target: 1292.744935
+[2026.01.08-01.28.02:000][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.02:005][  2]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-490.433 Y=1291.482 Z=100.000, Distance to Target: 2105.732495
+[2026.01.08-01.28.02:023][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.02:026][  2]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=799.890 Y=-1625.233 Z=100.000, Distance to Target: 1220.205497
+[2026.01.08-01.28.02:028][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.02:031][  2]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-637.165 Y=-781.091 Z=100.000, Distance to Target: 564.414772
+[2026.01.08-01.28.02:033][  2]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.02:036][  2]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1313.089 Y=1675.405 Z=100.000, Distance to Target: 2812.934688
+[2026.01.08-01.28.02:139][ 94]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - out of bounds
+[2026.01.08-01.28.02:151][ 94]LogLearning: Display: Learning Agents Manager: Resetting Agents [1].
+[2026.01.08-01.28.02:153][ 94]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.02:153][ 94]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-238.716 Y=662.191 Z=100.000, Distance to Target: 1444.174568
+[2026.01.08-01.28.02:581][514]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.28.02:591][514]LogLearning: Display: Subprocess: INFO: Receiving Decoder...
+[2026.01.08-01.28.02:592][514]LogLearning: Display: Subprocess: WARNING: GPU does not support CUDA. Defaulting to CPU training.
+[2026.01.08-01.28.02:593][514]LogLearning: Display: Subprocess: INFO: Creating PPO Policy...
+[2026.01.08-01.28.02:594][514]LogLearning: Display: Subprocess: INFO: Begin Training...
+[2026.01.08-01.28.02:601][514]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.28.02:602][514]LogLearning: Display: Subprocess: Episode Num: 21 | Total Step Num: 10000
+[2026.01.08-01.28.02:604][514]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience              287ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.08:783][514]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.08:811][514]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       29ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.08:870][514]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  57ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.08:922][514]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            52ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.43:597][514]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  34674ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.43:600][514]LogLearning: Display: Subprocess: INFO: Profile| Training                   40996ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.43:602][514]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 0
+[2026.01.08-01.28.43:606][514]LogLearning: Display: Pulling network...
+[2026.01.08-01.28.43:610][514]LogLearning: Display: Pulling network...
+[2026.01.08-01.28.43:614][514]LogLearning: Display: Pulling network...
+[2026.01.08-01.28.43:618][514]LogLearning: Display: Pulling network...
+[2026.01.08-01.28.43:619][514]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.28.43:622][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:623][514]LogTemp: Reset Target for Agent 0 - Target: X=1752.068 Y=-940.642 Z=100.000
+[2026.01.08-01.28.43:625][514]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=450.758 Y=-288.766 Z=100.000, Distance to Target: 1455.454191
+[2026.01.08-01.28.43:627][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:629][514]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1841.792 Y=1867.550 Z=100.000, Distance to Target: 4560.895156
+[2026.01.08-01.28.43:631][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:633][514]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-482.864 Y=-1148.900 Z=100.000, Distance to Target: 2244.613592
+[2026.01.08-01.28.43:635][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:637][514]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-1844.966 Y=-137.761 Z=100.000, Distance to Target: 3685.548551
+[2026.01.08-01.28.43:639][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:642][514]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-727.988 Y=-716.880 Z=100.000, Distance to Target: 2490.129974
+[2026.01.08-01.28.43:645][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:647][514]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-973.968 Y=-1025.361 Z=100.000, Distance to Target: 2727.351368
+[2026.01.08-01.28.43:649][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:651][514]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=79.043 Y=467.971 Z=100.000, Distance to Target: 2187.052881
+[2026.01.08-01.28.43:653][514]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.43:655][514]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-1462.630 Y=1595.325 Z=100.000, Distance to Target: 4094.557948
+[2026.01.08-01.28.44:614][515]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:615][515]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:617][515]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:618][515]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:620][515]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:621][515]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:623][515]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:624][515]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.28.44:625][515]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.28.44:626][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:628][515]LogTemp: Reset Target for Agent 0 - Target: X=1305.887 Y=719.687 Z=100.000
+[2026.01.08-01.28.44:628][515]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=1698.965 Y=328.074 Z=100.000, Distance to Target: 554.861867
+[2026.01.08-01.28.44:630][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:630][515]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1393.048 Y=1048.433 Z=100.000, Distance to Target: 2718.882648
+[2026.01.08-01.28.44:632][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:633][515]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=1943.236 Y=-985.809 Z=100.000, Distance to Target: 1820.695189
+[2026.01.08-01.28.44:634][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:635][515]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=1299.051 Y=1660.146 Z=100.000, Distance to Target: 940.483143
+[2026.01.08-01.28.44:637][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:638][515]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=1803.339 Y=-924.406 Z=100.000, Distance to Target: 1717.702122
+[2026.01.08-01.28.44:640][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:640][515]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=9.583 Y=-617.145 Z=100.000, Distance to Target: 1862.129555
+[2026.01.08-01.28.44:642][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:642][515]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-545.122 Y=512.284 Z=100.000, Distance to Target: 1862.592095
+[2026.01.08-01.28.44:644][515]LogTemp: Health reset to: 100.0
+[2026.01.08-01.28.44:645][515]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-29.359 Y=350.658 Z=100.000, Distance to Target: 1385.303013
+[2026.01.08-01.28.45:145][ 27]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.28.45:147][ 27]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.28.45:148][ 27]LogLearning: Display: Subprocess: Iter:       0 | Avg Rew: 0.43817 | Avg Rew Sum: 211.99372 | Avg Return: 48.90170 | Avg Episode Len: 476.19048 | Batch Size: 1
+[2026.01.08-01.28.45:150][ 27]LogLearning: Display: Subprocess: INFO: Saved Policy Snapshot to: "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590\Snapshots\policy_0.bin"
+[2026.01.08-01.28.45:151][ 27]LogLearning: Display: Subprocess: INFO: Saved Critic Snapshot to: "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590\Snapshots\critic_0.bin"
+[2026.01.08-01.28.45:152][ 27]LogLearning: Display: Subprocess: INFO: Saved Encoder Snapshot to: "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590\Snapshots\encoder_0.bin"
+[2026.01.08-01.28.45:153][ 27]LogLearning: Display: Subprocess: INFO: Saved Decoder Snapshot to: "D:/unrealprojects/coop-game-fleep/Intermediate/LearningAgents/Aggressive-seed-352901862-cb3af8bf3e590\Snapshots\decoder_0.bin"
+[2026.01.08-01.28.45:154][ 27]LogLearning: Display: Subprocess: INFO: Profile| Logging                       14ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.45:157][ 27]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.28.45:158][ 27]LogLearning: Display: Subprocess: Episode Num: 20 | Total Step Num: 10000
+[2026.01.08-01.28.45:159][ 27]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1522ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.45:160][ 27]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.45:199][ 27]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       45ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.45:261][ 27]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  62ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.28.45:313][ 27]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            51ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.19:985][ 27]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  34672ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.19:987][ 27]LogLearning: Display: Subprocess: INFO: Profile| Training                   34831ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.19:988][ 27]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 64
+[2026.01.08-01.29.19:992][ 27]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.19:996][ 27]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.20:001][ 27]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.20:004][ 27]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.20:005][ 27]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.29.20:007][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:009][ 27]LogTemp: Reset Target for Agent 0 - Target: X=-665.853 Y=-1656.117 Z=100.000
+[2026.01.08-01.29.20:012][ 27]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=1006.439 Y=1469.466 Z=100.000, Distance to Target: 3544.832077
+[2026.01.08-01.29.20:015][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:018][ 27]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1592.639 Y=225.776 Z=100.000, Distance to Target: 2097.726229
+[2026.01.08-01.29.20:022][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:025][ 27]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1116.672 Y=-1844.234 Z=100.000, Distance to Target: 488.493477
+[2026.01.08-01.29.20:028][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:031][ 27]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=1850.948 Y=-1515.366 Z=100.000, Distance to Target: 2520.733071
+[2026.01.08-01.29.20:034][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:038][ 27]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-1341.777 Y=-1784.906 Z=100.000, Distance to Target: 688.084033
+[2026.01.08-01.29.20:042][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:044][ 27]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1596.545 Y=1986.450 Z=100.000, Distance to Target: 3759.585625
+[2026.01.08-01.29.20:047][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:049][ 27]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-1379.986 Y=1093.478 Z=100.000, Distance to Target: 2840.820731
+[2026.01.08-01.29.20:051][ 27]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:055][ 27]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-1014.252 Y=64.760 Z=100.000, Distance to Target: 1755.790984
+[2026.01.08-01.29.20:584][565]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - reached target
+[2026.01.08-01.29.20:585][565]LogTemp: Agent 2 reached target! Reward: 100.000000
+[2026.01.08-01.29.20:586][565]LogLearning: Display: Learning Agents Manager: Resetting Agents [2].
+[2026.01.08-01.29.20:587][565]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:589][565]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1520.249 Y=-1481.429 Z=100.000, Distance to Target: 872.071585
+[2026.01.08-01.29.20:763][735]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - reached target
+[2026.01.08-01.29.20:764][735]LogTemp: Agent 4 reached target! Reward: 100.000000
+[2026.01.08-01.29.20:765][735]LogLearning: Display: Learning Agents Manager: Resetting Agents [4].
+[2026.01.08-01.29.20:767][735]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.20:769][735]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=1829.951 Y=-225.044 Z=100.000, Distance to Target: 2876.978989
+[2026.01.08-01.29.21:062][ 28]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:063][ 28]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:065][ 28]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:068][ 28]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:070][ 28]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:073][ 28]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.21:075][ 28]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 3 5 6 7].
+[2026.01.08-01.29.21:078][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:080][ 28]LogTemp: Reset Target for Agent 0 - Target: X=-1461.043 Y=216.132 Z=100.000
+[2026.01.08-01.29.21:082][ 28]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=1816.278 Y=-477.981 Z=100.000, Distance to Target: 3350.019343
+[2026.01.08-01.29.21:084][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:086][ 28]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-392.529 Y=343.333 Z=100.000, Distance to Target: 1076.058788
+[2026.01.08-01.29.21:088][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:090][ 28]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-1127.415 Y=-1325.663 Z=100.000, Distance to Target: 1577.479097
+[2026.01.08-01.29.21:093][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:095][ 28]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1698.355 Y=718.223 Z=100.000, Distance to Target: 555.348338
+[2026.01.08-01.29.21:095][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:097][ 28]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=383.496 Y=-1788.812 Z=100.000, Distance to Target: 2724.357495
+[2026.01.08-01.29.21:098][ 28]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.21:099][ 28]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-448.073 Y=1173.559 Z=100.000, Distance to Target: 1393.834452
+[2026.01.08-01.29.21:613][540]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.29.21:616][540]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.29.21:616][540]LogLearning: Display: Subprocess: Iter:      64 | Avg Rew: 0.52339 | Avg Rew Sum: 261.67172 | Avg Return: 51.09305 | Avg Episode Len: 500.00000 | Batch Size: 1
+[2026.01.08-01.29.21:618][540]LogLearning: Display: Subprocess: INFO: Profile| Logging                        5ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.21:621][540]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.29.21:623][540]LogLearning: Display: Subprocess: Episode Num: 22 | Total Step Num: 10000
+[2026.01.08-01.29.21:625][540]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1613ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.21:626][540]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.21:657][540]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       34ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.21:719][540]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  63ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.21:771][540]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            52ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.56:150][540]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.56:153][540]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  34377ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.56:155][540]LogLearning: Display: Subprocess: INFO: Profile| Training                   34526ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.56:178][540]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 128
+[2026.01.08-01.29.56:184][540]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.56:189][540]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.56:217][540]LogLearning: Display: Pulling network...
+[2026.01.08-01.29.56:219][540]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.29.56:223][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:243][540]LogTemp: Reset Target for Agent 0 - Target: X=740.440 Y=1955.565 Z=100.000
+[2026.01.08-01.29.56:266][540]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-967.742 Y=322.581 Z=100.000, Distance to Target: 2363.159776
+[2026.01.08-01.29.56:292][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:316][540]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1097.873 Y=292.062 Z=100.000, Distance to Target: 2479.241140
+[2026.01.08-01.29.56:320][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:322][540]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-584.063 Y=-1783.807 Z=100.000, Distance to Target: 3967.015396
+[2026.01.08-01.29.56:324][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:325][540]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=1140.721 Y=865.932 Z=100.000, Distance to Target: 1160.829091
+[2026.01.08-01.29.56:328][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:340][540]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-1228.492 Y=82.095 Z=100.000, Distance to Target: 2717.827265
+[2026.01.08-01.29.56:343][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:345][540]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1746.452 Y=1872.555 Z=100.000, Distance to Target: 2488.277359
+[2026.01.08-01.29.56:346][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:348][540]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=1285.134 Y=230.170 Z=100.000, Distance to Target: 1809.330786
+[2026.01.08-01.29.56:349][540]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.56:373][540]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1875.118 Y=1412.091 Z=100.000, Distance to Target: 1258.116797
+[2026.01.08-01.29.57:331][541]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:333][541]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:335][541]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:335][541]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:337][541]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:337][541]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:339][541]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:341][541]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.29.57:362][541]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.29.57:363][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:364][541]LogTemp: Reset Target for Agent 0 - Target: X=-1861.568 Y=-1757.805 Z=100.000
+[2026.01.08-01.29.57:365][541]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-350.047 Y=1598.743 Z=100.000, Distance to Target: 3681.182980
+[2026.01.08-01.29.57:366][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:367][541]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=118.717 Y=-146.916 Z=100.000, Distance to Target: 2552.742030
+[2026.01.08-01.29.57:368][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:370][541]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1224.952 Y=-1016.572 Z=100.000, Distance to Target: 977.091246
+[2026.01.08-01.29.57:372][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:372][541]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-612.995 Y=1237.281 Z=100.000, Distance to Target: 3244.915696
+[2026.01.08-01.29.57:374][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:374][541]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-1936.033 Y=-230.415 Z=100.000, Distance to Target: 1529.204491
+[2026.01.08-01.29.57:376][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:376][541]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1859.737 Y=-1569.567 Z=100.000, Distance to Target: 188.247080
+[2026.01.08-01.29.57:378][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:378][541]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-242.378 Y=1969.970 Z=100.000, Distance to Target: 4064.244305
+[2026.01.08-01.29.57:380][541]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:381][541]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=390.820 Y=1038.911 Z=100.000, Distance to Target: 3590.943268
+[2026.01.08-01.29.57:470][630]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - reached target
+[2026.01.08-01.29.57:472][630]LogTemp: Agent 5 reached target! Reward: 100.000000
+[2026.01.08-01.29.57:474][630]LogLearning: Display: Learning Agents Manager: Resetting Agents [5].
+[2026.01.08-01.29.57:474][630]LogTemp: Health reset to: 100.0
+[2026.01.08-01.29.57:476][630]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=110.416 Y=-395.459 Z=100.000, Distance to Target: 2396.812090
+[2026.01.08-01.29.57:886][ 53]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.29.57:888][ 53]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.29.57:890][ 53]LogLearning: Display: Subprocess: Iter:     128 | Avg Rew: 0.75646 | Avg Rew Sum: 256.93026 | Avg Return: 53.71480 | Avg Episode Len: 454.54545 | Batch Size: 1
+[2026.01.08-01.29.57:891][ 53]LogLearning: Display: Subprocess: INFO: Profile| Logging                        6ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.57:894][ 53]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.29.57:894][ 53]LogLearning: Display: Subprocess: Episode Num: 21 | Total Step Num: 10000
+[2026.01.08-01.29.57:896][ 53]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1673ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.57:899][ 53]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               1ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.57:924][ 53]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       28ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.57:974][ 53]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  50ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.29.58:023][ 53]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            50ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.32:151][ 53]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  34128ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.32:156][ 53]LogLearning: Display: Subprocess: INFO: Profile| Training                   34257ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.32:157][ 53]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 192
+[2026.01.08-01.30.32:161][ 53]LogLearning: Display: Pulling network...
+[2026.01.08-01.30.32:164][ 53]LogLearning: Display: Pulling network...
+[2026.01.08-01.30.32:168][ 53]LogLearning: Display: Pulling network...
+[2026.01.08-01.30.32:170][ 53]LogLearning: Display: Pulling network...
+[2026.01.08-01.30.32:171][ 53]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.30.32:173][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:175][ 53]LogTemp: Reset Target for Agent 0 - Target: X=-867.397 Y=-1917.722 Z=100.000
+[2026.01.08-01.30.32:176][ 53]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=1727.897 Y=-656.575 Z=100.000, Distance to Target: 2885.488248
+[2026.01.08-01.30.32:178][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:179][ 53]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-392.651 Y=1931.638 Z=100.000, Distance to Target: 3878.525557
+[2026.01.08-01.30.32:181][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:183][ 53]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1803.583 Y=1882.077 Z=100.000, Distance to Target: 3913.427305
+[2026.01.08-01.30.32:184][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:186][ 53]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=805.139 Y=1836.665 Z=100.000, Distance to Target: 4110.085129
+[2026.01.08-01.30.32:187][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:189][ 53]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=118.717 Y=-1194.678 Z=100.000, Distance to Target: 1222.789528
+[2026.01.08-01.30.32:191][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:193][ 53]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-839.564 Y=-190.985 Z=100.000, Distance to Target: 1726.961554
+[2026.01.08-01.30.32:194][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:197][ 53]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=1844.722 Y=-1575.426 Z=100.000, Distance to Target: 2733.634031
+[2026.01.08-01.30.32:199][ 53]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.32:202][ 53]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-1268.288 Y=-653.157 Z=100.000, Distance to Target: 1326.588969
+[2026.01.08-01.30.33:177][ 49]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - reached target
+[2026.01.08-01.30.33:178][ 49]LogTemp: Agent 4 reached target! Reward: 100.000000
+[2026.01.08-01.30.33:180][ 49]LogLearning: Display: Learning Agents Manager: Resetting Agents [4].
+[2026.01.08-01.30.33:180][ 49]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:182][ 49]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-141.179 Y=350.658 Z=100.000, Distance to Target: 2381.793478
+[2026.01.08-01.30.33:188][ 54]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:188][ 54]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:190][ 54]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:192][ 54]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:195][ 54]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:195][ 54]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:197][ 54]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.30.33:198][ 54]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 5 6 7].
+[2026.01.08-01.30.33:200][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:200][ 54]LogTemp: Reset Target for Agent 0 - Target: X=-1552.965 Y=1946.409 Z=100.000
+[2026.01.08-01.30.33:202][ 54]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-506.912 Y=-1891.964 Z=100.000, Distance to Target: 3978.358977
+[2026.01.08-01.30.33:202][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:204][ 54]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=693.930 Y=-1669.179 Z=100.000, Distance to Target: 4256.878975
+[2026.01.08-01.30.33:205][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:206][ 54]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=935.881 Y=1110.324 Z=100.000, Distance to Target: 2625.526675
+[2026.01.08-01.30.33:207][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:208][ 54]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-992.401 Y=887.295 Z=100.000, Distance to Target: 1198.313358
+[2026.01.08-01.30.33:209][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:211][ 54]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1968.505 Y=-244.453 Z=100.000, Distance to Target: 2229.922244
+[2026.01.08-01.30.33:211][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:213][ 54]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=595.172 Y=1593.616 Z=100.000, Distance to Target: 2176.914157
+[2026.01.08-01.30.33:214][ 54]LogTemp: Health reset to: 100.0
+[2026.01.08-01.30.33:215][ 54]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1388.287 Y=-390.576 Z=100.000, Distance to Target: 3756.655888
+[2026.01.08-01.30.33:725][566]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.30.33:727][566]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.30.33:729][566]LogLearning: Display: Subprocess: Iter:     192 | Avg Rew: 0.61641 | Avg Rew Sum: 274.14015 | Avg Return: 56.39957 | Avg Episode Len: 476.19048 | Batch Size: 1
+[2026.01.08-01.30.33:733][566]LogLearning: Display: Subprocess: INFO: Profile| Logging                       11ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.33:736][566]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.30.33:736][566]LogLearning: Display: Subprocess: Episode Num: 20 | Total Step Num: 10000
+[2026.01.08-01.30.33:738][566]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1551ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.33:738][566]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.33:762][566]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       30ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.33:816][566]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  54ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.30.33:868][566]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            51ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.08:532][566]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  34666ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.08:533][566]LogLearning: Display: Subprocess: INFO: Profile| Training                   34801ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.08:536][566]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 256
+[2026.01.08-01.31.08:539][566]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.08:542][566]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.08:547][566]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.08:551][566]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.08:552][566]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.31.08:553][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:555][566]LogTemp: Reset Target for Agent 0 - Target: X=526.078 Y=-42.421 Z=100.000
+[2026.01.08-01.31.08:555][566]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=206.610 Y=-1595.203 Z=100.000, Distance to Target: 1585.304659
+[2026.01.08-01.31.08:557][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:559][566]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1552.843 Y=116.153 Z=100.000, Distance to Target: 2084.959808
+[2026.01.08-01.31.08:561][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:563][566]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-774.255 Y=959.685 Z=100.000, Distance to Target: 1641.670134
+[2026.01.08-01.31.08:566][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:568][566]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-1666.982 Y=1196.997 Z=100.000, Distance to Target: 2519.061011
+[2026.01.08-01.31.08:569][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:571][566]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=1525.742 Y=-1841.426 Z=100.000, Distance to Target: 2058.093290
+[2026.01.08-01.31.08:574][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:577][566]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=259.835 Y=1384.014 Z=100.000, Distance to Target: 1451.069506
+[2026.01.08-01.31.08:580][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:582][566]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-555.132 Y=-187.811 Z=100.000, Distance to Target: 1090.941165
+[2026.01.08-01.31.08:586][566]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.08:587][566]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=511.551 Y=-1344.340 Z=100.000, Distance to Target: 1302.000622
+[2026.01.08-01.31.09:444][335]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - reached target
+[2026.01.08-01.31.09:444][335]LogTemp: Agent 2 reached target! Reward: 100.000000
+[2026.01.08-01.31.09:447][335]LogLearning: Display: Learning Agents Manager: Resetting Agents [2].
+[2026.01.08-01.31.09:449][335]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:451][335]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=557.451 Y=668.294 Z=100.000, Distance to Target: 711.407286
+[2026.01.08-01.31.09:483][359]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - reached target
+[2026.01.08-01.31.09:483][359]LogTemp: Agent 5 reached target! Reward: 100.000000
+[2026.01.08-01.31.09:485][359]LogLearning: Display: Learning Agents Manager: Resetting Agents [5].
+[2026.01.08-01.31.09:488][359]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:489][359]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=432.447 Y=-1784.661 Z=100.000, Distance to Target: 1744.754772
+[2026.01.08-01.31.09:695][552]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - reached target
+[2026.01.08-01.31.09:696][552]LogTemp: Agent 6 reached target! Reward: 100.000000
+[2026.01.08-01.31.09:697][552]LogLearning: Display: Learning Agents Manager: Resetting Agents [6].
+[2026.01.08-01.31.09:698][552]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:699][552]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-455.641 Y=-189.032 Z=100.000, Distance to Target: 992.606505
+[2026.01.08-01.31.09:716][567]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.09:716][567]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.09:717][567]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.09:718][567]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.09:720][567]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.09:724][567]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 3 4 7].
+[2026.01.08-01.31.09:726][567]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:727][567]LogTemp: Reset Target for Agent 0 - Target: X=-153.996 Y=202.826 Z=100.000
+[2026.01.08-01.31.09:727][567]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-611.408 Y=-1893.063 Z=100.000, Distance to Target: 2145.221830
+[2026.01.08-01.31.09:729][567]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:729][567]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=-1356.182 Y=-1911.130 Z=100.000, Distance to Target: 2431.883969
+[2026.01.08-01.31.09:731][567]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:732][567]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=1541.368 Y=1545.763 Z=100.000, Distance to Target: 2162.807892
+[2026.01.08-01.31.09:735][567]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:737][567]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=1273.415 Y=389.477 Z=100.000, Distance to Target: 1439.563397
+[2026.01.08-01.31.09:738][567]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.09:739][567]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1579.455 Y=88.687 Z=100.000, Distance to Target: 1737.204942
+[2026.01.08-01.31.10:120][944]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - reached target
+[2026.01.08-01.31.10:122][944]LogTemp: Agent 6 reached target! Reward: 100.000000
+[2026.01.08-01.31.10:124][944]LogLearning: Display: Learning Agents Manager: Resetting Agents [6].
+[2026.01.08-01.31.10:125][944]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.10:125][944]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-756.554 Y=972.014 Z=100.000, Distance to Target: 977.101013
+[2026.01.08-01.31.10:220][ 42]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - reached target
+[2026.01.08-01.31.10:222][ 42]LogTemp: Agent 2 reached target! Reward: 100.000000
+[2026.01.08-01.31.10:224][ 42]LogLearning: Display: Learning Agents Manager: Resetting Agents [2].
+[2026.01.08-01.31.10:225][ 42]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.10:225][ 42]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-1513.657 Y=-995.087 Z=100.000, Distance to Target: 1812.090426
+[2026.01.08-01.31.10:262][ 79]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.31.10:264][ 79]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.31.10:265][ 79]LogLearning: Display: Subprocess: Iter:     256 | Avg Rew: 0.55891 | Avg Rew Sum: 279.28726 | Avg Return: 64.75387 | Avg Episode Len: 500.00000 | Batch Size: 1
+[2026.01.08-01.31.10:266][ 79]LogLearning: Display: Subprocess: INFO: Profile| Logging                        5ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.10:271][ 79]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.31.10:271][ 79]LogLearning: Display: Subprocess: Episode Num: 22 | Total Step Num: 10000
+[2026.01.08-01.31.10:273][ 79]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1715ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.10:273][ 79]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.10:297][ 79]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       27ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.10:349][ 79]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  50ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.10:400][ 79]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            52ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.45:529][ 79]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.45:542][ 79]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  35128ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.45:543][ 79]LogLearning: Display: Subprocess: INFO: Profile| Training                   35258ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.45:545][ 79]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 320
+[2026.01.08-01.31.45:548][ 79]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.45:551][ 79]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.45:556][ 79]LogLearning: Display: Pulling network...
+[2026.01.08-01.31.45:556][ 79]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.31.45:558][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:559][ 79]LogTemp: Reset Target for Agent 0 - Target: X=-325.022 Y=-1035.127 Z=100.000
+[2026.01.08-01.31.45:560][ 79]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=778.161 Y=-68.545 Z=100.000, Distance to Target: 1466.729072
+[2026.01.08-01.31.45:561][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:563][ 79]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=1141.697 Y=1649.281 Z=100.000, Distance to Target: 3058.972506
+[2026.01.08-01.31.45:564][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:566][ 79]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-520.341 Y=529.252 Z=100.000, Distance to Target: 1576.524821
+[2026.01.08-01.31.45:567][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:569][ 79]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=1959.105 Y=1330.424 Z=100.000, Distance to Target: 3288.322914
+[2026.01.08-01.31.45:571][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:591][ 79]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-1955.687 Y=-13.001 Z=100.000, Distance to Target: 1924.528486
+[2026.01.08-01.31.45:594][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:596][ 79]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1799.310 Y=549.760 Z=100.000, Distance to Target: 2164.576843
+[2026.01.08-01.31.45:597][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:599][ 79]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=1185.888 Y=-1735.588 Z=100.000, Distance to Target: 1665.381510
+[2026.01.08-01.31.45:601][ 79]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.45:604][ 79]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1956.786 Y=429.762 Z=100.000, Distance to Target: 2711.557657
+[2026.01.08-01.31.46:402][867]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - reached target
+[2026.01.08-01.31.46:410][867]LogTemp: Agent 0 reached target! Reward: 100.000000
+[2026.01.08-01.31.46:411][867]LogLearning: Display: Learning Agents Manager: Resetting Agents [0].
+[2026.01.08-01.31.46:413][867]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:415][867]LogTemp: Reset Target for Agent 0 - Target: X=-1875.362 Y=-923.673 Z=100.000
+[2026.01.08-01.31.46:415][867]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-640.461 Y=529.496 Z=100.000, Distance to Target: 1907.008533
+[2026.01.08-01.31.46:626][ 80]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:628][ 80]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:630][ 80]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:631][ 80]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:632][ 80]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:633][ 80]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:634][ 80]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.31.46:635][ 80]LogLearning: Display: Learning Agents Manager: Resetting Agents [1 2 3 4 5 6 7].
+[2026.01.08-01.31.46:636][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:638][ 80]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=1850.703 Y=-1885.128 Z=100.000, Distance to Target: 3848.111625
+[2026.01.08-01.31.46:638][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:640][ 80]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=1136.937 Y=1898.190 Z=100.000, Distance to Target: 4127.572997
+[2026.01.08-01.31.46:641][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:642][ 80]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=318.430 Y=-1610.828 Z=100.000, Distance to Target: 2298.892715
+[2026.01.08-01.31.46:643][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:645][ 80]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-148.869 Y=-567.339 Z=100.000, Distance to Target: 1762.881882
+[2026.01.08-01.31.46:647][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:662][ 80]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=1815.790 Y=-1804.071 Z=100.000, Distance to Target: 3794.694731
+[2026.01.08-01.31.46:663][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:665][ 80]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=-268.868 Y=1306.619 Z=100.000, Distance to Target: 2748.641283
+[2026.01.08-01.31.46:667][ 80]LogTemp: Health reset to: 100.0
+[2026.01.08-01.31.46:669][ 80]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=1410.505 Y=-1511.216 Z=100.000, Distance to Target: 3337.982620
+[2026.01.08-01.31.47:161][592]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.31.47:163][592]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.31.47:165][592]LogLearning: Display: Subprocess: Iter:     320 | Avg Rew: 0.71053 | Avg Rew Sum: 311.50778 | Avg Return: 64.40229 | Avg Episode Len: 454.54545 | Batch Size: 1
+[2026.01.08-01.31.47:167][592]LogLearning: Display: Subprocess: INFO: Profile| Logging                        6ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.47:171][592]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.31.47:172][592]LogLearning: Display: Subprocess: Episode Num: 21 | Total Step Num: 10000
+[2026.01.08-01.31.47:173][592]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1607ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.47:174][592]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.47:196][592]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       28ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.47:251][592]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  54ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.31.47:302][592]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            51ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.24:792][592]LogLearning: Display: Subprocess: INFO: Profile| PPO train                  37491ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.24:795][592]LogLearning: Display: Subprocess: INFO: Profile| Training                   37624ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.24:796][592]LogLearning: Display: Subprocess: INFO: Setting latest networks in communicator... IDs: [0, 1, 2, 3] | Version: 384
+[2026.01.08-01.32.24:800][592]LogLearning: Display: Pulling network...
+[2026.01.08-01.32.24:805][592]LogLearning: Display: Pulling network...
+[2026.01.08-01.32.24:808][592]LogLearning: Display: Pulling network...
+[2026.01.08-01.32.24:810][592]LogLearning: Display: Pulling network...
+[2026.01.08-01.32.24:811][592]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 2 3 4 5 6 7].
+[2026.01.08-01.32.24:812][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:814][592]LogTemp: Reset Target for Agent 0 - Target: X=-1465.560 Y=-212.226 Z=100.000
+[2026.01.08-01.32.24:814][592]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=1440.779 Y=951.994 Z=100.000, Distance to Target: 3130.848500
+[2026.01.08-01.32.24:817][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:818][592]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=977.142 Y=-292.673 Z=100.000, Distance to Target: 2444.025800
+[2026.01.08-01.32.24:822][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:825][592]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=-817.835 Y=79.287 Z=100.000, Distance to Target: 710.300763
+[2026.01.08-01.32.24:827][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:830][592]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-1531.724 Y=925.016 Z=100.000, Distance to Target: 1139.164674
+[2026.01.08-01.32.24:834][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:835][592]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=87.832 Y=-1211.890 Z=100.000, Distance to Target: 1847.256234
+[2026.01.08-01.32.24:837][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:839][592]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=759.728 Y=-1288.186 Z=100.000, Distance to Target: 2471.759697
+[2026.01.08-01.32.24:841][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:843][592]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=1002.777 Y=443.434 Z=100.000, Distance to Target: 2553.933605
+[2026.01.08-01.32.24:846][592]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.24:848][592]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=913.907 Y=-71.841 Z=100.000, Distance to Target: 2383.604794
+[2026.01.08-01.32.25:243][936]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - reached target
+[2026.01.08-01.32.25:244][936]LogTemp: Agent 2 reached target! Reward: 100.000000
+[2026.01.08-01.32.25:245][936]LogLearning: Display: Learning Agents Manager: Resetting Agents [2].
+[2026.01.08-01.32.25:246][936]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:248][936]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=1200.049 Y=1665.639 Z=100.000, Distance to Target: 3260.651228
+[2026.01.08-01.32.25:619][294]LogTemp: Agent 3 (PlayerPawn_3): Episode complete - reached target
+[2026.01.08-01.32.25:620][294]LogTemp: Agent 3 reached target! Reward: 100.000000
+[2026.01.08-01.32.25:622][294]LogLearning: Display: Learning Agents Manager: Resetting Agents [3].
+[2026.01.08-01.32.25:623][294]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:625][294]LogTemp: Reset Agent 3 (PlayerPawn_3) - Character: X=-248.848 Y=68.545 Z=100.000, Distance to Target: 1248.687214
+[2026.01.08-01.32.25:945][593]LogTemp: Agent 0 (PlayerPawn_0): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:946][593]LogTemp: Agent 1 (PlayerPawn_1): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:949][593]LogTemp: Agent 4 (PlayerPawn_4): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:949][593]LogTemp: Agent 5 (PlayerPawn_5): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:951][593]LogTemp: Agent 6 (PlayerPawn_6): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:951][593]LogTemp: Agent 7 (PlayerPawn_7): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.25:953][593]LogLearning: Display: Learning Agents Manager: Resetting Agents [0 1 4 5 6 7].
+[2026.01.08-01.32.25:954][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:956][593]LogTemp: Reset Target for Agent 0 - Target: X=552.568 Y=-348.582 Z=100.000
+[2026.01.08-01.32.25:956][593]LogTemp: Reset Agent 0 (PlayerPawn_0) - Character: X=-1670.034 Y=-901.212 Z=100.000, Distance to Target: 2290.274880
+[2026.01.08-01.32.25:958][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:959][593]LogTemp: Reset Agent 1 (PlayerPawn_1) - Character: X=1753.532 Y=1912.839 Z=100.000, Distance to Target: 2560.535592
+[2026.01.08-01.32.25:961][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:961][593]LogTemp: Reset Agent 4 (PlayerPawn_4) - Character: X=-1947.752 Y=1741.081 Z=100.000, Distance to Target: 3258.572650
+[2026.01.08-01.32.25:963][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:964][593]LogTemp: Reset Agent 5 (PlayerPawn_5) - Character: X=-1524.644 Y=-1499.008 Z=100.000, Distance to Target: 2374.508102
+[2026.01.08-01.32.25:966][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:967][593]LogTemp: Reset Agent 6 (PlayerPawn_6) - Character: X=845.302 Y=1227.027 Z=100.000, Distance to Target: 1602.572420
+[2026.01.08-01.32.25:969][593]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.25:970][593]LogTemp: Reset Agent 7 (PlayerPawn_7) - Character: X=-194.525 Y=999.115 Z=100.000, Distance to Target: 1540.920657
+[2026.01.08-01.32.26:334][937]LogTemp: Agent 2 (PlayerPawn_2): Episode complete - max steps reached (1000)
+[2026.01.08-01.32.26:336][937]LogLearning: Display: Learning Agents Manager: Resetting Agents [2].
+[2026.01.08-01.32.26:337][937]LogTemp: Health reset to: 100.0
+[2026.01.08-01.32.26:339][937]LogTemp: Reset Agent 2 (PlayerPawn_2) - Character: X=332.347 Y=-1513.169 Z=100.000, Distance to Target: 1185.225261
+[2026.01.08-01.32.26:510][105]LogLearning: Display: Pushing Experience...
+[2026.01.08-01.32.26:511][105]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.32.26:513][105]LogLearning: Display: Subprocess: Iter:     384 | Avg Rew: 0.58855 | Avg Rew Sum: 277.83671 | Avg Return: 74.09901 | Avg Episode Len: 476.19048 | Batch Size: 1
+[2026.01.08-01.32.26:514][105]LogLearning: Display: Subprocess: INFO: Profile| Logging                        5ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.26:519][105]LogLearning: Display: Subprocess: INFO: 
+[2026.01.08-01.32.26:519][105]LogLearning: Display: Subprocess: Episode Num: 21 | Total Step Num: 10000
+[2026.01.08-01.32.26:522][105]LogLearning: Display: Subprocess: INFO: Profile| Pull Experience             1704ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.26:522][105]LogLearning: Display: Subprocess: INFO: Profile| PPO load tensors               0ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.26:560][105]LogLearning: Display: Subprocess: INFO: Profile| PPO gae                       41ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.26:623][105]LogLearning: Display: Subprocess: INFO: Profile| PPO log prob                  64ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
+[2026.01.08-01.32.26:675][105]LogLearning: Display: Subprocess: INFO: Profile| PPO create batches            51ms   GPU Usage| Allocated: 0.00 GiB, Reserved: 0.00 GiB
