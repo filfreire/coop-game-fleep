@@ -109,3 +109,10 @@ tps_*/
 
 # other files
 *.zip
+
+# Batch training results directories
+3types_batch_30seeds_35min_results/
+SpecialBatchResults/
+Aggressive/
+Balanced/
+Conservative/
