@@ -116,3 +116,9 @@ SpecialBatchResults/
 Aggressive/
 Balanced/
 Conservative/
+
+# msvcup toolchain (downloaded by build-msvcup.ps1)
+tools/msvcup.exe
+tools/msvcup.pdb
+tools/msvc/
+tools/autosdk/
